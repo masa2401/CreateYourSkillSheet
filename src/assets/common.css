@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+}
+li {
+  list-style: none;
+}
+.wrap {
+  width: fit-content;
+  max-width: 900px;
+  min-height: 80vh;
+  padding: 0 1rem;
+  margin: 0 auto;
+  text-align: center;
+}
