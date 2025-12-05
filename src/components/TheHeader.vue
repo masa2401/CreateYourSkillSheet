@@ -1,12 +1,62 @@
+<script setup>
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+
+const goHome = () => {
+  if (route.path !== '/') {
+    router.push('/')
+  }
+}
+</script>
+
 <template>
-  <h1 class="title">スキルシート制作ページ</h1>
+  <header class="header">
+    <h1 class="title" @click="goHome">
+      <span class="icon">📊</span>
+      スキルシート制作ページ
+    </h1>
+  </header>
 </template>
 
 <style scoped>
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
 .title {
   width: 100%;
-  padding: 16px 0;
   margin: 0;
   text-align: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.title:hover {
+  transform: scale(1.02);
+}
+
+.icon {
+  font-size: 1.8rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+  vertical-align: baseline;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
 }
 </style>
