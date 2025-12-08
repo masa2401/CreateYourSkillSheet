@@ -1,16 +1,18 @@
+import LZString from 'lz-string'
+
 // ========================================
 // データの圧縮・展開
 // ========================================
 
 /**
- * オブジェクトをBase64エンコード
+ * オブジェクトを圧縮してBase64エンコード
  */
 export const encodeData = (data) => {
     try {
         const jsonString = JSON.stringify(data)
-        // UTF-8対応のBase64エンコード
-        const base64 = btoa(unescape(encodeURIComponent(jsonString)))
-        return base64
+        // LZ-stringで圧縮 + URL安全なBase64エンコード
+        const compressed = LZString.compressToEncodedURIComponent(jsonString)
+        return compressed
     } catch (error) {
         console.error('エンコードエラー:', error)
         return null
@@ -18,12 +20,17 @@ export const encodeData = (data) => {
 }
 
 /**
- * Base64文字列をデコードしてオブジェクトに変換
+ * 圧縮されたBase64文字列をデコードしてオブジェクトに変換
  */
-export const decodeData = (base64String) => {
+export const decodeData = (compressedString) => {
     try {
-        // UTF-8対応のBase64デコード
-        const jsonString = decodeURIComponent(escape(atob(base64String)))
+        // LZ-stringで解凍
+        const jsonString = LZString.decompressFromEncodedURIComponent(compressedString)
+
+        if (!jsonString) {
+            throw new Error('解凍に失敗しました')
+        }
+
         const data = JSON.parse(jsonString)
         return data
     } catch (error) {

@@ -133,7 +133,7 @@ const canSubmit = computed(() => {
         </div>
         <div class="instruction-card">
           <p class="instruction-text">
-            📋 以下の質問にチェックを入れていただき、習熟度を5段階で御回答ください。
+            📋 以下の質問にチェックを入れていただき、習熟度を5段階で回答してください。
           </p>
         </div>
       </div>
