@@ -1,109 +1,109 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { commonQuestionData, engineerQuestionData, designerQuestionData } from '@/data/questionData'
+import { ROUTES, STORAGE_KEYS, CATEGORIES } from '@/utils/constants'
+import {
+  getUserName,
+  getStorageValue,
+  setStorageValue,
+  createReactiveQuestions,
+  serializeQuestions,
+  validateQuestions,
+  scrollToElement,
+} from '@/utils/utils'
 
 const router = useRouter()
-
 // ユーザー情報の取得
-const userName = localStorage.name?.toString() || ''
+const userName = getUserName()
 
 // カテゴリ設定
-const toBoolean = (value) => value === 'true'
-
 const categories = ref([
-  { id: 1, genre: '共通の質問', isChecked: true, icon: '💼' },
   {
-    id: 2,
-    genre: 'プログラマ/エンジニア向けの質問',
-    isChecked: toBoolean(localStorage.engineer),
-    icon: '💻',
+    id: CATEGORIES.COMMON.id,
+    genre: CATEGORIES.COMMON.genre,
+    isChecked: true,
+    icon: CATEGORIES.COMMON.icon,
   },
   {
-    id: 3,
-    genre: 'デザイナー(動画制作)向けの質問',
-    isChecked: toBoolean(localStorage.designer),
-    icon: '🎨',
+    id: CATEGORIES.ENGINEER.id,
+    genre: CATEGORIES.ENGINEER.genre,
+    isChecked: getStorageValue(STORAGE_KEYS.CATEGORY_ENGINEER, false),
+    icon: CATEGORIES.ENGINEER.icon,
+  },
+  {
+    id: CATEGORIES.DESIGNER.id,
+    genre: CATEGORIES.DESIGNER.genre,
+    isChecked: getStorageValue(STORAGE_KEYS.CATEGORY_DESIGNER, false),
+    icon: CATEGORIES.DESIGNER.icon,
   },
 ])
 
 // 質問データの初期化
-function createReactiveQuestions(data) {
-  return data.map((q) => ({
-    id: q.id,
-    question: q.question,
-    answers: q.answers.map((text) => ({
-      text,
-      isChecked: false,
-      value: null,
-    })),
-  }))
-}
-
 const commonQuestions = ref(createReactiveQuestions(commonQuestionData))
 const engineerQuestions = ref(createReactiveQuestions(engineerQuestionData))
 const designerQuestions = ref(createReactiveQuestions(designerQuestionData))
 
 // カテゴリごとの質問マッピング
 const questionsByCategory = computed(() => ({
-  1: commonQuestions.value,
-  2: engineerQuestions.value,
-  3: designerQuestions.value,
+  [CATEGORIES.COMMON.id]: commonQuestions.value,
+  [CATEGORIES.ENGINEER.id]: engineerQuestions.value,
+  [CATEGORIES.DESIGNER.id]: designerQuestions.value,
 }))
 
-// バリデーション
+// バリデーション・データ保存
 const validationErrors = ref([])
+const hasAttemptedSubmit = ref(false)
 
-function validateQuestions() {
-  const errors = []
+// リアルタイムバリデーション
+const performValidation = () => {
   const allQuestions = [
-    { name: '共通の質問', questions: commonQuestions.value, categoryId: 1 },
-    { name: 'プログラマ/エンジニア向けの質問', questions: engineerQuestions.value, categoryId: 2 },
-    { name: 'デザイナー(動画制作)向けの質問', questions: designerQuestions.value, categoryId: 3 },
+    {
+      name: CATEGORIES.COMMON.genre,
+      questions: commonQuestions.value,
+      categoryId: CATEGORIES.COMMON.id,
+    },
+    {
+      name: CATEGORIES.ENGINEER.genre,
+      questions: engineerQuestions.value,
+      categoryId: CATEGORIES.ENGINEER.id,
+    },
+    {
+      name: CATEGORIES.DESIGNER.genre,
+      questions: designerQuestions.value,
+      categoryId: CATEGORIES.DESIGNER.id,
+    },
   ]
 
-  allQuestions.forEach(({ name, questions, categoryId }) => {
-    const category = categories.value.find((c) => c.id === categoryId)
-    if (!category?.isChecked) return
-
-    questions.forEach((question) => {
-      question.answers.forEach((answer) => {
-        if (answer.isChecked && !answer.value) {
-          errors.push({
-            category: name,
-            question: question.question,
-            answer: answer.text,
-          })
-        }
-      })
-    })
-  })
-
-  return errors
+  return validateQuestions(allQuestions, categories.value)
 }
 
-// データ変換・保存処理
-function serializeQuestions(questions) {
-  return questions.map((q) => ({
-    id: q.id,
-    question: q.question,
-    answers: q.answers.map((a) => ({
-      text: a.text,
-      isChecked: a.isChecked,
-      value: a.value,
-    })),
-  }))
-}
+// 回答が変更されたらバリデーションを実行（送信ボタンを押した後のみ）
+watch(
+  [commonQuestions, engineerQuestions, designerQuestions],
+  () => {
+    if (hasAttemptedSubmit.value) {
+      validationErrors.value = performValidation()
+    }
+  },
+  { deep: true },
+)
 
-const toNext = () => {
-  validationErrors.value = validateQuestions()
+// 次へ進む処理
+const toNext = async () => {
+  hasAttemptedSubmit.value = true
+
+  // バリデーション実行
+  validationErrors.value = performValidation()
 
   if (validationErrors.value.length > 0) {
-    const element = document.getElementById('error-message')
-    window.scrollTo({ top: element.offsetTop, behavior: 'smooth' })
+    // DOM更新を待ってからスクロール
+    await nextTick()
+    scrollToElement('error-message')
     return
   }
 
+  // データ保存
   const surveyData = {
     userName,
     categories: categories.value,
@@ -112,9 +112,15 @@ const toNext = () => {
     designerQuestions: serializeQuestions(designerQuestions.value),
   }
 
-  localStorage.setItem('surveyData', JSON.stringify(surveyData))
-  router.push('/result')
+  setStorageValue(STORAGE_KEYS.SURVEY_DATA, surveyData)
+  router.push(ROUTES.RESULT)
 }
+
+// 次へ進むボタンの有効/無効判定
+const canSubmit = computed(() => {
+  if (!hasAttemptedSubmit.value) return true
+  return validationErrors.value.length === 0
+})
 </script>
 
 <template>
@@ -136,7 +142,7 @@ const toNext = () => {
     <div class="wrap">
       <!-- カテゴリごとの質問 -->
       <template v-for="category in categories" :key="category.id">
-        <div v-show="category.isChecked" class="category-section">
+        <div v-if="category.isChecked" class="category-section">
           <div class="category-header">
             <span class="category-icon">{{ category.icon }}</span>
             <h3 class="category-title">{{ category.genre }}</h3>
@@ -185,6 +191,7 @@ const toNext = () => {
           </div>
         </div>
       </template>
+
       <!-- バリデーションエラー表示 -->
       <transition name="fade">
         <div v-if="validationErrors.length > 0" class="error-message" id="error-message">
@@ -202,7 +209,17 @@ const toNext = () => {
       </transition>
 
       <div class="submit-section">
-        <button @click="toNext" class="submit-button">次へ進む →</button>
+        <button
+          @click="toNext"
+          class="submit-button"
+          :class="{ disabled: !canSubmit }"
+          :disabled="!canSubmit"
+        >
+          次へ進む →
+        </button>
+        <p v-if="!canSubmit" class="submit-hint">
+          ⚠️ すべてのチェック項目に習熟度を選択してください
+        </p>
       </div>
     </div>
   </div>
@@ -435,9 +452,12 @@ const toNext = () => {
 
 .submit-section {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-top: 3rem;
   padding: 2rem 0;
+  gap: 1rem;
 }
 
 .submit-button {
@@ -453,9 +473,25 @@ const toNext = () => {
   transition: all 0.3s;
 }
 
-.submit-button:hover {
+.submit-button:hover:not(.disabled) {
   transform: translateY(-3px);
   box-shadow: 0 12px 25px rgba(102, 126, 234, 0.5);
+}
+
+.submit-button.disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.submit-hint {
+  color: #f59e0b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+  animation: pulse 2s infinite;
 }
 
 /* アニメーション */
@@ -507,7 +543,7 @@ const toNext = () => {
     font-size: 1.4rem;
   }
 
-  .question-block {
+  .question-card {
     padding: 2rem;
   }
 

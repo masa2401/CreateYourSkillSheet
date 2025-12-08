@@ -1,18 +1,36 @@
 <script setup>
+import ShareButton from '@/components/ShareButton.vue'
+import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants'
+import { getDataFromUrl } from '@/utils/shareUtils'
+import { getStorageValue } from '@/utils/utils'
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const surveyData = ref(null)
+const isSharedView = ref(false)
 
 // データ取得
 onMounted(() => {
-  const data = localStorage.getItem('surveyData')
-  if (data) {
-    surveyData.value = JSON.parse(data)
-  } else {
-    router.push('/survey')
+  // 1. URLパラメータからデータを取得
+  const urlData = getDataFromUrl()
+  if (urlData) {
+    // URLから取得した場合（共有リンク経由）
+    surveyData.value = urlData
+    isSharedView.value = true
+    return
   }
+
+  // 2. LocalStorageから取得
+  const localData = getStorageValue(STORAGE_KEYS.SURVEY_DATA, '')
+  if (localData) {
+    surveyData.value = localData
+    isSharedView.value = false
+    return
+  }
+
+  // 3. どちらもない場合はアンケートページへ
+  router.push(ROUTES.SURVEY)
 })
 
 // カテゴリごとの質問データを取得
@@ -36,18 +54,6 @@ const getCheckedAnswers = (answers) => {
   return answers.filter((answer) => answer.isChecked)
 }
 
-// 習熟度のラベル変換
-const getLevelLabel = (value) => {
-  const labels = {
-    1: '★☆☆☆☆',
-    2: '★★☆☆☆',
-    3: '★★★☆☆',
-    4: '★★★★☆',
-    5: '★★★★★',
-  }
-  return labels[value] || value
-}
-
 // カテゴリアイコン
 const getCategoryIcon = (categoryId) => {
   const icons = {
@@ -60,11 +66,15 @@ const getCategoryIcon = (categoryId) => {
 
 // ナビゲーション
 const goToTop = () => {
-  router.push('/')
+  router.push(ROUTES.TOP)
 }
 
 const goBack = () => {
-  router.push('/survey')
+  router.push(ROUTES.SURVEY)
+}
+
+const createMyOwn = () => {
+  router.push(ROUTES.TOP)
 }
 </script>
 
@@ -111,7 +121,7 @@ const goBack = () => {
                 <div class="skill-info">
                   <div class="skill-name">{{ answer.text }}</div>
                   <div class="skill-level">
-                    <span class="level-stars">{{ getLevelLabel(answer.value) }}</span>
+                    <span class="level-stars">{{ LEVEL_LABELS[answer.value] }}</span>
                   </div>
                 </div>
               </div>
@@ -122,8 +132,17 @@ const goBack = () => {
 
       <!-- ボタングループ -->
       <div class="button-group">
-        <button @click="goBack" class="secondary-button">← 修正する</button>
-        <button @click="goToTop" class="primary-button">トップへ戻る</button>
+        <!-- 自分のデータの場合 -->
+        <template v-if="!isSharedView">
+          <button @click="goBack" class="secondary-button">← 修正する</button>
+          <ShareButton :surveyData="surveyData" />
+          <button @click="goToTop" class="primary-button">トップへ戻る</button>
+        </template>
+
+        <!-- 共有リンク経由の場合 -->
+        <template v-else>
+          <button @click="createMyOwn" class="primary-button">✨ 自分のスキルシートを作成</button>
+        </template>
       </div>
     </div>
   </div>

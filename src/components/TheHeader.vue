@@ -1,12 +1,13 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
+import { ROUTES } from '@/utils/constants'
 
 const router = useRouter()
 const route = useRoute()
 
 const goHome = () => {
-  if (route.path !== '/') {
-    router.push('/')
+  if (route.path !== ROUTES.TOP) {
+    router.push(ROUTES.TOP)
   }
 }
 </script>

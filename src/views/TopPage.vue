@@ -1,7 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-
+import { STORAGE_KEYS, ROUTES } from '@/utils/constants'
+import { setStorageValue } from '@/utils/utils'
 const router = useRouter()
 
 // フォームデータ
@@ -21,12 +22,12 @@ const validateAndProceed = () => {
   }
 
   // データを保存
-  localStorage.setItem('name', userName.value.trim())
-  localStorage.setItem('engineer', selectedCategories.value.engineer.toString())
-  localStorage.setItem('designer', selectedCategories.value.designer.toString())
+  setStorageValue(STORAGE_KEYS.USER_NAME, userName.value.trim())
+  setStorageValue(STORAGE_KEYS.CATEGORY_ENGINEER, selectedCategories.value.engineer)
+  setStorageValue(STORAGE_KEYS.CATEGORY_DESIGNER, selectedCategories.value.designer)
 
   // アンケートページへ遷移
-  router.push('/survey')
+  router.push(ROUTES.SURVEY)
 }
 </script>
 
