@@ -26,7 +26,7 @@ const goHome = () => {
 <style scoped>
 .notfound-container {
   min-height: 80vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,12 +34,13 @@ const goHome = () => {
 }
 
 .notfound-content {
-  background: white;
+  background: #ffffff;
   border-radius: 20px;
   padding: 3rem;
   text-align: center;
   max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
+  border: 1px solid rgba(72, 60, 50, 0.1);
 }
 
 .error-icon {
@@ -62,15 +63,12 @@ const goHome = () => {
   font-size: 6rem;
   font-weight: 800;
   margin: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #483c32;
 }
 
 .error-title {
   font-size: 1.8rem;
-  color: #333;
+  color: #483c32;
   margin: 1rem 0;
   font-weight: 700;
 }
@@ -86,18 +84,19 @@ const goHome = () => {
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #483c32;
+  color: #ffffff;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
 }
 
 .home-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 20px rgba(72, 60, 50, 0.4);
+  background: #5a4a3e;
 }
 
 @media (max-width: 768px) {

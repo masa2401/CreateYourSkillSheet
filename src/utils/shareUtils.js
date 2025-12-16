@@ -104,32 +104,3 @@ export const copyToClipboard = async (text) => {
         return false
     }
 }
-
-// ========================================
-// SNSシェア
-// ========================================
-
-/**
- * Twitter シェアURLを生成
- */
-export const getTwitterShareUrl = (url, text = 'スキルシートを共有') => {
-    const encodedText = encodeURIComponent(text)
-    const encodedUrl = encodeURIComponent(url)
-    return `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`
-}
-
-/**
- * LINE シェアURLを生成
- */
-export const getLineShareUrl = (url, text = 'スキルシートを共有') => {
-    const message = encodeURIComponent(`${text}\n${url}`)
-    return `https://line.me/R/msg/text/?${message}`
-}
-
-/**
- * Facebook シェアURLを生成
- */
-export const getFacebookShareUrl = (url) => {
-    const encodedUrl = encodeURIComponent(url)
-    return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`
-}

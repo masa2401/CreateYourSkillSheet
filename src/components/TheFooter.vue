@@ -6,15 +6,15 @@
 
 <style scoped>
 .footer {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #483c32 0%, #5a4a3e 100%);
   padding: 1.5rem 0;
   text-align: center;
   margin-top: auto;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 8px rgba(72, 60, 50, 0.1);
 }
 
 .copyright {
-  color: white;
+  color: #ffffff;
   font-size: 0.9rem;
   margin: 0;
   opacity: 0.9;

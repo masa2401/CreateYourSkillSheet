@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref, computed, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { commonQuestionData, engineerQuestionData, designerQuestionData } from '@/data/questionData'
@@ -14,6 +14,7 @@ import {
 } from '@/utils/utils'
 
 const router = useRouter()
+
 // ユーザー情報の取得
 const userName = getUserName()
 
@@ -228,7 +229,7 @@ const canSubmit = computed(() => {
 <style scoped>
 .page-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
   padding: 2rem;
 }
 
@@ -242,19 +243,20 @@ const canSubmit = computed(() => {
   max-width: 1000px;
   padding: 1.5rem 1rem;
   margin: 0 auto;
-  background: white;
+  background: #ffffff;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
+  border: 1px solid rgba(72, 60, 50, 0.1);
 }
 
 .user-greeting {
   font-size: 1.8rem;
   margin-bottom: 0.8rem;
-  color: #333;
+  color: #483c32;
   font-weight: 700;
 }
 
@@ -267,14 +269,14 @@ const canSubmit = computed(() => {
 }
 
 .error-message {
-  background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+  background: #fff5f5;
   border: 2px solid #f88;
   border-radius: 15px;
   padding: 1.5rem;
   margin-bottom: 2rem;
   display: flex;
   gap: 1rem;
-  box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.15);
 }
 
 .error-icon {
@@ -311,9 +313,9 @@ const canSubmit = computed(() => {
 
 .category-section {
   margin-bottom: 3rem;
-  background: white;
+  background: #ffffff;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
 }
 
 .category-header {
@@ -332,12 +334,12 @@ const canSubmit = computed(() => {
 .category-title {
   font-size: 1.5rem;
   margin: 0;
-  color: #333;
+  color: #483c32;
   font-weight: 700;
 }
 
 .question-card {
-  background: white;
+  background: #ffffff;
   border-radius: 15px;
   padding: 2rem 3.6rem;
   margin-bottom: 1.5rem;
@@ -347,7 +349,7 @@ const canSubmit = computed(() => {
 .question-text {
   font-size: 1.1rem;
   margin: 0 0 1.5rem 0;
-  color: #333;
+  color: #483c32;
   font-weight: 600;
   line-height: 1.6;
 }
@@ -359,7 +361,7 @@ const canSubmit = computed(() => {
 }
 
 .answer-item {
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #d3c6a6;
   padding-left: 1rem;
 }
 
@@ -377,7 +379,7 @@ const canSubmit = computed(() => {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #667eea;
+  accent-color: #483c32;
 }
 
 .checkbox-text {
@@ -388,8 +390,9 @@ const canSubmit = computed(() => {
 .level-selector {
   margin-top: 1rem;
   padding: 1rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: #ffffff;
   border-radius: 10px;
+  border: 1px solid #d3c6a6;
 }
 
 .level-buttons {
@@ -403,8 +406,8 @@ const canSubmit = computed(() => {
   flex: 1;
   min-width: 80px;
   padding: 0.75rem;
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: #ffffff;
+  border: 2px solid #d3c6a6;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s;
@@ -415,15 +418,15 @@ const canSubmit = computed(() => {
 }
 
 .level-button:hover {
-  border-color: #667eea;
+  border-color: #483c32;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 8px rgba(72, 60, 50, 0.15);
 }
 
 .level-button.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
-  color: white;
+  background: #483c32;
+  border-color: #483c32;
+  color: #ffffff;
   transform: scale(1.05);
 }
 
@@ -463,19 +466,20 @@ const canSubmit = computed(() => {
 .submit-button {
   font-size: 1.1rem;
   padding: 1rem 3rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #483c32;
+  color: #ffffff;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   font-weight: 700;
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
   transition: all 0.3s;
 }
 
 .submit-button:hover:not(.disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 20px rgba(72, 60, 50, 0.4);
+  background: #5a4a3e;
 }
 
 .submit-button.disabled {

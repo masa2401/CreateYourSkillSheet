@@ -157,7 +157,7 @@ const createMyOwn = () => {
 <style scoped>
 .page-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
   padding-bottom: 4rem;
 }
 
@@ -180,10 +180,10 @@ const createMyOwn = () => {
 
 .page-title {
   font-size: 2.5rem;
-  color: white;
+  color: #483c32;
   margin: 0;
   font-weight: 800;
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(211, 198, 166, 0.3);
 }
 
 .content-wrapper {
@@ -194,9 +194,9 @@ const createMyOwn = () => {
 
 .category-section {
   margin-bottom: 2rem;
-  background: white;
+  background: #ffffff;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
 }
 
 .category-header {
@@ -214,7 +214,7 @@ const createMyOwn = () => {
 
 .category-title {
   font-size: 1.5rem;
-  color: #333;
+  color: #483c32;
   margin: 0;
   font-weight: 700;
 }
@@ -225,7 +225,7 @@ const createMyOwn = () => {
 
 .question-title {
   font-size: 1.1rem;
-  color: #333;
+  color: #483c32;
   margin: 0 0 1.5rem;
   font-weight: 600;
   line-height: 1.6;
@@ -237,10 +237,10 @@ const createMyOwn = () => {
 }
 
 .skill-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: #ffffff;
   border-radius: 12px;
   padding: 1.25rem;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #d3c6a6;
   transition: all 0.3s;
 }
 
@@ -253,7 +253,7 @@ const createMyOwn = () => {
 
 .skill-name {
   flex: 1;
-  color: #333;
+  color: #483c32;
   font-size: 1rem;
   font-weight: 500;
 }
@@ -290,32 +290,33 @@ const createMyOwn = () => {
 }
 
 .primary-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  background: #483c32;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
 }
 
 .primary-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 20px rgba(72, 60, 50, 0.4);
+  background: #5a4a3e;
 }
 
 .secondary-button {
-  background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  background: #ffffff;
+  color: #483c32;
+  border: 2px solid #483c32;
 }
 
 .secondary-button:hover {
-  background: #667eea;
-  color: white;
+  background: #483c32;
+  color: #ffffff;
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
 }
 
 .loading-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -326,8 +327,8 @@ const createMyOwn = () => {
 .loading-spinner {
   width: 60px;
   height: 60px;
-  border: 5px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border: 5px solid rgba(72, 60, 50, 0.3);
+  border-top-color: #483c32;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -339,7 +340,7 @@ const createMyOwn = () => {
 }
 
 .loading-text {
-  color: white;
+  color: #483c32;
   font-size: 1.2rem;
   font-weight: 600;
 }

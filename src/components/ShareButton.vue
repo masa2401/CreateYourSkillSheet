@@ -1,11 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import {
-  generateShareUrl,
-  copyToClipboard,
-  getTwitterShareUrl,
-  getLineShareUrl,
-} from '@/utils/shareUtils'
+import { generateShareUrl, copyToClipboard } from '@/utils/shareUtils'
 
 const props = defineProps({
   surveyData: {
@@ -37,19 +32,6 @@ const handleCopy = async () => {
   }
 }
 
-// SNS共有
-const shareOnTwitter = () => {
-  const url = getTwitterShareUrl(shareUrl.value, 'スキルシートを共有します')
-  window.open(url, '_blank')
-  showMenu.value = false
-}
-
-const shareOnLine = () => {
-  const url = getLineShareUrl(shareUrl.value, 'スキルシートを共有します')
-  window.open(url, '_blank')
-  showMenu.value = false
-}
-
 // メニューの表示切替
 const toggleMenu = () => {
   showMenu.value = !showMenu.value
@@ -64,17 +46,7 @@ const toggleMenu = () => {
       <div v-if="showMenu" class="share-menu">
         <button @click="handleCopy" class="menu-item" :class="{ success: copySuccess }">
           <span class="menu-icon">{{ copySuccess ? '✓' : '📋' }}</span>
-          <span class="menu-text">{{ copySuccess ? 'コピーしました！' : 'URLをコピー' }}</span>
-        </button>
-
-        <button @click="shareOnTwitter" class="menu-item">
-          <span class="menu-icon">🐦</span>
-          <span class="menu-text">Twitterで共有</span>
-        </button>
-
-        <button @click="shareOnLine" class="menu-item">
-          <span class="menu-icon">💬</span>
-          <span class="menu-text">LINEで共有</span>
+          <span class="menu-text">{{ copySuccess ? 'コピーしました!' : 'URLをコピー' }}</span>
         </button>
       </div>
     </transition>
@@ -96,12 +68,12 @@ const toggleMenu = () => {
   border: none;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
 }
 
 .share-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
 .share-menu {
@@ -109,9 +81,10 @@ const toggleMenu = () => {
   top: calc(100% + 0.5rem);
   left: 50%;
   transform: translateX(-50%);
-  background: white;
+  background: #ffffff;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
+  border: 1px solid rgba(72, 60, 50, 0.1);
   padding: 0.5rem;
   min-width: 200px;
   z-index: 100;
@@ -130,15 +103,15 @@ const toggleMenu = () => {
   transition: all 0.2s;
   font-size: 1rem;
   font-weight: 600;
-  color: #333;
+  color: #483c32;
 }
 
 .menu-item:hover {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: #f5f5f5;
 }
 
 .menu-item.success {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  background: #d1fae5;
   color: #059669;
 }
 

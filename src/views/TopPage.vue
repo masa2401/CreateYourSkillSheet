@@ -70,7 +70,7 @@ const validateAndProceed = () => {
         <div class="category-section">
           <h3 class="section-title">
             <span class="title-icon">🎯</span>
-            該当するカテゴリを選択してください（複数選択可）
+            該当するカテゴリを選択してください(複数選択可)
           </h3>
           <div class="category-cards">
             <label class="category-card" :class="{ active: selectedCategories.engineer }">
@@ -120,7 +120,7 @@ const validateAndProceed = () => {
 <style scoped>
 .page-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
 }
 
 .hero-section {
@@ -135,10 +135,10 @@ const validateAndProceed = () => {
 
 .hero-title {
   font-size: 3rem;
-  color: white;
+  color: #483c32;
   margin: 0 0 1rem;
   font-weight: 800;
-  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(211, 198, 166, 0.3);
 }
 
 .emoji {
@@ -153,12 +153,13 @@ const validateAndProceed = () => {
 }
 
 .welcome-card {
-  background: white;
+  background: #ffffff;
   border-radius: 20px;
   padding: 2.5rem;
   text-align: center;
   margin-bottom: 3rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
+  border: 1px solid rgba(72, 60, 50, 0.1);
 }
 
 .card-description {
@@ -169,11 +170,11 @@ const validateAndProceed = () => {
 }
 
 .input-group {
-  background: white;
+  background: #ffffff;
   border-radius: 20px;
   padding: 2rem;
   margin-bottom: 3rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
 }
 
 .input-section {
@@ -184,7 +185,7 @@ const validateAndProceed = () => {
 .input-label {
   display: block;
   font-size: 1.3rem;
-  color: #333;
+  color: #483c32;
   margin-bottom: 1rem;
   font-weight: 600;
 }
@@ -198,16 +199,17 @@ const validateAndProceed = () => {
   width: 100%;
   padding: 1rem 1.5rem;
   font-size: 1.2rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #d3c6a6;
   border-radius: 15px;
   transition: all 0.3s;
   box-sizing: border-box;
+  background: #ffffff;
 }
 
 .name-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: #483c32;
+  box-shadow: 0 0 0 4px rgba(72, 60, 50, 0.1);
 }
 
 .error-text {
@@ -219,7 +221,7 @@ const validateAndProceed = () => {
 
 .section-title {
   font-size: 1.3rem;
-  color: #333;
+  color: #483c32;
   margin: 0 0 1.5rem;
   font-weight: 700;
   text-align: center;
@@ -239,8 +241,8 @@ const validateAndProceed = () => {
 
 .category-card {
   position: relative;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  border: 3px solid #e0e0e0;
+  background: #ffffff;
+  border: 3px solid #d3c6a6;
   border-radius: 20px;
   padding: 2rem;
   cursor: pointer;
@@ -250,20 +252,20 @@ const validateAndProceed = () => {
 
 .category-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-  border-color: #667eea;
+  box-shadow: 0 8px 20px rgba(72, 60, 50, 0.15);
+  border-color: #483c32;
 }
 
 .category-card.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
+  background: linear-gradient(135deg, #483c32 0%, #5a4a3e 100%);
+  border-color: #483c32;
   transform: scale(1.02);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 24px rgba(72, 60, 50, 0.3);
 }
 
 .category-card.active .card-category-title,
 .category-card.active .card-category-desc {
-  color: white;
+  color: #ffffff;
 }
 
 .category-checkbox {
@@ -281,7 +283,7 @@ const validateAndProceed = () => {
 
 .card-category-title {
   font-size: 1.3rem;
-  color: #333;
+  color: #483c32;
   margin: 0 0 0.75rem;
   font-weight: 700;
 }
@@ -304,7 +306,7 @@ const validateAndProceed = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(72, 60, 50, 0.15);
 }
 
 .check-mark {
@@ -342,19 +344,20 @@ const validateAndProceed = () => {
 .start-button {
   font-size: 1.2rem;
   padding: 1.25rem 3.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #483c32;
+  color: #ffffff;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   font-weight: 700;
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
   transition: all 0.3s;
 }
 
 .start-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 20px rgba(72, 60, 50, 0.4);
+  background: #5a4a3e;
 }
 
 .fade-enter-active,
