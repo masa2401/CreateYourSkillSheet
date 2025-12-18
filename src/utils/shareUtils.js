@@ -44,7 +44,7 @@ export const decodeData = (compressedString) => {
 // ========================================
 
 /**
- * 共有用URLを生成
+ * 共有用URLを生成（Hash Mode対応）
  */
 export const generateShareUrl = (surveyData) => {
     const encoded = encodeData(surveyData)
@@ -53,16 +53,39 @@ export const generateShareUrl = (surveyData) => {
     }
 
     const baseUrl = window.location.origin
-    const shareUrl = `${baseUrl}/#/result?data=${encoded}`
+    const basePath = window.location.pathname // GitHub Pagesのサブパス対応
+
+    // Hash Modeの場合: /#/result?data=xxxxx
+    const shareUrl = `${baseUrl}${basePath}#/result?data=${encoded}`
 
     return shareUrl
 }
 
 /**
- * URLからデータを取得
+ * URLからデータを取得（Hash Mode対応）
  */
 export const getDataFromUrl = () => {
-    const urlParams = new URLSearchParams(window.location.search)
+    // Hash Modeでは window.location.hash にクエリパラメータが含まれる
+    // 例: "#/result?data=xxxxx" または "?data=xxxxx"（History Mode互換性）
+
+    let searchString = ''
+
+    // Hash Modeの場合（#の後ろにクエリパラメータがある）
+    if (window.location.hash.includes('?')) {
+        // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
+        const hashParts = window.location.hash.split('?')
+        searchString = hashParts.length > 1 ? '?' + hashParts.slice(1).join('?') : ''
+    }
+    // History Modeの場合（従来通り）
+    else if (window.location.search) {
+        searchString = window.location.search
+    }
+
+    if (!searchString) {
+        return null
+    }
+
+    const urlParams = new URLSearchParams(searchString)
     const encodedData = urlParams.get('data')
 
     if (!encodedData) {
