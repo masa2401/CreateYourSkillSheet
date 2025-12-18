@@ -53,7 +53,7 @@ export const generateShareUrl = (surveyData) => {
     }
 
     const baseUrl = window.location.origin
-    const shareUrl = `${baseUrl}/result?data=${encoded}`
+    const shareUrl = `${baseUrl}/#/result?data=${encoded}`
 
     return shareUrl
 }
