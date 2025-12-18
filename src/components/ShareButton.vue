@@ -59,6 +59,7 @@ const toggleMenu = () => {
 }
 
 .share-button {
+  height: 100%;
   padding: 1rem 2.5rem;
   border-radius: 50px;
   font-size: 1.1rem;
@@ -144,6 +145,9 @@ const toggleMenu = () => {
 }
 
 @media (max-width: 768px) {
+  .share-button {
+    width: 100%;
+  }
   .share-menu {
     left: 0;
     right: 0;
