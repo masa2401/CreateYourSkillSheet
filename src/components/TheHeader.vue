@@ -60,4 +60,10 @@ const goHome = () => {
     font-size: 1.5rem;
   }
 }
+
+@media print {
+  .header {
+    display: none !important;
+  }
+}
 </style>

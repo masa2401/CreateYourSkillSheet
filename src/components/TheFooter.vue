@@ -19,4 +19,10 @@
   margin: 0;
   opacity: 0.9;
 }
+
+@media print {
+  .footer {
+    display: none !important;
+  }
+}
 </style>

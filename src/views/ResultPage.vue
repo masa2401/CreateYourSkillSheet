@@ -76,6 +76,11 @@ const goBack = () => {
 const createMyOwn = () => {
   router.push(ROUTES.TOP)
 }
+
+// 印刷機能
+const handlePrint = () => {
+  window.print()
+}
 </script>
 
 <template>
@@ -130,11 +135,14 @@ const createMyOwn = () => {
         </div>
       </div>
 
-      <!-- ボタングループ -->
-      <div class="button-group">
+      <!-- ボタングループ（印刷時は非表示） -->
+      <div class="button-group no-print">
         <!-- 自分のデータの場合 -->
         <template v-if="!isSharedView">
           <button @click="goBack" class="secondary-button">← 修正する</button>
+          <!-- 印刷ボタンを追加 -->
+          <button @click="handlePrint" class="print-button">🖨️ 印刷する</button>
+
           <ShareButton :surveyData="surveyData" />
           <button @click="goToTop" class="primary-button">トップへ戻る</button>
         </template>
@@ -279,7 +287,8 @@ const createMyOwn = () => {
 }
 
 .primary-button,
-.secondary-button {
+.secondary-button,
+.print-button {
   padding: 1rem 2.5rem;
   border-radius: 50px;
   font-size: 1.1rem;
@@ -312,6 +321,18 @@ const createMyOwn = () => {
   color: #ffffff;
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
+}
+
+.print-button {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+}
+
+.print-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  background: #059669;
 }
 
 .loading-container {
@@ -372,8 +393,132 @@ const createMyOwn = () => {
   }
 
   .primary-button,
-  .secondary-button {
+  .secondary-button,
+  .print-button {
     width: 100%;
+  }
+}
+
+/* 印刷用スタイル */
+@media print {
+  /* A4サイズ設定 */
+  @page {
+    size: A4;
+    margin: 15mm 10mm;
+  }
+
+  /* 印刷時に非表示にする要素 */
+  .no-print,
+  .button-group {
+    display: none !important;
+  }
+
+  /* 背景色を白に */
+  .page-container {
+    background: #ffffff !important;
+    padding: 0;
+    min-height: auto;
+  }
+
+  /* ヘッダーの調整 */
+  .header-section {
+    padding: 0 0 1rem 0;
+    page-break-after: avoid;
+  }
+
+  .header-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+    text-shadow: none;
+    page-break-after: avoid;
+  }
+
+  /* コンテンツの調整 */
+  .content-wrapper {
+    padding: 0;
+    max-width: 100%;
+  }
+
+  /* カテゴリセクション */
+  .category-section {
+    margin-bottom: 1.5rem;
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    page-break-inside: avoid;
+  }
+
+  .category-header {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    page-break-after: avoid;
+  }
+
+  .category-icon {
+    font-size: 1.8rem;
+  }
+
+  .category-title {
+    font-size: 1.3rem;
+  }
+
+  /* 質問ブロック */
+  .question-block {
+    padding: 0 1.5rem 1rem;
+    page-break-inside: avoid;
+  }
+
+  .question-title {
+    font-size: 1rem;
+    margin: 0 0 0.8rem;
+    page-break-after: avoid;
+  }
+
+  /* スキルカード */
+  .skills-grid {
+    gap: 0.5rem;
+  }
+
+  .skill-card {
+    padding: 0.8rem;
+    border-radius: 6px;
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+    page-break-inside: avoid;
+  }
+
+  .skill-info {
+    gap: 0.8rem;
+  }
+
+  .skill-name {
+    font-size: 0.9rem;
+  }
+
+  .level-stars {
+    font-size: 0.9rem;
+  }
+
+  /* カラー印刷対応 */
+  .skill-card {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* 改ページ制御 */
+  h2,
+  h3,
+  h4 {
+    page-break-after: avoid;
+  }
+
+  /* リンクのURL表示を無効化 */
+  a[href]:after {
+    content: none !important;
   }
 }
 </style>
