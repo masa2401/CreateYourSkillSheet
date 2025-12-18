@@ -201,7 +201,7 @@ const handlePrint = () => {
 }
 
 .category-section {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
@@ -241,19 +241,19 @@ const handlePrint = () => {
 
 .skills-grid {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .skill-card {
   background: #ffffff;
-  border-radius: 12px;
-  padding: 1.25rem;
+  padding: 0.8rem 1rem;
   border-left: 4px solid #d3c6a6;
   transition: all 0.3s;
 }
 
 .skill-info {
-  display: flex;
+  display: grid;
+  grid-template-columns: 9fr 1fr;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
@@ -376,12 +376,6 @@ const handlePrint = () => {
     padding: 2rem;
   }
 
-  .skill-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-
   .skill-level {
     width: 100%;
     justify-content: space-between;
@@ -423,7 +417,6 @@ const handlePrint = () => {
   /* ヘッダーの調整 */
   .header-section {
     padding: 0 0 1rem 0;
-    page-break-after: avoid;
   }
 
   .header-icon {
@@ -434,7 +427,7 @@ const handlePrint = () => {
   .page-title {
     font-size: 1.8rem;
     text-shadow: none;
-    page-break-after: avoid;
+    break-after: avoid;
   }
 
   /* コンテンツの調整 */
@@ -449,13 +442,11 @@ const handlePrint = () => {
     box-shadow: none;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    page-break-inside: avoid;
   }
 
   .category-header {
     padding: 1rem;
     margin-bottom: 0.5rem;
-    page-break-after: avoid;
   }
 
   .category-icon {
@@ -469,13 +460,12 @@ const handlePrint = () => {
   /* 質問ブロック */
   .question-block {
     padding: 0 1.5rem 1rem;
-    page-break-inside: avoid;
   }
 
   .question-title {
     font-size: 1rem;
     margin: 0 0 0.8rem;
-    page-break-after: avoid;
+    break-after: avoid;
   }
 
   /* スキルカード */
@@ -488,7 +478,7 @@ const handlePrint = () => {
     border-radius: 6px;
     box-shadow: none;
     border: 1px solid #e5e7eb;
-    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   .skill-info {
@@ -513,7 +503,7 @@ const handlePrint = () => {
   h2,
   h3,
   h4 {
-    page-break-after: avoid;
+    break-after: avoid;
   }
 
   /* リンクのURL表示を無効化 */
