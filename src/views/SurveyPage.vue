@@ -1,6 +1,8 @@
 ﻿<script setup>
 import { ref, computed, nextTick, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import QuestionCard from '@/components/QuestionCard.vue'
+import ValidationError from '@/components/ValidationError.vue'
 import { commonQuestionData, engineerQuestionData, designerQuestionData } from '@/data/questionData'
 import { ROUTES, STORAGE_KEYS, CATEGORIES } from '@/utils/constants'
 import {
@@ -52,11 +54,11 @@ const questionsByCategory = computed(() => ({
   [CATEGORIES.DESIGNER.id]: designerQuestions.value,
 }))
 
-// バリデーション・データ保存
+// バリデーション
 const validationErrors = ref([])
 const hasAttemptedSubmit = ref(false)
 
-// リアルタイムバリデーション
+// バリデーション実行
 const performValidation = () => {
   const allQuestions = [
     {
@@ -89,6 +91,15 @@ watch(
   },
   { deep: true },
 )
+
+// 質問の更新ハンドラ
+const handleQuestionUpdate = (categoryId, questionId, updatedQuestion) => {
+  const questionsRef = questionsByCategory.value[categoryId]
+  const index = questionsRef.findIndex((q) => q.id === questionId)
+  if (index !== -1) {
+    questionsRef[index] = updatedQuestion
+  }
+}
 
 // 次へ進む処理
 const toNext = async () => {
@@ -149,65 +160,17 @@ const canSubmit = computed(() => {
             <h3 class="category-title">{{ category.genre }}</h3>
           </div>
 
-          <div
+          <QuestionCard
             v-for="question in questionsByCategory[category.id]"
             :key="question.id"
-            class="question-card"
-          >
-            <h4 class="question-text">{{ question.question }}</h4>
-
-            <div class="answers-grid">
-              <div v-for="(answer, index) in question.answers" :key="index" class="answer-item">
-                <label class="checkbox-label">
-                  <input type="checkbox" v-model="answer.isChecked" class="custom-checkbox" />
-                  <span class="checkbox-text">{{ answer.text }}</span>
-                </label>
-
-                <transition name="slide-fade">
-                  <div v-if="answer.isChecked" class="level-selector">
-                    <div class="level-buttons">
-                      <label
-                        v-for="level in 5"
-                        :key="level"
-                        class="level-button"
-                        :class="{ active: answer.value === level }"
-                      >
-                        <input
-                          type="radio"
-                          v-model="answer.value"
-                          :value="level"
-                          class="level-radio"
-                        />
-                        <span class="level-number">{{ level }}</span>
-                        <span class="level-stars">{{ '★'.repeat(level) }}</span>
-                      </label>
-                    </div>
-                    <span v-if="!answer.value" class="warning-text">
-                      ⚡ 習熟度を選択してください
-                    </span>
-                  </div>
-                </transition>
-              </div>
-            </div>
-          </div>
+            :question="question"
+            @update:question="handleQuestionUpdate(category.id, question.id, $event)"
+          />
         </div>
       </template>
 
       <!-- バリデーションエラー表示 -->
-      <transition name="fade">
-        <div v-if="validationErrors.length > 0" class="error-message" id="error-message">
-          <div class="error-icon">⚠️</div>
-          <div class="error-content">
-            <h4>入力エラー</h4>
-            <p>チェックを入れた項目には、習熟度の選択が必須です。</p>
-            <ul>
-              <li v-for="(error, index) in validationErrors" :key="index">
-                <strong>{{ error.category }}</strong> - {{ error.answer }}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </transition>
+      <ValidationError :errors="validationErrors" />
 
       <div class="submit-section">
         <button
@@ -268,43 +231,6 @@ const canSubmit = computed(() => {
   line-height: 1.6;
 }
 
-.error-message {
-  background: #fff5f5;
-  border: 2px solid #f88;
-  border-radius: 15px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  display: flex;
-  gap: 1rem;
-  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.15);
-}
-
-.error-icon {
-  font-size: 2rem;
-}
-
-.error-content h4 {
-  color: #c00;
-  margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
-}
-
-.error-content p {
-  color: #c00;
-  margin: 0 0 1rem 0;
-}
-
-.error-content ul {
-  margin: 0;
-  padding-left: 1.5rem;
-  list-style: disc;
-}
-
-.error-content li {
-  color: #c00;
-  margin-bottom: 0.5rem;
-}
-
 .wrap {
   max-width: 1000px;
   margin: 0 auto;
@@ -334,123 +260,8 @@ const canSubmit = computed(() => {
 .category-title {
   font-size: 1.5rem;
   margin: 0;
-  color: #483c32;
+  color: #333;
   font-weight: 700;
-}
-
-.question-card {
-  background: #ffffff;
-  border-radius: 15px;
-  padding: 2rem 3.6rem;
-  margin-bottom: 1.5rem;
-  transition: transform 0.2s;
-}
-
-.question-text {
-  font-size: 1.1rem;
-  margin: 0 0 1.5rem 0;
-  color: #483c32;
-  font-weight: 600;
-  line-height: 1.6;
-}
-
-.answers-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.answer-item {
-  border-left: 4px solid #d3c6a6;
-  padding-left: 1rem;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #444;
-  padding: 0.5rem 0;
-}
-
-.custom-checkbox {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  accent-color: #483c32;
-}
-
-.checkbox-text {
-  flex: 1;
-  line-height: 1.5;
-}
-
-.level-selector {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: #ffffff;
-  border-radius: 10px;
-  border: 1px solid #d3c6a6;
-}
-
-.level-buttons {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.level-button {
-  flex: 1;
-  min-width: 80px;
-  padding: 0.75rem;
-  background: #ffffff;
-  border: 2px solid #d3c6a6;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.level-button:hover {
-  border-color: #483c32;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(72, 60, 50, 0.15);
-}
-
-.level-button.active {
-  background: #483c32;
-  border-color: #483c32;
-  color: #ffffff;
-  transform: scale(1.05);
-}
-
-.level-radio {
-  display: none;
-}
-
-.level-number {
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-
-.level-stars {
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
-
-.warning-text {
-  color: #f59e0b;
-  font-size: 0.85rem;
-  font-weight: 600;
-  display: block;
-  margin-top: 0.5rem;
-  animation: pulse 2s infinite;
 }
 
 .submit-section {
@@ -498,35 +309,6 @@ const canSubmit = computed(() => {
   animation: pulse 2s infinite;
 }
 
-/* アニメーション */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.slide-fade-enter-active {
-  transition: all 0.3s ease;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.2s ease;
-}
-
-.slide-fade-enter-from {
-  transform: translateY(-10px);
-  opacity: 0;
-}
-
-.slide-fade-leave-to {
-  transform: translateY(-10px);
-  opacity: 0;
-}
-
 @keyframes pulse {
   0%,
   100% {
@@ -537,7 +319,6 @@ const canSubmit = computed(() => {
   }
 }
 
-/* レスポンシブ対応 */
 @media (max-width: 768px) {
   .page-container {
     padding: 1rem 0;
@@ -545,27 +326,6 @@ const canSubmit = computed(() => {
 
   .user-greeting {
     font-size: 1.4rem;
-  }
-
-  .question-card {
-    padding: 2rem;
-  }
-
-  .level-buttons {
-    gap: 0.25rem;
-  }
-
-  .level-button {
-    min-width: 60px;
-    padding: 0.5rem;
-  }
-
-  .level-number {
-    font-size: 1rem;
-  }
-
-  .level-stars {
-    font-size: 0.65rem;
   }
 }
 </style>

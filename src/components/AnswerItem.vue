@@ -1,0 +1,209 @@
+<script setup>
+const props = defineProps({
+  answer: {
+    type: Object,
+    required: true,
+  },
+  answerIndex: {
+    type: Number,
+    required: true,
+  },
+})
+
+const emit = defineEmits(['update:answer'])
+
+// チェックボックスの変更
+const handleCheckChange = (event) => {
+  emit('update:answer', {
+    ...props.answer,
+    isChecked: event.target.checked,
+  })
+}
+
+// 習熟度の変更
+const handleLevelChange = (level) => {
+  emit('update:answer', {
+    ...props.answer,
+    value: level,
+  })
+}
+</script>
+
+<template>
+  <div class="answer-item">
+    <label class="checkbox-label">
+      <input
+        type="checkbox"
+        :checked="answer.isChecked"
+        @change="handleCheckChange"
+        class="custom-checkbox"
+      />
+      <span class="checkbox-text">{{ answer.text }}</span>
+    </label>
+
+    <transition name="slide-fade">
+      <div v-if="answer.isChecked" class="level-selector">
+        <div class="level-buttons">
+          <label
+            v-for="level in 5"
+            :key="level"
+            class="level-button"
+            :class="{ active: answer.value === level }"
+          >
+            <input
+              type="radio"
+              :checked="answer.value === level"
+              @change="handleLevelChange(level)"
+              class="level-radio"
+            />
+            <span class="level-number">{{ level }}</span>
+            <span class="level-stars">{{ '★'.repeat(level) }}</span>
+          </label>
+        </div>
+        <span v-if="!answer.value" class="warning-text"> ⚡ 習熟度を選択してください </span>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<style scoped>
+.answer-item {
+  border-left: 4px solid #d3c6a6;
+  padding-left: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #444;
+  padding: 0.5rem 0;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #483c32;
+}
+
+.checkbox-text {
+  flex: 1;
+  line-height: 1.5;
+}
+
+.level-selector {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #d3c6a6;
+}
+
+.level-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.level-button {
+  flex: 1;
+  min-width: 80px;
+  padding: 0.75rem;
+  background: #ffffff;
+  border: 2px solid #d3c6a6;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.level-button:hover {
+  border-color: #483c32;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(72, 60, 50, 0.15);
+}
+
+.level-button.active {
+  background: #483c32;
+  border-color: #483c32;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.level-radio {
+  display: none;
+}
+
+.level-number {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.level-stars {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.warning-text {
+  color: #f59e0b;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: block;
+  margin-top: 0.5rem;
+  animation: pulse 2s infinite;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-fade-enter-from {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 768px) {
+  .level-buttons {
+    gap: 0.25rem;
+  }
+
+  .level-button {
+    min-width: 60px;
+    padding: 0.5rem;
+  }
+
+  .level-number {
+    font-size: 1rem;
+  }
+
+  .level-stars {
+    font-size: 0.65rem;
+  }
+}
+</style>
