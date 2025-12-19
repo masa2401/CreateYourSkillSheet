@@ -139,17 +139,29 @@ const handlePrint = () => {
       <div class="button-group no-print">
         <!-- 自分のデータの場合 -->
         <template v-if="!isSharedView">
-          <button @click="goBack" class="secondary-button">← 修正する</button>
-          <!-- 印刷ボタンを追加 -->
-          <button @click="handlePrint" class="print-button">🖨️ 印刷する</button>
+          <button @click="goBack" class="action-button secondary-button">
+            <span class="button-icon">←</span>
+            <span class="button-text">修正する</span>
+          </button>
+
+          <button @click="handlePrint" class="action-button print-button">
+            <span class="button-icon">🖨️</span>
+            <span class="button-text">印刷する</span>
+          </button>
 
           <ShareButton :surveyData="surveyData" />
-          <button @click="goToTop" class="primary-button">トップへ戻る</button>
+
+          <button @click="goToTop" class="action-button primary-button">
+            <span class="button-text">トップへ戻る</span>
+          </button>
         </template>
 
         <!-- 共有リンク経由の場合 -->
         <template v-else>
-          <button @click="createMyOwn" class="primary-button">✨ 自分のスキルシートを作成</button>
+          <button @click="createMyOwn" class="action-button primary-button">
+            <span class="button-icon">✨</span>
+            <span class="button-text">自分のスキルシートを作成</span>
+          </button>
         </template>
       </div>
     </div>
@@ -286,16 +298,27 @@ const handlePrint = () => {
   flex-wrap: wrap;
 }
 
-.primary-button,
-.secondary-button,
-.print-button {
-  padding: 1rem 2.5rem;
+.action-button {
+  padding: 1rem 2rem;
   border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  border: none;
+  border: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.button-icon {
+  font-size: 1.1rem;
+  display: inline-block;
+}
+
+.button-text {
+  display: inline-block;
 }
 
 .primary-button {
@@ -308,31 +331,23 @@ const handlePrint = () => {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(72, 60, 50, 0.4);
   background: #5a4a3e;
+  border-color: #5a4a3e;
 }
 
-.secondary-button {
+.secondary-button,
+.print-button {
   background: #ffffff;
   color: #483c32;
-  border: 2px solid #483c32;
+  border-color: #483c32;
+  box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
 }
 
-.secondary-button:hover {
+.secondary-button:hover,
+.print-button:hover {
   background: #483c32;
   color: #ffffff;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
-}
-
-.print-button {
-  background: #10b981;
-  color: #ffffff;
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
-}
-
-.print-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
-  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(72, 60, 50, 0.25);
 }
 
 .loading-container {
@@ -376,6 +391,12 @@ const handlePrint = () => {
     padding: 2rem;
   }
 
+  .skill-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
   .skill-level {
     width: 100%;
     justify-content: space-between;
@@ -386,35 +407,30 @@ const handlePrint = () => {
     width: 100%;
   }
 
-  .primary-button,
-  .secondary-button,
-  .print-button {
+  .action-button {
     width: 100%;
+    justify-content: center;
   }
 }
 
 /* 印刷用スタイル */
 @media print {
-  /* A4サイズ設定 */
   @page {
     size: A4;
     margin: 15mm 10mm;
   }
 
-  /* 印刷時に非表示にする要素 */
   .no-print,
   .button-group {
     display: none !important;
   }
 
-  /* 背景色を白に */
   .page-container {
     background: #ffffff !important;
     padding: 0;
     min-height: auto;
   }
 
-  /* ヘッダーの調整 */
   .header-section {
     padding: 0 0 1rem 0;
   }
@@ -430,13 +446,11 @@ const handlePrint = () => {
     break-after: avoid;
   }
 
-  /* コンテンツの調整 */
   .content-wrapper {
     padding: 0;
     max-width: 100%;
   }
 
-  /* カテゴリセクション */
   .category-section {
     margin-bottom: 1.5rem;
     box-shadow: none;
@@ -457,7 +471,6 @@ const handlePrint = () => {
     font-size: 1.3rem;
   }
 
-  /* 質問ブロック */
   .question-block {
     padding: 0 1.5rem 1rem;
   }
@@ -468,7 +481,6 @@ const handlePrint = () => {
     break-after: avoid;
   }
 
-  /* スキルカード */
   .skills-grid {
     gap: 0.5rem;
   }
@@ -493,20 +505,17 @@ const handlePrint = () => {
     font-size: 0.9rem;
   }
 
-  /* カラー印刷対応 */
   .skill-card {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  /* 改ページ制御 */
   h2,
   h3,
   h4 {
     break-after: avoid;
   }
 
-  /* リンクのURL表示を無効化 */
   a[href]:after {
     content: none !important;
   }

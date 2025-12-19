@@ -66,15 +66,17 @@ const toggleMenu = () => {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s;
-  border: none;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+  background: #ffffff;
+  color: #483c32;
+  border-color: #483c32;
+  box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
 }
 
 .share-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  background: #483c32;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(72, 60, 50, 0.25);
 }
 
 .share-menu {
