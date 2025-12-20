@@ -1,5 +1,6 @@
 <script setup>
 import ShareButton from '@/components/ShareButton.vue'
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
 import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants'
 import { getDataFromUrl } from '@/utils/shareUtils'
 import { getStorageValue } from '@/utils/utils'
@@ -12,16 +13,13 @@ const isSharedView = ref(false)
 
 // データ取得
 onMounted(() => {
-  // 1. URLパラメータからデータを取得
   const urlData = getDataFromUrl()
   if (urlData) {
-    // URLから取得した場合（共有リンク経由）
     surveyData.value = urlData
     isSharedView.value = true
     return
   }
 
-  // 2. LocalStorageから取得
   const localData = getStorageValue(STORAGE_KEYS.SURVEY_DATA, '')
   if (localData) {
     surveyData.value = localData
@@ -29,11 +27,9 @@ onMounted(() => {
     return
   }
 
-  // 3. どちらもない場合はアンケートページへ
   router.push(ROUTES.SURVEY)
 })
 
-// カテゴリごとの質問データを取得
 const getQuestionsByCategory = (categoryId) => {
   if (!surveyData.value) return []
 
@@ -49,12 +45,10 @@ const getQuestionsByCategory = (categoryId) => {
   }
 }
 
-// チェックされた回答のみをフィルタリング
 const getCheckedAnswers = (answers) => {
   return answers.filter((answer) => answer.isChecked)
 }
 
-// カテゴリアイコン
 const getCategoryIcon = (categoryId) => {
   const icons = {
     1: '💼',
@@ -64,7 +58,6 @@ const getCategoryIcon = (categoryId) => {
   return icons[categoryId] || '📋'
 }
 
-// ナビゲーション
 const goToTop = () => {
   router.push(ROUTES.TOP)
 }
@@ -77,7 +70,6 @@ const createMyOwn = () => {
   router.push(ROUTES.TOP)
 }
 
-// 印刷機能
 const handlePrint = () => {
   window.print()
 }
@@ -85,7 +77,6 @@ const handlePrint = () => {
 
 <template>
   <div class="page-container" v-if="surveyData">
-    <!-- ヘッダーセクション -->
     <div class="header-section">
       <div class="result-header">
         <div class="header-icon">📊</div>
@@ -94,7 +85,6 @@ const handlePrint = () => {
     </div>
 
     <div class="content-wrapper">
-      <!-- カテゴリごとに結果を表示 -->
       <div
         v-for="category in surveyData.categories"
         :key="category.id"
@@ -106,14 +96,12 @@ const handlePrint = () => {
           <h3 class="category-title">{{ category.genre }}</h3>
         </div>
 
-        <!-- 質問ごとに表示 -->
         <div
           v-for="question in getQuestionsByCategory(category.id)"
           :key="question.id"
           v-show="getCheckedAnswers(question.answers).length > 0"
           class="question-block"
         >
-          <!-- チェックされた回答がある場合のみ質問を表示 -->
           <template v-if="getCheckedAnswers(question.answers).length > 0">
             <h4 class="question-title">{{ question.question }}</h4>
 
@@ -135,28 +123,35 @@ const handlePrint = () => {
         </div>
       </div>
 
-      <!-- ボタングループ（印刷時は非表示） -->
       <div class="button-group no-print">
-        <!-- 自分のデータの場合 -->
         <template v-if="!isSharedView">
-          <button @click="goBack" class="action-button secondary-button">
-            <span class="button-icon">←</span>
-            <span class="button-text">修正する</span>
-          </button>
+          <AnimatedIconButton
+            icon="fa-solid fa-arrow-left"
+            text="修正する"
+            animation="beat"
+            button-class="action-button secondary-button"
+            @click="goBack"
+          />
 
-          <button @click="handlePrint" class="action-button print-button">
-            <span class="button-icon">🖨️</span>
-            <span class="button-text">印刷する</span>
-          </button>
+          <AnimatedIconButton
+            icon="fa-solid fa-print"
+            text="印刷する"
+            animation="bounce"
+            button-class="action-button print-button"
+            @click="handlePrint"
+          />
 
           <ShareButton :surveyData="surveyData" />
 
-          <button @click="goToTop" class="action-button primary-button">
-            <span class="button-text">トップへ戻る</span>
-          </button>
+          <AnimatedIconButton
+            icon="fa-regular fa-house"
+            text="トップへ戻る"
+            animation="beat"
+            button-class="action-button primary-button"
+            @click="goToTop"
+          />
         </template>
 
-        <!-- 共有リンク経由の場合 -->
         <template v-else>
           <button @click="createMyOwn" class="action-button primary-button">
             <span class="button-icon">✨</span>
@@ -167,7 +162,6 @@ const handlePrint = () => {
     </div>
   </div>
 
-  <!-- ローディング画面 -->
   <div v-else class="loading-container">
     <div class="loading-spinner"></div>
     <p class="loading-text">データを読み込んでいます...</p>

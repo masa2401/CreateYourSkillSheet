@@ -16,6 +16,7 @@ import {
 } from '@/utils/utils'
 
 const router = useRouter()
+const isHover = ref(false)
 
 // ユーザー情報の取得
 const userName = getUserName()
@@ -145,7 +146,8 @@ const canSubmit = computed(() => {
         </div>
         <div class="instruction-card">
           <p class="instruction-text">
-            📋 以下の質問にチェックを入れていただき、習熟度を5段階で回答してください。
+            <font-awesome-icon icon="fa-solid fa-circle-check" />
+            以下の質問にチェックを入れていただき、習熟度を5段階で回答してください。
           </p>
         </div>
       </div>
@@ -174,15 +176,19 @@ const canSubmit = computed(() => {
 
       <div class="submit-section">
         <button
+          @mouseenter="isHover = true"
+          @mouseleave="isHover = false"
           @click="toNext"
           class="submit-button"
           :class="{ disabled: !canSubmit }"
           :disabled="!canSubmit"
         >
-          次へ進む →
+          次へ進む &ensp;
+          <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHover" />
         </button>
         <p v-if="!canSubmit" class="submit-hint">
-          ⚠️ すべてのチェック項目に習熟度を選択してください
+          <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake />
+          すべてのチェック項目に習熟度を選択してください
         </p>
       </div>
     </div>
@@ -271,7 +277,7 @@ const canSubmit = computed(() => {
   justify-content: center;
   margin-top: 3rem;
   padding: 2rem 0;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .submit-button {

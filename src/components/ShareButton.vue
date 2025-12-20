@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue'
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
+import { ref, computed } from 'vue'
 import { generateShareUrl, copyToClipboard } from '@/utils/shareUtils'
 
 const props = defineProps({
@@ -13,12 +14,14 @@ const showMenu = ref(false)
 const copySuccess = ref(false)
 
 // 共有URLを生成
-const shareUrl = ref('')
-try {
-  shareUrl.value = generateShareUrl(props.surveyData)
-} catch (error) {
-  console.error('URL生成エラー:', error)
-}
+const shareUrl = computed(() => {
+  try {
+    return generateShareUrl(props.surveyData)
+  } catch (error) {
+    console.error('URL生成エラー:', error)
+    return ''
+  }
+})
 
 // クリップボードにコピー
 const handleCopy = async () => {
@@ -40,7 +43,13 @@ const toggleMenu = () => {
 
 <template>
   <div class="share-button-container">
-    <button @click="toggleMenu" class="share-button">🔗 結果を共有</button>
+    <AnimatedIconButton
+      icon="fa-solid fa-arrow-up-right-from-square"
+      text="結果を共有"
+      animation="bounce"
+      button-class="share-button"
+      @click="toggleMenu"
+    />
 
     <transition name="slide-fade">
       <div v-if="showMenu" class="share-menu">

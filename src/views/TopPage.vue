@@ -3,7 +3,9 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { STORAGE_KEYS, ROUTES } from '@/utils/constants'
 import { setStorageValue } from '@/utils/utils'
+
 const router = useRouter()
+const isHover = ref(false)
 
 // フォームデータ
 const userName = ref('')
@@ -52,7 +54,10 @@ const validateAndProceed = () => {
         <!-- 名前入力セクション -->
         <div class="input-section">
           <label class="input-label">
-            <span class="label-icon">✏️</span>
+            <span class="label-icon">
+              <font-awesome-icon icon="fa-solid fa-pen" />
+            </span>
+
             お名前を入力してください
           </label>
           <input
@@ -63,7 +68,10 @@ const validateAndProceed = () => {
             @input="showError = false"
           />
           <transition name="fade">
-            <p v-if="showError" class="error-text">⚠️ お名前を入力してください</p>
+            <p v-if="showError" class="error-text">
+              <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake></font-awesome-icon>
+              お名前を入力してください
+            </p>
           </transition>
         </div>
         <!-- カテゴリ選択セクション -->
@@ -106,12 +114,23 @@ const validateAndProceed = () => {
               </div>
             </label>
           </div>
-          <p class="hint-text">💡 どちらも選択しない場合は、共通の質問のみ表示されます</p>
+          <p class="hint-text">
+            <font-awesome-icon icon="fa-regular fa-lightbulb" />
+            どちらも選択しない場合は、共通の質問のみ表示されます
+          </p>
         </div>
       </div>
       <!-- ボタン -->
       <div class="button-section">
-        <button @click="validateAndProceed" class="start-button">アンケートを開始 →</button>
+        <button
+          @click="validateAndProceed"
+          class="start-button"
+          @mouseenter="isHover = true"
+          @mouseleave="isHover = false"
+        >
+          アンケートを開始 &ensp;
+          <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHover" />
+        </button>
       </div>
     </div>
   </div>
@@ -192,7 +211,6 @@ const validateAndProceed = () => {
 
 .label-icon {
   font-size: 1.3rem;
-  margin-right: 0.5rem;
 }
 
 .name-input {
