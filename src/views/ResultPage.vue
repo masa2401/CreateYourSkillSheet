@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import ShareButton from '@/components/ShareButton.vue'
 import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
 import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants'

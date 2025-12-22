@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { STORAGE_KEYS, ROUTES } from '@/utils/constants'
