@@ -6,7 +6,6 @@ import ValidationError from '@/components/ValidationError.vue'
 import { commonQuestionData, engineerQuestionData, designerQuestionData } from '@/data/questionData'
 import { ROUTES, STORAGE_KEYS, CATEGORIES } from '@/utils/constants'
 import {
-  getUserName,
   getStorageValue,
   setStorageValue,
   createReactiveQuestions,
@@ -19,7 +18,7 @@ const router = useRouter()
 const isHover = ref(false)
 
 // ユーザー情報の取得
-const userName = getUserName()
+const userName = getStorageValue(STORAGE_KEYS.USER_NAME, 'ゲスト')
 
 // カテゴリ設定
 const categories = ref([
@@ -175,6 +174,10 @@ const canSubmit = computed(() => {
       <ValidationError :errors="validationErrors" />
 
       <div class="submit-section">
+        <p v-if="!canSubmit" class="submit-hint">
+          <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake />
+          すべてのチェック項目に習熟度を選択してください
+        </p>
         <button
           @mouseenter="isHover = true"
           @mouseleave="isHover = false"
@@ -186,10 +189,6 @@ const canSubmit = computed(() => {
           次へ進む &ensp;
           <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHover" />
         </button>
-        <p v-if="!canSubmit" class="submit-hint">
-          <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake />
-          すべてのチェック項目に習熟度を選択してください
-        </p>
       </div>
     </div>
   </div>
@@ -307,7 +306,7 @@ const canSubmit = computed(() => {
 }
 
 .submit-hint {
-  color: #f59e0b;
+  color: #c00e0b;
   font-size: 0.95rem;
   font-weight: 600;
   margin: 0;

@@ -2,7 +2,6 @@
 defineProps({
   errors: {
     type: Array,
-    required: true,
     default: () => [],
   },
 })
@@ -11,7 +10,9 @@ defineProps({
 <template>
   <transition name="fade">
     <div v-if="errors.length > 0" class="error-message" id="error-message">
-      <div class="error-icon">⚠️</div>
+      <div class="error-icon">
+        <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
+      </div>
       <div class="error-content">
         <h4 class="error-title">入力エラー</h4>
         <p class="error-description">チェックを入れた項目には、習熟度の選択が必須です。</p>
@@ -30,7 +31,7 @@ defineProps({
   background: #fff5f5;
   border: 2px solid #f88;
   border-radius: 15px;
-  padding: 1.5rem;
+  padding: 2rem;
   margin-bottom: 2rem;
   display: flex;
   gap: 1rem;
@@ -52,6 +53,7 @@ defineProps({
 }
 
 .error-icon {
+  color: #f59e0b;
   font-size: 2rem;
   flex-shrink: 0;
 }

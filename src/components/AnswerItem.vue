@@ -155,8 +155,9 @@ const handleLevelChange = (level) => {
   color: #f59e0b;
   font-size: 0.85rem;
   font-weight: 600;
+  text-align: center;
   display: block;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   animation: pulse 2s infinite;
 }
 

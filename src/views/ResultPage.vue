@@ -281,7 +281,7 @@ const handlePrint = () => {
 
 .level-stars {
   color: #fbbf24;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .button-group {

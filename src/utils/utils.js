@@ -1,12 +1,19 @@
-import { STORAGE_KEYS } from './constants'
 
+// ========================================
 // LocalStorage操作
+// ========================================
+
+/**
+ * LocalStorageから値を取得
+ * @param {string} key - ストレージキー
+ * @param {*} defaultValue - デフォルト値
+ * @returns {*} 取得した値またはデフォルト値
+ */
+
 export const getStorageValue = (key, defaultValue = null) => {
     try {
         const item = localStorage.getItem(key)
         if (item === null) return defaultValue
-
-        // JSON.parseで自動的に型変換
         return JSON.parse(item)
     } catch (error) {
         console.error(`LocalStorage取得・パースエラー: ${key}`, error)
@@ -14,7 +21,13 @@ export const getStorageValue = (key, defaultValue = null) => {
     }
 }
 
-// LocalStorageに値を保存（自動でJSON.stringify）
+/**
+ * LocalStorageに値を保存
+ * @param {string} key - ストレージキー
+ * @param {*} value - 保存する値
+ * @returns {boolean} 成功/失敗
+ */
+
 export const setStorageValue = (key, value) => {
     try {
         localStorage.setItem(key, JSON.stringify(value))
@@ -25,7 +38,12 @@ export const setStorageValue = (key, value) => {
     }
 }
 
-// LocalStorageから値を削除
+/**
+ * LocalStorageから値を削除
+ * @param {string} key - ストレージキー
+ * @returns {boolean} 成功/失敗
+ */
+
 export const removeStorageValue = (key) => {
     try {
         localStorage.removeItem(key)
@@ -36,16 +54,16 @@ export const removeStorageValue = (key) => {
     }
 }
 
-// ユーザー名を取得
-export const getUserName = () => {
-    return getStorageValue(STORAGE_KEYS.USER_NAME, 'ゲスト')
-}
-// カテゴリの選択状態を取得
-export const getCategorySelection = (categoryKey) => {
-    return getStorageValue(categoryKey, false)
-}
+// ========================================
 // データ変換
-// 質問データをリアクティブな形式に変換
+// ========================================
+
+/**
+ * 質問データをリアクティブな形式に変換
+ * @param {Array} data - 質問データ配列
+ * @returns {Array} リアクティブな質問データ
+ */
+
 export const createReactiveQuestions = (data) => {
     return data.map((q) => ({
         id: q.id,
@@ -58,7 +76,12 @@ export const createReactiveQuestions = (data) => {
     }))
 }
 
-// 質問データをシリアライズ（保存用）
+/**
+ * 質問データをシリアライズ（保存用）
+ * @param {Array} questions - 質問データ配列
+ * @returns {Array} シリアライズされた質問データ
+ */
+
 export const serializeQuestions = (questions) => {
     return questions.map((q) => ({
         id: q.id,
@@ -71,8 +94,17 @@ export const serializeQuestions = (questions) => {
     }))
 }
 
+// ========================================
 // バリデーション
-// チェックされた回答で習熟度が未選択のものを検証
+// ========================================
+
+/**
+ * チェックされた回答で習熟度が未選択のものを検証
+ * @param {Array} allQuestions - すべての質問データ
+ * @param {Array} categories - カテゴリ設定
+ * @returns {Array} エラー配列
+ */
+
 export const validateQuestions = (allQuestions, categories) => {
     const errors = []
 
@@ -96,8 +128,15 @@ export const validateQuestions = (allQuestions, categories) => {
     return errors
 }
 
+// ========================================
 // スクロール
-// 要素までスムーズスクロール
+// ========================================
+
+/**
+ * 要素までスムーズスクロール
+ * @param {string} elementId - 要素のID
+ */
+
 export const scrollToElement = (elementId) => {
     const element = document.getElementById(elementId)
     if (element) {
