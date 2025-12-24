@@ -32,17 +32,8 @@ onMounted(() => {
 
 const getQuestionsByCategory = (categoryId) => {
   if (!surveyData.value) return []
-
-  switch (categoryId) {
-    case 1:
-      return surveyData.value.commonQuestions || []
-    case 2:
-      return surveyData.value.engineerQuestions || []
-    case 3:
-      return surveyData.value.designerQuestions || []
-    default:
-      return []
-  }
+  const category = surveyData.value.categories.find((c) => c.id === categoryId)
+  return category.questions || []
 }
 
 const getCheckedAnswers = (answers) => {

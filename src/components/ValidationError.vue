@@ -10,20 +10,23 @@ defineProps({
 <template>
   <transition name="fade">
     <div v-if="errors.length > 0" class="error-message" id="error-message">
-      <div class="error-icon">
-        <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
-      </div>
       <div class="error-content">
-        <h4 class="error-title">入力エラー</h4>
+        <div class="error-title">
+          <div class="error-icon">
+            <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
+          </div>
+          <h4>入力エラー</h4>
+        </div>
+        <div class="error-text">
+          <!-- スロットでカスタムメッセージを受け取る -->
+          <slot name="description"></slot>
 
-        <!-- スロットでカスタムメッセージを受け取る -->
-        <slot name="description"> </slot>
-
-        <ul class="error-list">
-          <li v-for="(error, index) in errors" :key="index" class="error-item">
-            <strong>{{ error.category }}</strong> - {{ error.answer }}
-          </li>
-        </ul>
+          <ul class="error-list">
+            <li v-for="(error, index) in errors" :key="index" class="error-item">
+              <strong>{{ error.category }}</strong> - {{ error.answer }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </transition>

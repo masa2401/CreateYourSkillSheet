@@ -44,7 +44,7 @@ export const decodeData = (compressedString) => {
 // ========================================
 
 /**
- * 共有用URLを生成（Hash Mode対応）
+ * 共有用URLを生成
  */
 export const generateShareUrl = (surveyData) => {
     const encoded = encodeData(surveyData)
@@ -52,17 +52,12 @@ export const generateShareUrl = (surveyData) => {
         throw new Error('データのエンコードに失敗しました')
     }
 
-    const baseUrl = window.location.origin
-    const basePath = window.location.pathname // GitHub Pagesのサブパス対応
-
-    // Hash Modeの場合: /#/result?data=xxxxx
-    const shareUrl = `${baseUrl}${basePath}#/result?data=${encoded}`
-
-    return shareUrl
+    const { origin, pathname } = window.location
+    return `${origin}${pathname}#/result?data=${encoded}`
 }
 
 /**
- * URLからデータを取得（Hash Mode対応）
+ * URLからデータを取得
  */
 export const getDataFromUrl = () => {
     // Hash Modeでは window.location.hash にクエリパラメータが含まれる
