@@ -1,6 +1,7 @@
 ﻿<script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import ValidationError from '@/components/ValidationError.vue'
 import { STORAGE_KEYS, ROUTES } from '@/utils/constants'
 import { setStorageValue } from '@/utils/utils'
 
@@ -14,12 +15,40 @@ const selectedCategories = ref({
   designer: false,
 })
 
-// バリデーション
-const showError = ref(false)
-const validateAndProceed = () => {
-  // 名前が空の場合はエラー表示
+// バリデーション状態
+const validationErrors = ref([])
+const hasAttemptedSubmit = ref(false)
+
+// バリデーション実行
+const performValidation = () => {
+  const errors = []
+
+  // 名前が空の場合
   if (!userName.value.trim()) {
-    showError.value = true
+    errors.push({
+      category: '入力必須項目',
+      question: 'お名前の入力',
+      answer: 'お名前を入力してください',
+    })
+  }
+
+  return errors
+}
+
+// 入力時にエラーをクリア
+const handleNameInput = () => {
+  if (hasAttemptedSubmit.value) {
+    validationErrors.value = performValidation()
+  }
+}
+
+// アンケート開始処理
+const validateAndProceed = () => {
+  hasAttemptedSubmit.value = true
+  validationErrors.value = performValidation()
+
+  // エラーがある場合は処理を中断
+  if (validationErrors.value.length > 0) {
     return
   }
 
@@ -57,23 +86,18 @@ const validateAndProceed = () => {
             <span class="label-icon">
               <font-awesome-icon icon="fa-solid fa-pen" />
             </span>
-
             お名前を入力してください
           </label>
           <input
             type="text"
             class="name-input"
+            :class="{ 'input-error': validationErrors.length > 0 }"
             v-model="userName"
             placeholder="山田 太郎"
-            @input="showError = false"
+            @input="handleNameInput"
           />
-          <transition name="fade">
-            <p v-if="showError" class="error-text">
-              <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake></font-awesome-icon>
-              お名前を入力してください
-            </p>
-          </transition>
         </div>
+
         <!-- カテゴリ選択セクション -->
         <div class="category-section">
           <h3 class="section-title">
@@ -120,6 +144,14 @@ const validateAndProceed = () => {
           </p>
         </div>
       </div>
+
+      <!-- バリデーションエラー表示 -->
+      <ValidationError :errors="validationErrors">
+        <template #description>
+          <p class="error-description">必須項目を入力してください。</p>
+        </template>
+      </ValidationError>
+
       <!-- ボタン -->
       <div class="button-section">
         <button
@@ -230,11 +262,22 @@ const validateAndProceed = () => {
   box-shadow: 0 0 0 4px rgba(72, 60, 50, 0.1);
 }
 
-.error-text {
-  color: #ef4444;
-  font-size: 0.95rem;
-  margin: 0.75rem 0 0;
-  font-weight: 600;
+.name-input.input-error {
+  border-color: #f88;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 .section-title {

@@ -15,7 +15,10 @@ defineProps({
       </div>
       <div class="error-content">
         <h4 class="error-title">入力エラー</h4>
-        <p class="error-description">チェックを入れた項目には、習熟度の選択が必須です。</p>
+
+        <!-- スロットでカスタムメッセージを受け取る -->
+        <slot name="description"> </slot>
+
         <ul class="error-list">
           <li v-for="(error, index) in errors" :key="index" class="error-item">
             <strong>{{ error.category }}</strong> - {{ error.answer }}
@@ -59,31 +62,39 @@ defineProps({
 }
 
 .error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   flex: 1;
+  gap: 1rem;
+  color: #c00;
 }
 
 .error-title {
-  color: #c00;
-  margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-title > h4 {
+  margin: 0;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .error-description {
-  color: #c00;
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.5rem 0;
   font-size: 1rem;
   line-height: 1.5;
 }
 
 .error-list {
-  margin: 0;
+  margin: 0.2rem 0 0;
   padding-left: 1.5rem;
   list-style: disc;
 }
 
 .error-item {
-  color: #c00;
   margin-bottom: 0.5rem;
   line-height: 1.4;
 }
@@ -112,7 +123,7 @@ defineProps({
     font-size: 1.5rem;
   }
 
-  .error-title {
+  .error-title > h4 {
     font-size: 1.1rem;
   }
 

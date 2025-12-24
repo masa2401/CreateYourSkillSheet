@@ -1,5 +1,5 @@
 ﻿<script setup>
-import { ref, computed, nextTick, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import QuestionCard from '@/components/QuestionCard.vue'
 import ValidationError from '@/components/ValidationError.vue'
@@ -10,7 +10,6 @@ import {
   setStorageValue,
   createReactiveQuestions,
   serializeQuestions,
-  validateQuestions,
   scrollToElement,
 } from '@/utils/utils'
 
@@ -20,70 +19,55 @@ const isHover = ref(false)
 // ユーザー情報の取得
 const userName = getStorageValue(STORAGE_KEYS.USER_NAME, 'ゲスト')
 
-// カテゴリ設定
-const categories = ref([
+// カテゴリと質問データを統合管理
+const categoryData = ref([
   {
-    id: CATEGORIES.COMMON.id,
-    genre: CATEGORIES.COMMON.genre,
+    ...CATEGORIES.COMMON,
     isChecked: true,
-    icon: CATEGORIES.COMMON.icon,
+    questions: createReactiveQuestions(commonQuestionData),
   },
   {
-    id: CATEGORIES.ENGINEER.id,
-    genre: CATEGORIES.ENGINEER.genre,
+    ...CATEGORIES.ENGINEER,
     isChecked: getStorageValue(STORAGE_KEYS.CATEGORY_ENGINEER, false),
-    icon: CATEGORIES.ENGINEER.icon,
+    questions: createReactiveQuestions(engineerQuestionData),
   },
   {
-    id: CATEGORIES.DESIGNER.id,
-    genre: CATEGORIES.DESIGNER.genre,
+    ...CATEGORIES.DESIGNER,
     isChecked: getStorageValue(STORAGE_KEYS.CATEGORY_DESIGNER, false),
-    icon: CATEGORIES.DESIGNER.icon,
+    questions: createReactiveQuestions(designerQuestionData),
   },
 ])
 
-// 質問データの初期化
-const commonQuestions = ref(createReactiveQuestions(commonQuestionData))
-const engineerQuestions = ref(createReactiveQuestions(engineerQuestionData))
-const designerQuestions = ref(createReactiveQuestions(designerQuestionData))
-
-// カテゴリごとの質問マッピング
-const questionsByCategory = computed(() => ({
-  [CATEGORIES.COMMON.id]: commonQuestions.value,
-  [CATEGORIES.ENGINEER.id]: engineerQuestions.value,
-  [CATEGORIES.DESIGNER.id]: designerQuestions.value,
-}))
-
-// バリデーション
+// バリデーション状態
 const validationErrors = ref([])
 const hasAttemptedSubmit = ref(false)
 
 // バリデーション実行
 const performValidation = () => {
-  const allQuestions = [
-    {
-      name: CATEGORIES.COMMON.genre,
-      questions: commonQuestions.value,
-      categoryId: CATEGORIES.COMMON.id,
-    },
-    {
-      name: CATEGORIES.ENGINEER.genre,
-      questions: engineerQuestions.value,
-      categoryId: CATEGORIES.ENGINEER.id,
-    },
-    {
-      name: CATEGORIES.DESIGNER.genre,
-      questions: designerQuestions.value,
-      categoryId: CATEGORIES.DESIGNER.id,
-    },
-  ]
+  const errors = []
 
-  return validateQuestions(allQuestions, categories.value)
+  categoryData.value.forEach((category) => {
+    if (!category.isChecked) return
+
+    category.questions.forEach((question) => {
+      question.answers.forEach((answer) => {
+        if (answer.isChecked && !answer.value) {
+          errors.push({
+            category: category.genre,
+            question: question.question,
+            answer: answer.text,
+          })
+        }
+      })
+    })
+  })
+
+  return errors
 }
 
 // 回答が変更されたらバリデーションを実行（送信ボタンを押した後のみ）
 watch(
-  [commonQuestions, engineerQuestions, designerQuestions],
+  categoryData,
   () => {
     if (hasAttemptedSubmit.value) {
       validationErrors.value = performValidation()
@@ -93,23 +77,16 @@ watch(
 )
 
 // 質問の更新ハンドラ
-const handleQuestionUpdate = (categoryId, questionId, updatedQuestion) => {
-  const questionsRef = questionsByCategory.value[categoryId]
-  const index = questionsRef.findIndex((q) => q.id === questionId)
-  if (index !== -1) {
-    questionsRef[index] = updatedQuestion
-  }
+const handleQuestionUpdate = (categoryIndex, questionIndex, updatedQuestion) => {
+  categoryData.value[categoryIndex].questions[questionIndex] = updatedQuestion
 }
 
 // 次へ進む処理
 const toNext = async () => {
   hasAttemptedSubmit.value = true
-
-  // バリデーション実行
   validationErrors.value = performValidation()
 
   if (validationErrors.value.length > 0) {
-    // DOM更新を待ってからスクロール
     await nextTick()
     scrollToElement('error-message')
     return
@@ -118,10 +95,13 @@ const toNext = async () => {
   // データ保存
   const surveyData = {
     userName,
-    categories: categories.value,
-    commonQuestions: serializeQuestions(commonQuestions.value),
-    engineerQuestions: serializeQuestions(engineerQuestions.value),
-    designerQuestions: serializeQuestions(designerQuestions.value),
+    categories: categoryData.value.map((cat) => ({
+      id: cat.id,
+      genre: cat.genre,
+      isChecked: cat.isChecked,
+      icon: cat.icon,
+      questions: serializeQuestions(cat.questions),
+    })),
   }
 
   setStorageValue(STORAGE_KEYS.SURVEY_DATA, surveyData)
@@ -129,10 +109,9 @@ const toNext = async () => {
 }
 
 // 次へ進むボタンの有効/無効判定
-const canSubmit = computed(() => {
-  if (!hasAttemptedSubmit.value) return true
-  return validationErrors.value.length === 0
-})
+const isSubmitDisabled = () => {
+  return hasAttemptedSubmit.value && validationErrors.value.length > 0
+}
 </script>
 
 <template>
@@ -154,7 +133,7 @@ const canSubmit = computed(() => {
 
     <div class="wrap">
       <!-- カテゴリごとの質問 -->
-      <template v-for="category in categories" :key="category.id">
+      <template v-for="(category, categoryIndex) in categoryData" :key="category.id">
         <div v-if="category.isChecked" class="category-section">
           <div class="category-header">
             <span class="category-icon">{{ category.icon }}</span>
@@ -162,19 +141,23 @@ const canSubmit = computed(() => {
           </div>
 
           <QuestionCard
-            v-for="question in questionsByCategory[category.id]"
+            v-for="(question, questionIndex) in category.questions"
             :key="question.id"
             :question="question"
-            @update:question="handleQuestionUpdate(category.id, question.id, $event)"
+            @update:question="handleQuestionUpdate(categoryIndex, questionIndex, $event)"
           />
         </div>
       </template>
 
       <!-- バリデーションエラー表示 -->
-      <ValidationError :errors="validationErrors" />
+      <ValidationError :errors="validationErrors">
+        <template #description>
+          <p class="error-description">チェックを入れた項目には、習熟度の選択が必須です。</p>
+        </template>
+      </ValidationError>
 
       <div class="submit-section">
-        <p v-if="!canSubmit" class="submit-hint">
+        <p v-if="isSubmitDisabled()" class="submit-hint">
           <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake />
           すべてのチェック項目に習熟度を選択してください
         </p>
@@ -183,8 +166,8 @@ const canSubmit = computed(() => {
           @mouseleave="isHover = false"
           @click="toNext"
           class="submit-button"
-          :class="{ disabled: !canSubmit }"
-          :disabled="!canSubmit"
+          :class="{ disabled: isSubmitDisabled() }"
+          :disabled="isSubmitDisabled()"
         >
           次へ進む &ensp;
           <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHover" />
