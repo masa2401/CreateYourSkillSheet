@@ -75,7 +75,7 @@ const handleLevelChange = (level) => {
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   cursor: pointer;
   font-size: 1rem;
   color: #444;
@@ -95,7 +95,7 @@ const handleLevelChange = (level) => {
 }
 
 .level-selector {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   padding: 1rem;
   background: #ffffff;
   border-radius: 10px;
@@ -157,7 +157,6 @@ const handleLevelChange = (level) => {
   font-weight: 600;
   text-align: center;
   display: block;
-  margin-top: 0.75rem;
   animation: pulse 2s infinite;
 }
 

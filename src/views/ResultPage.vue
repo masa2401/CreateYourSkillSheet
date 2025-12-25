@@ -163,13 +163,12 @@ const handlePrint = () => {
 .page-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
-  padding-bottom: 4rem;
 }
 
 .header-section {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1.5rem;
 }
 
 .result-header {
@@ -194,14 +193,14 @@ const handlePrint = () => {
 .content-wrapper {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1rem 2.25rem;
 }
 
 .category-section {
-  margin-bottom: 3rem;
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
+  margin-bottom: 2.25rem;
 }
 
 .category-header {
@@ -210,7 +209,6 @@ const handlePrint = () => {
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 1rem;
 }
 
 .category-icon {
@@ -225,25 +223,25 @@ const handlePrint = () => {
 }
 
 .question-block {
-  padding: 0 3.6rem 1.8rem;
+  padding: 0 3.6rem 2.4rem;
 }
 
 .question-title {
   font-size: 1.1rem;
   color: #483c32;
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.2rem;
   font-weight: 600;
   line-height: 1.6;
 }
 
 .skills-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.2rem;
 }
 
 .skill-card {
   background: #ffffff;
-  padding: 0.8rem 1rem;
+  padding: 0.5rem 1rem;
   border-left: 4px solid #d3c6a6;
   transition: all 0.3s;
 }
@@ -279,12 +277,12 @@ const handlePrint = () => {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 3rem;
   flex-wrap: wrap;
+  padding: 1.5rem 0;
 }
 
 .action-button {
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;

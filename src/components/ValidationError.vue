@@ -18,9 +18,7 @@ defineProps({
           <h4>入力エラー</h4>
         </div>
         <div class="error-text">
-          <!-- スロットでカスタムメッセージを受け取る -->
           <slot name="description"></slot>
-
           <ul class="error-list">
             <li v-for="(error, index) in errors" :key="index" class="error-item">
               <strong>{{ error.category }}</strong> - {{ error.answer }}
@@ -37,10 +35,10 @@ defineProps({
   background: #fff5f5;
   border: 2px solid #f88;
   border-radius: 15px;
-  padding: 2rem;
-  margin-bottom: 2rem;
+  padding: 2.25rem;
+  margin-bottom: 2.25rem;
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   box-shadow: 0 2px 8px rgba(255, 0, 0, 0.15);
   animation: shake 0.5s ease;
 }
@@ -69,7 +67,7 @@ defineProps({
   flex-direction: column;
   align-items: center;
   flex: 1;
-  gap: 1rem;
+  gap: 0.75rem;
   color: #c00;
 }
 
@@ -92,7 +90,7 @@ defineProps({
 }
 
 .error-list {
-  margin: 0.2rem 0 0;
+  margin: 0.25rem 0 0;
   padding-left: 1.5rem;
   list-style: disc;
 }
@@ -118,7 +116,7 @@ defineProps({
 
 @media (max-width: 768px) {
   .error-message {
-    padding: 1rem;
+    padding: 0.75rem;
     gap: 0.75rem;
   }
 

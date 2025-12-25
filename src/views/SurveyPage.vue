@@ -17,7 +17,7 @@ const router = useRouter()
 const isHover = ref(false)
 
 // ユーザー情報の取得
-const userName = getStorageValue(STORAGE_KEYS.USER_NAME, 'ゲスト')
+const userName = getStorageValue(STORAGE_KEYS.USER_NAME, '')
 
 // カテゴリと質問データを統合管理
 const categoryData = ref([
@@ -116,7 +116,6 @@ const isSubmitDisabled = () => {
 
 <template>
   <div class="page-container">
-    <!-- ヘッダーセクション -->
     <div class="header-section">
       <div class="inner">
         <div class="name-card">
@@ -132,7 +131,6 @@ const isSubmitDisabled = () => {
     </div>
 
     <div class="wrap">
-      <!-- カテゴリごとの質問 -->
       <template v-for="(category, categoryIndex) in categoryData" :key="category.id">
         <div v-if="category.isChecked" class="category-section">
           <div class="category-header">
@@ -181,21 +179,20 @@ const isSubmitDisabled = () => {
 .page-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
-  padding: 2rem;
+  padding: 3.6rem 1rem 2rem;
 }
 
 .header-section {
   max-width: 1000px;
-  margin: 0 auto 1rem;
-  padding: 1rem;
+  margin: 0 auto 2.25rem;
 }
 
 .inner {
   max-width: 1000px;
-  padding: 1.5rem 1rem;
+  padding: 1.2rem 1rem;
   margin: 0 auto;
   background: #ffffff;
-  border-radius: 15px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -206,7 +203,6 @@ const isSubmitDisabled = () => {
 
 .user-greeting {
   font-size: 1.8rem;
-  margin-bottom: 0.8rem;
   color: #483c32;
   font-weight: 700;
 }
@@ -214,7 +210,7 @@ const isSubmitDisabled = () => {
 .instruction-text {
   margin: 0;
   font-size: 1.05rem;
-  color: #555;
+  color: #444;
   text-align: center;
   line-height: 1.6;
 }
@@ -222,11 +218,10 @@ const isSubmitDisabled = () => {
 .wrap {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 1rem 2rem;
 }
 
 .category-section {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
@@ -236,9 +231,8 @@ const isSubmitDisabled = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
+  gap: 0.75rem;
+  padding: 3rem 1.5rem 1.5rem;
 }
 
 .category-icon {
@@ -257,14 +251,13 @@ const isSubmitDisabled = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3rem;
-  padding: 2rem 0;
   gap: 1.5rem;
+  padding: 1rem;
 }
 
 .submit-button {
   font-size: 1.1rem;
-  padding: 1rem 3rem;
+  padding: 0.75rem 1.5rem;
   background: #483c32;
   color: #ffffff;
   border: none;

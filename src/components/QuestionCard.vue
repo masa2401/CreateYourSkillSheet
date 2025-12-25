@@ -42,14 +42,13 @@ const handleAnswerUpdate = (answerIndex, updatedAnswer) => {
 .question-card {
   background: #ffffff;
   border-radius: 15px;
-  padding: 2rem 3.6rem;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem 3rem;
   transition: transform 0.2s;
 }
 
 .question-text {
   font-size: 1.1rem;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 0.75rem 0;
   color: #483c32;
   font-weight: 600;
   line-height: 1.6;
