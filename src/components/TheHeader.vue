@@ -15,7 +15,9 @@ const goHome = () => {
 <template>
   <header class="header">
     <h1 class="title" @click="goHome">
-      <span class="icon">📊</span>
+      <span class="icon">
+        <font-awesome-icon icon="fa-regular fa-clipboard" />
+      </span>
       スキルシート制作ページ
     </h1>
   </header>
@@ -46,7 +48,6 @@ const goHome = () => {
 
 .icon {
   font-size: 1.8rem;
-  margin-right: 0.5rem;
   display: inline-block;
   vertical-align: baseline;
 }

@@ -123,7 +123,7 @@ const isSubmitDisabled = () => {
         </div>
         <div class="instruction-card">
           <p class="instruction-text">
-            <font-awesome-icon icon="fa-solid fa-circle-check" />
+            <font-awesome-icon icon="fa-solid fa-check" />
             以下の質問にチェックを入れていただき、習熟度を5段階で回答してください。
           </p>
         </div>
@@ -134,7 +134,7 @@ const isSubmitDisabled = () => {
       <template v-for="(category, categoryIndex) in categoryData" :key="category.id">
         <div v-if="category.isChecked" class="category-section">
           <div class="category-header">
-            <span class="category-icon">{{ category.icon }}</span>
+            <font-awesome-icon :icon="category.icon" class="category-icon" />
             <h3 class="category-title">{{ category.genre }}</h3>
           </div>
 
@@ -223,8 +223,9 @@ const isSubmitDisabled = () => {
 .category-section {
   margin-bottom: 2rem;
   background: #ffffff;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
+  padding: 2.5rem 0;
 }
 
 .category-header {
@@ -232,17 +233,18 @@ const isSubmitDisabled = () => {
   justify-content: center;
   align-items: center;
   gap: 0.75rem;
-  padding: 3rem 1.5rem 1.5rem;
+  padding: 1rem;
 }
 
 .category-icon {
   font-size: 2rem;
+  color: #483c32;
 }
 
 .category-title {
   font-size: 1.5rem;
   margin: 0;
-  color: #333;
+  color: #483c32;
   font-weight: 700;
 }
 

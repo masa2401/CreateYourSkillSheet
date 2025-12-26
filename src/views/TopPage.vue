@@ -91,7 +91,9 @@ const validateAndProceed = () => {
 
         <div class="category-section">
           <h3 class="section-title">
-            <span class="title-icon">🎯</span>
+            <span class="title-icon">
+              <font-awesome-icon icon="fa-regular fa-hand-pointer" />
+            </span>
             該当するカテゴリを選択してください(複数選択可)
           </h3>
           <div class="category-cards">
@@ -102,7 +104,9 @@ const validateAndProceed = () => {
                 v-model="selectedCategories.engineer"
               />
               <div class="card-content">
-                <div class="card-icon-large">💻</div>
+                <div class="card-icon-large">
+                  <font-awesome-icon icon="fa-solid fa-computer" />
+                </div>
                 <h4 class="card-category-title">プログラマ / ITエンジニア</h4>
                 <p class="card-category-desc">
                   開発言語、フレームワーク、<br />インフラ関連のスキル
@@ -119,7 +123,9 @@ const validateAndProceed = () => {
                 v-model="selectedCategories.designer"
               />
               <div class="card-content">
-                <div class="card-icon-large">🎨</div>
+                <div class="card-icon-large">
+                  <font-awesome-icon icon="fa-solid fa-palette" />
+                </div>
                 <h4 class="card-category-title">デザイナー / 動画制作</h4>
                 <p class="card-category-desc">デザインツール、動画編集、<br />制作スキル</p>
                 <div class="check-indicator">
@@ -171,15 +177,16 @@ const validateAndProceed = () => {
 
 .welcome-card {
   background: #ffffff;
-  border-radius: 15px;
+  border-radius: 10px;
   padding: 1.6rem;
   text-align: center;
   margin-bottom: 2.25rem;
   box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
-  border: 1px solid rgba(72, 60, 50, 0.1);
+  border: 1px solid rgba(219, 214, 211, 0.1);
 }
 
 .card-description {
+  color: #666;
   font-size: 1.2rem;
   line-height: 1.8;
   margin: 0;
@@ -187,8 +194,8 @@ const validateAndProceed = () => {
 
 .input-group {
   background: #ffffff;
-  border-radius: 20px;
-  padding: 1.6rem 2.4rem;
+  border-radius: 10px;
+  padding: 2rem 2.4rem 1.6rem;
   margin-bottom: 2.25rem;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
 }
@@ -255,7 +262,6 @@ const validateAndProceed = () => {
 
 .title-icon {
   font-size: 1.5rem;
-  margin-right: 0.5rem;
 }
 
 .category-cards {
@@ -269,7 +275,7 @@ const validateAndProceed = () => {
   position: relative;
   background: #ffffff;
   border: 3px solid #d3c6a6;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 2.25rem;
   cursor: pointer;
   transition: all 0.3s;
@@ -290,7 +296,8 @@ const validateAndProceed = () => {
 }
 
 .category-card.active .card-category-title,
-.category-card.active .card-category-desc {
+.category-card.active .card-category-desc,
+.category-card.active .card-icon-large {
   color: #ffffff;
 }
 
@@ -303,6 +310,7 @@ const validateAndProceed = () => {
 }
 
 .card-icon-large {
+  color: #483c32;
   font-size: 3.5rem;
   margin-bottom: 1rem;
 }

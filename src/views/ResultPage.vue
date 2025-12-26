@@ -40,15 +40,6 @@ const getCheckedAnswers = (answers) => {
   return answers.filter((answer) => answer.isChecked)
 }
 
-const getCategoryIcon = (categoryId) => {
-  const icons = {
-    1: '💼',
-    2: '💻',
-    3: '🎨',
-  }
-  return icons[categoryId] || '📋'
-}
-
 const goToTop = () => {
   router.push(ROUTES.TOP)
 }
@@ -70,7 +61,9 @@ const handlePrint = () => {
   <div class="page-container" v-if="surveyData">
     <div class="header-section">
       <div class="result-header">
-        <div class="header-icon">📊</div>
+        <div class="header-icon">
+          <font-awesome-icon icon="fa-regular fa-chart-bar" />
+        </div>
         <h2 class="page-title">{{ surveyData.userName }} 様のスキルシート</h2>
       </div>
     </div>
@@ -83,7 +76,7 @@ const handlePrint = () => {
         class="category-section"
       >
         <div class="category-header">
-          <span class="category-icon">{{ getCategoryIcon(category.id) }}</span>
+          <font-awesome-icon :icon="category.icon" class="category-icon" />
           <h3 class="category-title">{{ category.genre }}</h3>
         </div>
 
@@ -174,12 +167,12 @@ const handlePrint = () => {
 .result-header {
   display: flex;
   justify-content: center;
-  align-items: baseline;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .header-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+  font-size: 2.4rem;
 }
 
 .page-title {
@@ -198,26 +191,26 @@ const handlePrint = () => {
 
 .category-section {
   background: #ffffff;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
   margin-bottom: 2.25rem;
 }
 
 .category-header {
+  color: #483c32;
   padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 .category-icon {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .category-title {
   font-size: 1.5rem;
-  color: #483c32;
   margin: 0;
   font-weight: 700;
 }
@@ -288,7 +281,6 @@ const handlePrint = () => {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  border: 2px solid transparent;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -376,7 +368,7 @@ const handlePrint = () => {
 
   .skill-info {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.75rem;
   }
 
@@ -438,7 +430,7 @@ const handlePrint = () => {
     margin-bottom: 1.5rem;
     box-shadow: none;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border-radius: 10px;
   }
 
   .category-header {
@@ -447,7 +439,7 @@ const handlePrint = () => {
   }
 
   .category-icon {
-    font-size: 1.8rem;
+    font-size: 1.75rem;
   }
 
   .category-title {
@@ -470,7 +462,7 @@ const handlePrint = () => {
 
   .skill-card {
     padding: 0.8rem;
-    border-radius: 6px;
+    border-radius: 10px;
     box-shadow: none;
     border: 1px solid #e5e7eb;
     break-inside: avoid;

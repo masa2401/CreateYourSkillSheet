@@ -11,19 +11,19 @@ export const CATEGORIES = {
     COMMON: {
         id: 1,
         genre: '共通の質問',
-        icon: '💼',
+        icon: 'fa-solid fa-briefcase',
         alwaysChecked: true,
     },
     ENGINEER: {
         id: 2,
         genre: 'プログラマ/エンジニア向けの質問',
-        icon: '💻',
+        icon: 'fa-solid fa-computer',
         storageKey: STORAGE_KEYS.CATEGORY_ENGINEER,
     },
     DESIGNER: {
         id: 3,
         genre: 'デザイナー(動画制作)向けの質問',
-        icon: '🎨',
+        icon: 'fa-solid fa-palette',
         storageKey: STORAGE_KEYS.CATEGORY_DESIGNER,
     },
 }

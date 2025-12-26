@@ -54,7 +54,12 @@ const toggleMenu = () => {
     <transition name="slide-fade">
       <div v-if="showMenu" class="share-menu">
         <button @click="handleCopy" class="menu-item" :class="{ success: copySuccess }">
-          <span class="menu-icon">{{ copySuccess ? '✓' : '📋' }}</span>
+          <span class="menu-icon" v-if="copySuccess">
+            <font-awesome-icon icon="fa-solid fa-check" />
+          </span>
+          <span class="menu-icon" v-else>
+            <font-awesome-icon icon="fa-regular fa-copy" />
+          </span>
           <span class="menu-text">{{ copySuccess ? 'コピーしました!' : 'URLをコピー' }}</span>
         </button>
       </div>
@@ -71,14 +76,18 @@ const toggleMenu = () => {
   height: 100%;
   padding: 0.75rem 1.5rem;
   border-radius: 50px;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   background: #ffffff;
   color: #483c32;
   border-color: #483c32;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .share-button:hover {
@@ -110,7 +119,7 @@ const toggleMenu = () => {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   border-radius: 10px;
   transition: all 0.2s;
   font-size: 1rem;
@@ -128,7 +137,7 @@ const toggleMenu = () => {
 }
 
 .menu-icon {
-  font-size: 1.25rem;
+  font-size: 1rem;
 }
 
 .menu-text {
@@ -158,6 +167,7 @@ const toggleMenu = () => {
 @media (max-width: 768px) {
   .share-button {
     width: 100%;
+    justify-content: center;
   }
   .share-menu {
     left: 0;
