@@ -60,7 +60,10 @@ const handleLevelChange = (level) => {
             <span class="level-stars">{{ '★'.repeat(level) }}</span>
           </label>
         </div>
-        <span v-if="!answer.value" class="warning-text"> ⚡ 習熟度を選択してください </span>
+        <span v-if="!answer.value" class="warning-text">
+          <font-awesome-icon icon="fa-regular fa-lightbulb" />
+          習熟度を選択してください
+        </span>
       </div>
     </transition>
   </div>

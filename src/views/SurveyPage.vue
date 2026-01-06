@@ -304,7 +304,7 @@ const isSubmitDisabled = () => {
 
 @media (max-width: 768px) {
   .page-container {
-    padding: 1rem 0;
+    padding: 1.2rem;
   }
 
   .user-greeting {

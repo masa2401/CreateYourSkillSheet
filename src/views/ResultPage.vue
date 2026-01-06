@@ -62,7 +62,7 @@ const handlePrint = () => {
     <div class="header-section">
       <div class="result-header">
         <div class="header-icon">
-          <font-awesome-icon icon="fa-regular fa-chart-bar" />
+          <font-awesome-icon icon="fa-solid fa-square-poll-vertical" />
         </div>
         <h2 class="page-title">{{ surveyData.userName }} 様のスキルシート</h2>
       </div>
@@ -161,7 +161,7 @@ const handlePrint = () => {
 .header-section {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 2.5rem;
 }
 
 .result-header {
@@ -363,7 +363,7 @@ const handlePrint = () => {
   }
 
   .question-block {
-    padding: 2rem;
+    padding: 1.2rem;
   }
 
   .skill-info {

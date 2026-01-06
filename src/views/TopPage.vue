@@ -112,7 +112,9 @@ const validateAndProceed = () => {
                   開発言語、フレームワーク、<br />インフラ関連のスキル
                 </p>
                 <div class="check-indicator">
-                  <span v-if="selectedCategories.engineer" class="check-mark">✓</span>
+                  <span v-if="selectedCategories.engineer" class="check-mark">
+                    <font-awesome-icon icon="fa-solid fa-check" />
+                  </span>
                 </div>
               </div>
             </label>
@@ -129,7 +131,9 @@ const validateAndProceed = () => {
                 <h4 class="card-category-title">デザイナー / 動画制作</h4>
                 <p class="card-category-desc">デザインツール、動画編集、<br />制作スキル</p>
                 <div class="check-indicator">
-                  <span v-if="selectedCategories.designer" class="check-mark">✓</span>
+                  <span v-if="selectedCategories.designer" class="check-mark">
+                    <font-awesome-icon icon="fa-solid fa-check" />
+                  </span>
                 </div>
               </div>
             </label>
@@ -172,7 +176,7 @@ const validateAndProceed = () => {
 .main-content {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 3.6rem 1.8rem 2.25rem;
+  padding: 3.6rem 1.2rem 2.25rem;
 }
 
 .welcome-card {

@@ -16,18 +16,12 @@ import TheHeader from '@/components/TheHeader.vue'
 </template>
 
 <style>
-/* グローバルスタイル（全ページ共通） */
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.main {
-  flex: 1;
-}
-
-/* ページ遷移アニメーション */
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.3s ease;

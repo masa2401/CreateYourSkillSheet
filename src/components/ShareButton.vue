@@ -118,6 +118,7 @@ const toggleMenu = () => {
   background: transparent;
   cursor: pointer;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0.5rem;
   border-radius: 10px;
@@ -141,7 +142,6 @@ const toggleMenu = () => {
 }
 
 .menu-text {
-  flex: 1;
   text-align: left;
 }
 
