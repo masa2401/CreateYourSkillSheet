@@ -1,24 +1,36 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { ROUTES } from '@/utils/constants'
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
 
 const router = useRouter()
 
-const goHome = () => {
-  router.push('/')
+const goToTop = () => {
+  router.push(ROUTES.TOP)
 }
 </script>
 
 <template>
   <div class="notfound-container">
     <div class="notfound-content">
-      <div class="error-icon">🔍</div>
-      <h1 class="error-code">404</h1>
-      <h2 class="error-title">ページが見つかりません</h2>
+      <div>
+        <span class="error-icon"
+          ><font-awesome-icon icon="fa-solid fa-magnifying-glass" bounce
+        /></span>
+        <h2 class="error-code">404</h2>
+      </div>
+      <h3 class="error-title">ページが見つかりません</h3>
       <p class="error-message">
         お探しのページは存在しないか、<br />
         移動または削除された可能性があります。
       </p>
-      <button @click="goHome" class="home-button">🏠 トップページへ戻る</button>
+      <AnimatedIconButton
+        icon="fa-regular fa-house"
+        text="トップへ戻る"
+        animation="bounce"
+        button-class="action-button primary-button"
+        @click="goToTop"
+      />
     </div>
   </div>
 </template>
@@ -45,18 +57,7 @@ const goHome = () => {
 
 .error-icon {
   font-size: 5rem;
-  margin-bottom: 1rem;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  color: #483c32;
 }
 
 .error-code {
@@ -80,23 +81,39 @@ const goHome = () => {
   margin: 1rem 0 2rem;
 }
 
-.home-button {
-  padding: 1rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  background: #483c32;
-  color: #ffffff;
-  border: none;
+.action-button {
+  padding: 0.75rem 1.5rem;
   border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.button-icon {
+  font-size: 1.1rem;
+  display: inline-block;
+}
+
+.button-text {
+  display: inline-block;
+}
+
+.primary-button {
+  background: #483c32;
+  color: #ffffff;
   box-shadow: 0 6px 16px rgba(72, 60, 50, 0.3);
 }
 
-.home-button:hover {
+.primary-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(72, 60, 50, 0.4);
   background: #5a4a3e;
+  border-color: #5a4a3e;
 }
 
 @media (max-width: 768px) {
