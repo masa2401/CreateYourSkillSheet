@@ -59,12 +59,41 @@ const handlePrint = () => {
 
 <template>
   <div class="page-container" v-if="surveyData">
-    <div class="header-section">
-      <div class="result-header">
-        <div class="header-icon">
-          <font-awesome-icon icon="fa-solid fa-square-poll-vertical" />
+    <div class="content-wrapper">
+      <div class="header-section">
+        <div class="result-header">
+          <div class="header-icon">
+            <font-awesome-icon icon="fa-solid fa-square-poll-vertical" />
+          </div>
+          <h2 class="page-title">{{ surveyData.userName }} 様のスキルシート</h2>
         </div>
-        <h2 class="page-title">{{ surveyData.userName }} 様のスキルシート</h2>
+        <div class="description-group">
+          <div class="image">
+            <img src="../assets/mission.png" alt="" />
+          </div>
+          <ul class="stars-description">
+            <li>
+              <span>{{ LEVEL_LABELS[1] }}</span>
+              ：習得が不十分な状態
+            </li>
+            <li>
+              <span>{{ LEVEL_LABELS[2] }}</span>
+              ：基礎はあるが不安定
+            </li>
+            <li>
+              <span>{{ LEVEL_LABELS[3] }}</span>
+              ：期待どおりにできる
+            </li>
+            <li>
+              <span>{{ LEVEL_LABELS[4] }}</span>
+              ：期待以上の成果を出す
+            </li>
+            <li>
+              <span>{{ LEVEL_LABELS[5] }}</span>
+              ：卓越したレベルで発揮する
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -88,7 +117,6 @@ const handlePrint = () => {
         >
           <template v-if="getCheckedAnswers(question.answers).length > 0">
             <h4 class="question-title">{{ question.question }}</h4>
-
             <div class="skills-grid">
               <div
                 v-for="(answer, index) in getCheckedAnswers(question.answers)"
@@ -158,10 +186,15 @@ const handlePrint = () => {
   background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
 }
 
+.page-container > .content-wrapper:first-child {
+  padding: 2.25rem 1rem;
+}
+
 .header-section {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
+  padding: 0;
 }
 
 .result-header {
@@ -169,6 +202,22 @@ const handlePrint = () => {
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.description-group {
+  display: flex;
+  justify-content: center;
+}
+
+.stars-description {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  padding: 0 0 2rem;
+  margin-left: 3rem;
 }
 
 .header-icon {
@@ -216,13 +265,13 @@ const handlePrint = () => {
 }
 
 .question-block {
-  padding: 0 3.6rem 2.4rem;
+  padding: 0 3.2rem 2.4rem;
 }
 
 .question-title {
   font-size: 1.1rem;
   color: #483c32;
-  margin: 0 0 1.2rem;
+  margin: 0 0 0.8rem;
   font-weight: 600;
   line-height: 1.6;
 }
@@ -360,6 +409,14 @@ const handlePrint = () => {
 @media (max-width: 768px) {
   .page-title {
     font-size: 2rem;
+  }
+
+  .image {
+    display: none;
+  }
+
+  .stars-description {
+    margin-left: 0;
   }
 
   .question-block {

@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import QuestionCard from '@/components/QuestionCard.vue'
 import ValidationError from '@/components/ValidationError.vue'
 import { commonQuestionData, engineerQuestionData, designerQuestionData } from '@/data/questionData'
-import { ROUTES, STORAGE_KEYS, CATEGORIES } from '@/utils/constants'
+import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constants'
 import {
   getStorageValue,
   setStorageValue,
@@ -124,8 +124,35 @@ const isSubmitDisabled = () => {
         <div class="instruction-card">
           <p class="instruction-text">
             <font-awesome-icon icon="fa-solid fa-check" />
-            以下の質問にチェックを入れていただき、習熟度を5段階で回答してください。
+            以下の質問で該当する項目を選択後、習熟度を5段階で選択してください。
           </p>
+          <div class="description-group">
+            <ul class="stars-description">
+              <li>
+                <span>{{ LEVEL_LABELS[1] }}</span>
+                ：習得が不十分な状態
+              </li>
+              <li>
+                <span>{{ LEVEL_LABELS[2] }}</span>
+                ：基礎はあるが不安定
+              </li>
+              <li>
+                <span>{{ LEVEL_LABELS[3] }}</span>
+                ：期待どおりにできる
+              </li>
+              <li>
+                <span>{{ LEVEL_LABELS[4] }}</span>
+                ：期待以上の成果を出す
+              </li>
+              <li>
+                <span>{{ LEVEL_LABELS[5] }}</span>
+                ：卓越したレベルで発揮する
+              </li>
+            </ul>
+            <div class="image">
+              <img src="../assets/customers.png" alt="" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -188,6 +215,7 @@ const isSubmitDisabled = () => {
 }
 
 .inner {
+  color: #483c32;
   max-width: 1000px;
   padding: 1.2rem 1rem;
   margin: 0 auto;
@@ -201,18 +229,31 @@ const isSubmitDisabled = () => {
   border: 1px solid rgba(72, 60, 50, 0.1);
 }
 
+.name-card {
+  margin-bottom: 1rem;
+}
+
 .user-greeting {
   font-size: 1.8rem;
-  color: #483c32;
   font-weight: 700;
 }
 
 .instruction-text {
-  margin: 0;
+  margin: 0 0 0.75rem;
   font-size: 1.05rem;
   color: #444;
   text-align: center;
   line-height: 1.6;
+}
+
+.description-group {
+  display: flex;
+  align-items: flex-end;
+}
+
+.stars-description {
+  font-size: 0.95rem;
+  margin-right: 3rem;
 }
 
 .wrap {
@@ -309,6 +350,14 @@ const isSubmitDisabled = () => {
 
   .user-greeting {
     font-size: 1.4rem;
+  }
+
+  .stars-description {
+    margin-right: 0;
+  }
+
+  .image {
+    display: none;
   }
 }
 </style>
