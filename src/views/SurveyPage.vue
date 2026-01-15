@@ -127,6 +127,9 @@ const isSubmitDisabled = () => {
             以下の質問で該当する項目を選択後、習熟度を5段階で選択してください。
           </p>
           <div class="description-group">
+            <div class="image">
+              <img src="../assets/customers.png" alt="" />
+            </div>
             <ul class="stars-description">
               <li>
                 <span>{{ LEVEL_LABELS[1] }}</span>
@@ -149,9 +152,6 @@ const isSubmitDisabled = () => {
                 ：卓越したレベルで発揮する
               </li>
             </ul>
-            <div class="image">
-              <img src="../assets/customers.png" alt="" />
-            </div>
           </div>
         </div>
       </div>
@@ -206,21 +206,21 @@ const isSubmitDisabled = () => {
 .page-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
-  padding: 3.6rem 1rem 2rem;
+  padding: var(--p-24, 3rem) var(--p-8, 1rem) var(--p-16, 2rem);
 }
 
 .header-section {
   max-width: 1000px;
-  margin: 0 auto 2.25rem;
+  margin: 0 auto var(--p-16, 2rem);
 }
 
 .inner {
   color: #483c32;
   max-width: 1000px;
-  padding: 1.2rem 1rem;
+  padding: var(--p-16, 2rem) var(--p-8, 1rem);
   margin: 0 auto;
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: var(--radius, 12px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -230,7 +230,7 @@ const isSubmitDisabled = () => {
 }
 
 .name-card {
-  margin-bottom: 1rem;
+  margin-bottom: var(--p-12, 1.5rem);
 }
 
 .user-greeting {
@@ -239,7 +239,7 @@ const isSubmitDisabled = () => {
 }
 
 .instruction-text {
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--p-8, 0.5rem);
   font-size: 1.05rem;
   color: #444;
   text-align: center;
@@ -248,12 +248,13 @@ const isSubmitDisabled = () => {
 
 .description-group {
   display: flex;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
+  gap: var(--p-24, 3rem);
 }
 
 .stars-description {
   font-size: 0.95rem;
-  margin-right: 3rem;
 }
 
 .wrap {
@@ -262,19 +263,19 @@ const isSubmitDisabled = () => {
 }
 
 .category-section {
-  margin-bottom: 2rem;
+  margin-top: var(--p-16, 2rem);
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: var(--radius, 12px);
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
-  padding: 2.5rem 0;
+  padding: var(--p-20, 2.5rem) 0;
 }
 
 .category-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: var(--p-4, 0.5rem);
+  padding: var(--p-8, 1rem);
 }
 
 .category-icon {
@@ -294,13 +295,13 @@ const isSubmitDisabled = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-  padding: 1rem;
+  gap: var(--p-8, 1rem);
+  margin-top: var(--p-16, 2rem);
 }
 
 .submit-button {
-  font-size: 1.1rem;
-  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  padding: var(--p-8, 1rem) var(--p-16, 2rem);
   background: #483c32;
   color: #ffffff;
   border: none;
@@ -345,7 +346,7 @@ const isSubmitDisabled = () => {
 
 @media (max-width: 768px) {
   .page-container {
-    padding: 1.2rem;
+    padding: var(--p-8, 1rem);
   }
 
   .user-greeting {

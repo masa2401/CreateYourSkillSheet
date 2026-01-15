@@ -72,17 +72,17 @@ const handleLevelChange = (level) => {
 <style scoped>
 .answer-item {
   border-left: 4px solid #d3c6a6;
-  padding-left: 1rem;
+  padding-left: var(--p-8, 1rem);
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--p-4, 0.5rem);
   cursor: pointer;
   font-size: 1rem;
   color: #444;
-  padding: 0.5rem 0;
+  padding: var(--p-4, 0.5rem) 0;
 }
 
 .custom-checkbox {
@@ -98,24 +98,24 @@ const handleLevelChange = (level) => {
 }
 
 .level-selector {
-  margin-top: 0.5rem;
-  padding: 1rem;
+  margin-top: var(--p-4, 0.5rem);
+  padding: var(--p-8, 1rem);
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: var(--radius, 12px);
   border: 1px solid #d3c6a6;
 }
 
 .level-buttons {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: var(--p-4, 0.5rem);
+  margin-bottom: var(--p-4, 0.5rem);
   flex-wrap: wrap;
 }
 
 .level-button {
   flex: 1;
   min-width: 80px;
-  padding: 0.75rem;
+  padding: var(--p-4, 0.5rem);
   background: #ffffff;
   border: 2px solid #d3c6a6;
   border-radius: 10px;
@@ -124,7 +124,7 @@ const handleLevelChange = (level) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  gap: var(--p-4, 0.5rem);
 }
 
 .level-button:hover {
@@ -193,12 +193,12 @@ const handleLevelChange = (level) => {
 
 @media (max-width: 768px) {
   .level-buttons {
-    gap: 0.25rem;
+    gap: var(--p-4, 0.5rem);
   }
 
   .level-button {
     min-width: 60px;
-    padding: 0.5rem;
+    padding: var(--p-4, 0.5rem);
   }
 
   .level-number {

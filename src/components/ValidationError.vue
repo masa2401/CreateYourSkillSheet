@@ -34,11 +34,11 @@ defineProps({
 .error-message {
   background: #fff5f5;
   border: 2px solid #f88;
-  border-radius: 15px;
-  padding: 2.25rem;
-  margin-bottom: 2.25rem;
+  border-radius: var(--radius, 12px);
+  padding: var(--p-16, 2rem);
+  margin-top: var(--p-16, 2rem);
   display: flex;
-  gap: 0.75rem;
+  gap: var(--p-4, 0.5rem);
   box-shadow: 0 2px 8px rgba(255, 0, 0, 0.15);
   animation: shake 0.5s ease;
 }
@@ -67,7 +67,7 @@ defineProps({
   flex-direction: column;
   align-items: center;
   flex: 1;
-  gap: 0.75rem;
+  gap: var(--p-4, 0.5rem);
   color: #c00;
 }
 
@@ -84,19 +84,19 @@ defineProps({
 }
 
 .error-description {
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 var(--p-12, 1.5rem) 0;
   font-size: 1rem;
   line-height: 1.5;
 }
 
 .error-list {
-  margin: 0.25rem 0 0;
-  padding-left: 1.5rem;
+  margin: var(--p-4, 0.5rem) 0 0;
+  padding-left: var(--p-12, 1.5rem);
   list-style: disc;
 }
 
 .error-item {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--p-4, 0.5rem);
   line-height: 1.4;
 }
 
@@ -116,8 +116,8 @@ defineProps({
 
 @media (max-width: 768px) {
   .error-message {
-    padding: 0.75rem;
-    gap: 0.75rem;
+    padding: var(--p-4, 0.5rem);
+    gap: var(--p-4, 0.5rem);
   }
 
   .error-icon {

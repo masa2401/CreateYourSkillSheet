@@ -74,7 +74,7 @@ const toggleMenu = () => {
 
 .share-button {
   height: 100%;
-  padding: 0.75rem 1.5rem;
+  padding: var(--p-8, 1rem) var(--p-16, 2rem);
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
@@ -86,7 +86,7 @@ const toggleMenu = () => {
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--p-4, 0.5rem);
   white-space: nowrap;
 }
 
@@ -106,21 +106,21 @@ const toggleMenu = () => {
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
   border: 1px solid rgba(72, 60, 50, 0.1);
-  padding: 0.5rem;
+  padding: var(--p-4, 0.5rem);
   min-width: 200px;
   z-index: 100;
 }
 
 .menu-item {
   width: 100%;
-  padding: 1rem;
+  padding: var(--p-8, 1rem);
   border: none;
   background: transparent;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--p-4, 0.5rem);
   border-radius: 10px;
   transition: all 0.2s;
   font-size: 1rem;
@@ -173,7 +173,7 @@ const toggleMenu = () => {
     left: 0;
     right: 0;
     transform: none;
-    margin: 0 1rem;
+    margin: 0 var(--p-8, 1rem);
   }
 }
 </style>

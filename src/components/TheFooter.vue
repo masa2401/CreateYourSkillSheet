@@ -7,7 +7,7 @@
 <style scoped>
 .footer {
   background: linear-gradient(135deg, #483c32 0%, #5a4a3e 100%);
-  padding: 0.75rem 0;
+  padding: var(--p-4, 0.5rem) 0;
   text-align: center;
   margin-top: auto;
   box-shadow: 0 -2px 8px rgba(72, 60, 50, 0.1);

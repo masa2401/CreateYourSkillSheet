@@ -184,15 +184,12 @@ const handlePrint = () => {
 .page-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
-}
-
-.page-container > .content-wrapper:first-child {
-  padding: 2.25rem 1rem;
+  padding: var(--p-24, 3rem) 0;
 }
 
 .header-section {
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: var(--radius, 12px);
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
   padding: 0;
 }
@@ -201,23 +198,23 @@ const handlePrint = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--p-4, 0.5rem);
   background: #ffffff;
-  border-radius: 10px;
-  padding: 2rem;
+  border-radius: var(--radius, 12px);
+  padding: var(--p-16, 2rem);
 }
 
 .description-group {
   display: flex;
   justify-content: center;
+  gap: var(--p-24, 3rem);
 }
 
 .stars-description {
   display: flex;
   flex-direction: column;
   width: fit-content;
-  padding: 0 0 2rem;
-  margin-left: 3rem;
+  padding: 0 0 var(--p-16, 2rem);
 }
 
 .header-icon {
@@ -234,24 +231,24 @@ const handlePrint = () => {
 
 .content-wrapper {
   max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 1rem 2.25rem;
+  margin: var(--p-20, 2.5rem) auto 0;
+  padding: 0 var(--p-8, 1rem);
 }
 
 .category-section {
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: var(--radius, 12px);
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
-  margin-bottom: 2.25rem;
+  margin-bottom: var(--p-12, 1.5rem);
 }
 
 .category-header {
   color: #483c32;
-  padding: 2rem;
+  padding: var(--p-16, 2rem);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--p-4, 0.5rem);
 }
 
 .category-icon {
@@ -265,25 +262,25 @@ const handlePrint = () => {
 }
 
 .question-block {
-  padding: 0 3.2rem 2.4rem;
+  padding: 0 var(--p-24, 3rem) var(--p-20, 2.5rem);
 }
 
 .question-title {
   font-size: 1.1rem;
   color: #483c32;
-  margin: 0 0 0.8rem;
+  margin: 0 0 var(--p-8, 1rem);
   font-weight: 600;
   line-height: 1.6;
 }
 
 .skills-grid {
   display: grid;
-  gap: 1.2rem;
+  gap: var(--p-12, 1.5rem);
 }
 
 .skill-card {
   background: #ffffff;
-  padding: 0.5rem 1rem;
+  padding: var(--p-4, 0.5rem) var(--p-8, 1rem);
   border-left: 4px solid #d3c6a6;
   transition: all 0.3s;
 }
@@ -293,7 +290,7 @@ const handlePrint = () => {
   grid-template-columns: 9fr 1fr;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: var(--p-8, 1rem);
 }
 
 .skill-name {
@@ -306,7 +303,6 @@ const handlePrint = () => {
 .skill-level {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   flex-shrink: 0;
 }
 
@@ -318,13 +314,13 @@ const handlePrint = () => {
 .button-group {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: var(--p-8, 1rem);
   flex-wrap: wrap;
-  padding: 1.5rem 0;
+  margin-top: var(--p-24, 3rem);
 }
 
 .action-button {
-  padding: 0.75rem 1.5rem;
+  padding: var(--p-8, 1rem) var(--p-16, 2rem);
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
@@ -332,7 +328,7 @@ const handlePrint = () => {
   transition: all 0.3s;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--p-4, 0.5rem);
   white-space: nowrap;
 }
 
@@ -381,7 +377,7 @@ const handlePrint = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: var(--p-16, 2rem);
 }
 
 .loading-spinner {
@@ -419,14 +415,18 @@ const handlePrint = () => {
     margin-left: 0;
   }
 
+  .category-header {
+    padding: var(--p-8, 1rem);
+  }
+
   .question-block {
-    padding: 1.2rem;
+    padding: var(--p-8, 1rem);
   }
 
   .skill-info {
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--p-4, 0.5rem);
   }
 
   .skill-level {
@@ -437,6 +437,7 @@ const handlePrint = () => {
   .button-group {
     flex-direction: column;
     width: 100%;
+    gap: var(--p-4, 0.5rem);
   }
 
   .action-button {
@@ -464,12 +465,12 @@ const handlePrint = () => {
   }
 
   .header-section {
-    padding: 0 0 1rem 0;
+    padding: 0 0 var(--p-8, 1rem) 0;
   }
 
   .header-icon {
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--p-4, 0.5rem);
   }
 
   .page-title {
@@ -484,15 +485,15 @@ const handlePrint = () => {
   }
 
   .category-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--p-12, 1.5rem);
     box-shadow: none;
     border: 1px solid #e5e7eb;
-    border-radius: 10px;
+    border-radius: var(--radius, 12px);
   }
 
   .category-header {
-    padding: 1rem;
-    margin-bottom: 0.5rem;
+    padding: var(--p-8, 1rem);
+    margin-bottom: var(--p-4, 0.5rem);
   }
 
   .category-icon {
@@ -504,29 +505,29 @@ const handlePrint = () => {
   }
 
   .question-block {
-    padding: 0 1.5rem 1rem;
+    padding: 0 var(--p-12, 1.5rem) var(--p-8, 1rem);
   }
 
   .question-title {
     font-size: 1rem;
-    margin: 0 0 0.8rem;
+    margin: 0 0 var(--p-4, 0.5rem);
     break-after: avoid;
   }
 
   .skills-grid {
-    gap: 0.5rem;
+    gap: var(--p-4, 0.5rem);
   }
 
   .skill-card {
-    padding: 0.8rem;
-    border-radius: 10px;
+    padding: var(--p-8, 1rem);
+    border-radius: var(--radius, 12px);
     box-shadow: none;
     border: 1px solid #e5e7eb;
     break-inside: avoid;
   }
 
   .skill-info {
-    gap: 0.8rem;
+    gap: var(--p-8, 1rem);
   }
 
   .skill-name {

@@ -42,13 +42,15 @@ const handleAnswerUpdate = (answerIndex, updatedAnswer) => {
 .question-card {
   background: #ffffff;
   border-radius: 15px;
-  padding: 1.5rem 3rem;
+  padding: var(--p-12, 1.5rem) var(--p-8, 1rem);
   transition: transform 0.2s;
+  width: 80ch;
+  margin: 0 auto;
 }
 
 .question-text {
   font-size: 1.1rem;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 var(--p-8, 1rem) 0;
   color: #483c32;
   font-weight: 600;
   line-height: 1.6;
@@ -57,12 +59,13 @@ const handleAnswerUpdate = (answerIndex, updatedAnswer) => {
 .answers-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--p-8, 1rem);
 }
 
 @media (max-width: 768px) {
   .question-card {
-    padding: 2rem;
+    padding: var(--p-12, 1.5rem);
+    width: 100%;
   }
 }
 </style>

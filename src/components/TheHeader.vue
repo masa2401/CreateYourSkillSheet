@@ -26,8 +26,9 @@ const goHome = () => {
 <style scoped>
 .header {
   background: linear-gradient(135deg, #483c32 0%, #5a4a3e 100%);
-  padding: 1.5rem 0;
+  padding: var(--p-12, 1.5rem) 0;
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.2);
+  overflow: hidden;
 }
 
 .title {

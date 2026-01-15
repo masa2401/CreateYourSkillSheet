@@ -37,20 +37,21 @@ const goToTop = () => {
 
 <style scoped>
 .notfound-container {
-  min-height: 80vh;
+  min-height: 85vh;
   background: linear-gradient(135deg, #d3c6a6 0%, #e8dcc8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: var(--p-32, 4rem);
 }
 
 .notfound-content {
   background: #ffffff;
   border-radius: 20px;
-  padding: 3rem;
+  padding: var(--p-24, 3rem);
   text-align: center;
-  max-width: 500px;
+  max-width: 600px;
+  width: 75%;
   box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
   border: 1px solid rgba(72, 60, 50, 0.1);
 }
@@ -70,7 +71,7 @@ const goToTop = () => {
 .error-title {
   font-size: 1.8rem;
   color: #483c32;
-  margin: 1rem 0;
+  margin: var(--p-8, 1rem) 0;
   font-weight: 700;
 }
 
@@ -78,11 +79,11 @@ const goToTop = () => {
   color: #666;
   font-size: 1rem;
   line-height: 1.8;
-  margin: 1rem 0 2rem;
+  margin: var(--p-8, 1rem) 0 var(--p-16, 2rem);
 }
 
 .action-button {
-  padding: 0.75rem 1.5rem;
+  padding: var(--p-8, 1rem) var(--p-16, 2rem);
   border-radius: 50px;
   font-size: 1rem;
   font-weight: 600;
@@ -90,7 +91,7 @@ const goToTop = () => {
   transition: all 0.3s;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--p-4, 0.5rem);
   white-space: nowrap;
 }
 
@@ -118,7 +119,7 @@ const goToTop = () => {
 
 @media (max-width: 768px) {
   .notfound-content {
-    padding: 2rem;
+    padding: var(--p-16, 2rem);
   }
 
   .error-code {

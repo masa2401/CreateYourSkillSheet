@@ -176,15 +176,15 @@ const validateAndProceed = () => {
 .main-content {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 3.6rem 1.2rem 2.25rem;
+  padding: var(--p-24, 3rem) var(--p-8, 1rem);
 }
 
 .welcome-card {
   background: #ffffff;
-  border-radius: 10px;
-  padding: 1.6rem;
+  border-radius: var(--radius, 12px);
+  padding: var(--p-12, 1.5rem);
   text-align: center;
-  margin-bottom: 2.25rem;
+  margin-bottom: var(--p-16, 2rem);
   box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
   border: 1px solid rgba(219, 214, 211, 0.1);
 }
@@ -198,22 +198,21 @@ const validateAndProceed = () => {
 
 .input-group {
   background: #ffffff;
-  border-radius: 10px;
-  padding: 2rem 2.4rem 1.6rem;
-  margin-bottom: 2.25rem;
+  border-radius: var(--radius, 12px);
+  padding: var(--p-16, 2rem) var(--p-20, 2.5rem);
   box-shadow: 0 2px 8px rgba(72, 60, 50, 0.1);
 }
 
 .input-section {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--p-16, 2rem);
 }
 
 .input-label {
   display: block;
   font-size: 1.2rem;
   color: #483c32;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--p-4, 0.5rem);
   font-weight: 600;
 }
 
@@ -223,10 +222,10 @@ const validateAndProceed = () => {
 
 .name-input {
   width: 75%;
-  padding: 0.8rem 1.2rem;
+  padding: var(--p-8, 1rem);
   font-size: 1.2rem;
   border: 2px solid #d3c6a6;
-  border-radius: 10px;
+  border-radius: var(--radius, 12px);
   transition: all 0.3s;
   box-sizing: border-box;
   background: #ffffff;
@@ -259,7 +258,7 @@ const validateAndProceed = () => {
 .section-title {
   font-size: 1.2rem;
   color: #483c32;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--p-4, 0.5rem);
   font-weight: 700;
   text-align: center;
 }
@@ -271,16 +270,16 @@ const validateAndProceed = () => {
 .category-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: var(--p-8, 1rem);
+  margin-bottom: var(--p-12, 1.5rem);
 }
 
 .category-card {
   position: relative;
   background: #ffffff;
   border: 3px solid #d3c6a6;
-  border-radius: 10px;
-  padding: 2.25rem;
+  border-radius: var(--radius, 12px);
+  padding: var(--p-16, 2rem);
   cursor: pointer;
   transition: all 0.3s;
   display: block;
@@ -316,13 +315,13 @@ const validateAndProceed = () => {
 .card-icon-large {
   color: #483c32;
   font-size: 3.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: var(--p-8, 1rem);
 }
 
 .card-category-title {
   font-size: 1.3rem;
   color: #483c32;
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--p-4, 0.5rem);
   font-weight: 700;
 }
 
@@ -335,8 +334,8 @@ const validateAndProceed = () => {
 
 .check-indicator {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: var(--p-8, 1rem);
+  right: var(--p-8, 1rem);
   width: 40px;
   height: 40px;
   background: white;
@@ -377,12 +376,12 @@ const validateAndProceed = () => {
 .button-section {
   display: flex;
   justify-content: center;
-  padding: 1rem 0;
 }
 
 .start-button {
-  font-size: 1.2rem;
-  padding: 0.85rem 1.8rem;
+  font-size: 1rem;
+  padding: var(--p-8, 1rem) var(--p-16, 2rem);
+  margin-top: var(--p-24, 3rem);
   background: #483c32;
   color: #ffffff;
   border: none;
@@ -425,7 +424,7 @@ const validateAndProceed = () => {
 
   .welcome-card,
   .input-group {
-    padding: 1.5rem;
+    padding: var(--p-12, 1.5rem);
   }
 }
 </style>
