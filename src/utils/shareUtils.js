@@ -46,7 +46,7 @@ export const decodeData = (compressedString) => {
 /**
  * 共有用URLを生成
  */
-export const generateShareUrl = (surveyData) => {
+export const createShareUrl = (surveyData) => {
     const encoded = encodeData(surveyData)
     if (!encoded) {
         throw new Error('データのエンコードに失敗しました')
@@ -60,34 +60,101 @@ export const generateShareUrl = (surveyData) => {
  * URLからデータを取得
  */
 export const getDataFromUrl = () => {
-    // Hash Modeでは window.location.hash にクエリパラメータが含まれる
-    // 例: "#/result?data=xxxxx" または "?data=xxxxx"（History Mode互換性）
+    try {
+        let searchString = ''
 
-    let searchString = ''
+        // Hash Modeの場合（#の後ろにクエリパラメータがある）
+        if (window.location.hash.includes('?')) {
+            // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
+            const hashParts = window.location.hash.split('?')
+            searchString = hashParts.length > 1 ? '?' + hashParts.slice(1).join('?') : ''
+        }
+        // History Modeの場合（従来通り）
+        else if (window.location.search) {
+            searchString = window.location.search
+        }
 
-    // Hash Modeの場合（#の後ろにクエリパラメータがある）
-    if (window.location.hash.includes('?')) {
-        // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
-        const hashParts = window.location.hash.split('?')
-        searchString = hashParts.length > 1 ? '?' + hashParts.slice(1).join('?') : ''
-    }
-    // History Modeの場合（従来通り）
-    else if (window.location.search) {
-        searchString = window.location.search
-    }
+        // クエリパラメータが存在しない場合
+        if (!searchString) {
+            console.info('URLにデータパラメータが含まれていません')
+            return null
+        }
 
-    if (!searchString) {
+        // URLパラメータの解析
+        const urlParams = new URLSearchParams(searchString)
+        const encodedData = urlParams.get('data')
+
+        // dataパラメータが存在しない場合
+        if (!encodedData) {
+            console.warn('URLに"data"パラメータが見つかりません')
+            return null
+        }
+
+        // 空文字列チェック
+        if (encodedData.trim() === '') {
+            console.error('dataパラメータが空です')
+            return null
+        }
+
+        // デコード処理
+        const decoded = decodeData(encodedData)
+
+        // デコード失敗
+        if (!decoded) {
+            console.error('データのデコードに失敗しました。URLが破損している可能性があります。')
+            return null
+        }
+
+        // データ構造の検証
+        if (typeof decoded !== 'object' || decoded === null) {
+            console.error('デコードされたデータが無効な形式です（オブジェクトではありません）')
+            return null
+        }
+
+        // 必須フィールドの検証
+        if (!decoded.userName || typeof decoded.userName !== 'string') {
+            console.error('データに有効なuserNameフィールドがありません')
+            return null
+        }
+
+        if (!Array.isArray(decoded.categories)) {
+            console.error('データに有効なcategoriesフィールドがありません（配列ではありません）')
+            return null
+        }
+
+        // categoriesの各要素を検証
+        const isValidCategories = decoded.categories.every((category) => {
+            return (
+                category &&
+                typeof category.id === 'number' &&
+                typeof category.genre === 'string' &&
+                typeof category.isChecked === 'boolean' &&
+                Array.isArray(category.questions)
+            )
+        })
+
+        if (!isValidCategories) {
+            console.error('categoriesの構造が無効です')
+            return null
+        }
+
+        // すべての検証を通過
+        console.info('URLからデータを正常に取得しました')
+        return decoded
+
+    } catch (error) {
+        // 予期しないエラーをキャッチ
+        console.error('URLからのデータ取得中に予期しないエラーが発生しました:', error)
+
+        // エラーの詳細をログ出力（デバッグ用）
+        if (error instanceof TypeError) {
+            console.error('型エラー: データ構造が想定と異なる可能性があります')
+        } else if (error instanceof SyntaxError) {
+            console.error('構文エラー: JSONのパースに失敗しました')
+        }
+
         return null
     }
-
-    const urlParams = new URLSearchParams(searchString)
-    const encodedData = urlParams.get('data')
-
-    if (!encodedData) {
-        return null
-    }
-
-    return decodeData(encodedData)
 }
 
 // ========================================

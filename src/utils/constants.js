@@ -29,13 +29,13 @@ export const CATEGORIES = {
 }
 
 // 習熟度ラベル
-export const LEVEL_LABELS = {
-    1: '★☆☆☆☆',
-    2: '★★☆☆☆',
-    3: '★★★☆☆',
-    4: '★★★★☆',
-    5: '★★★★★',
-}
+export const LEVEL_LABELS = [
+    '★☆☆☆☆',
+    '★★☆☆☆',
+    '★★★☆☆',
+    '★★★★☆',
+    '★★★★★',
+]
 
 // ルートパス
 export const ROUTES = {

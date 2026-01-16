@@ -63,7 +63,7 @@ const handlePrint = () => {
       <div class="header-section">
         <div class="result-header">
           <div class="header-icon">
-            <font-awesome-icon icon="fa-solid fa-square-poll-vertical" />
+            <font-awesome-icon icon="fa-regular fa-clipboard" />
           </div>
           <h2 class="page-title">{{ surveyData.userName }} 様のスキルシート</h2>
         </div>
@@ -73,23 +73,23 @@ const handlePrint = () => {
           </div>
           <ul class="stars-description">
             <li>
-              <span>{{ LEVEL_LABELS[1] }}</span>
+              <span>{{ LEVEL_LABELS[0] }}</span>
               ：習得が不十分な状態
             </li>
             <li>
-              <span>{{ LEVEL_LABELS[2] }}</span>
+              <span>{{ LEVEL_LABELS[1] }}</span>
               ：基礎はあるが不安定
             </li>
             <li>
-              <span>{{ LEVEL_LABELS[3] }}</span>
+              <span>{{ LEVEL_LABELS[2] }}</span>
               ：期待どおりにできる
             </li>
             <li>
-              <span>{{ LEVEL_LABELS[4] }}</span>
+              <span>{{ LEVEL_LABELS[3] }}</span>
               ：期待以上の成果を出す
             </li>
             <li>
-              <span>{{ LEVEL_LABELS[5] }}</span>
+              <span>{{ LEVEL_LABELS[4] }}</span>
               ：卓越したレベルで発揮する
             </li>
           </ul>
@@ -116,7 +116,7 @@ const handlePrint = () => {
           class="question-block"
         >
           <template v-if="getCheckedAnswers(question.answers).length > 0">
-            <h4 class="question-title">{{ question.question }}</h4>
+            <h4 class="question-title">{{ question.questionText }}</h4>
             <div class="skills-grid">
               <div
                 v-for="(answer, index) in getCheckedAnswers(question.answers)"
@@ -126,7 +126,7 @@ const handlePrint = () => {
                 <div class="skill-info">
                   <div class="skill-name">{{ answer.text }}</div>
                   <div class="skill-level">
-                    <span class="level-stars">{{ LEVEL_LABELS[answer.value] }}</span>
+                    <span class="level-stars">{{ LEVEL_LABELS[answer.value - 1] }}</span>
                   </div>
                 </div>
               </div>
@@ -139,16 +139,16 @@ const handlePrint = () => {
         <template v-if="!isSharedView">
           <AnimatedIconButton
             icon="fa-solid fa-arrow-left"
-            text="修正する"
-            animation="beat"
+            label="修正する"
+            animationType="beat"
             button-class="action-button secondary-button"
             @click="goBack"
           />
 
           <AnimatedIconButton
             icon="fa-solid fa-print"
-            text="印刷する"
-            animation="bounce"
+            label="印刷する"
+            animationType="bounce"
             button-class="action-button print-button"
             @click="handlePrint"
           />
@@ -157,8 +157,8 @@ const handlePrint = () => {
 
           <AnimatedIconButton
             icon="fa-regular fa-house"
-            text="トップへ戻る"
-            animation="beat"
+            label="トップへ戻る"
+            animationType="beat"
             button-class="action-button primary-button"
             @click="goToTop"
           />
@@ -166,7 +166,9 @@ const handlePrint = () => {
 
         <template v-else>
           <button @click="createMyOwn" class="action-button primary-button">
-            <span class="button-icon">✨</span>
+            <span class="button-icon">
+              <font-awesome-icon icon="fa-solid fa-pen" />
+            </span>
             <span class="button-text">自分のスキルシートを作成</span>
           </button>
         </template>

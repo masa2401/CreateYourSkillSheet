@@ -24,7 +24,7 @@ const handleAnswerUpdate = (answerIndex, updatedAnswer) => {
 
 <template>
   <div class="question-card">
-    <h4 class="question-text">{{ question.question }}</h4>
+    <h4 class="question-text">{{ question.questionText }}</h4>
 
     <div class="answers-grid">
       <AnswerItem

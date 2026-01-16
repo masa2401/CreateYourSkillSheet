@@ -6,13 +6,13 @@ defineProps({
     type: String,
     required: true,
   },
-  text: {
+  label: {
     type: String,
     required: true,
   },
-  animation: {
+  animationType: {
     type: String,
-    default: 'beat', // 'beat', 'bounce', 'fade', 'spin' など
+    default: 'beat',
     validator: (value) => ['beat', 'bounce', 'fade', 'spin', 'none'].includes(value),
   },
   buttonClass: {
@@ -23,7 +23,7 @@ defineProps({
 
 const emit = defineEmits(['click'])
 
-const isHover = ref(false)
+const isHovering = ref(false)
 
 const handleClick = () => {
   emit('click')
@@ -34,19 +34,19 @@ const handleClick = () => {
   <button
     @click="handleClick"
     :class="buttonClass"
-    @mouseenter="isHover = true"
-    @mouseleave="isHover = false"
+    @mouseenter="isHovering = true"
+    @mouseleave="isHovering = false"
   >
     <span class="button-icon">
       <font-awesome-icon
         :icon="icon"
-        :beat="animation === 'beat' && isHover"
-        :bounce="animation === 'bounce' && isHover"
-        :fade="animation === 'fade' && isHover"
-        :spin="animation === 'spin' && isHover"
+        :beat="animationType === 'beat' && isHovering"
+        :bounce="animationType === 'bounce' && isHovering"
+        :fade="animationType === 'fade' && isHovering"
+        :spin="animationType === 'spin' && isHovering"
       />
     </span>
-    <span class="button-text">{{ text }}</span>
+    <span class="button-text">{{ label }}</span>
   </button>
 </template>
 

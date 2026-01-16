@@ -14,7 +14,7 @@ import {
 } from '@/utils/utils'
 
 const router = useRouter()
-const isHover = ref(false)
+const isHovering = ref(false)
 
 // ユーザー情報の取得
 const userName = getStorageValue(STORAGE_KEYS.USER_NAME, '')
@@ -54,7 +54,7 @@ const performValidation = () => {
         if (answer.isChecked && !answer.value) {
           errors.push({
             category: category.genre,
-            question: question.question,
+            questionText: question.questionText,
             answer: answer.text,
           })
         }
@@ -82,7 +82,7 @@ const handleQuestionUpdate = (categoryIndex, questionIndex, updatedQuestion) => 
 }
 
 // 次へ進む処理
-const toNext = async () => {
+const onSubmit = async () => {
   hasAttemptedSubmit.value = true
   validationErrors.value = performValidation()
 
@@ -132,23 +132,23 @@ const isSubmitDisabled = () => {
             </div>
             <ul class="stars-description">
               <li>
-                <span>{{ LEVEL_LABELS[1] }}</span>
+                <span>{{ LEVEL_LABELS[0] }}</span>
                 ：習得が不十分な状態
               </li>
               <li>
-                <span>{{ LEVEL_LABELS[2] }}</span>
+                <span>{{ LEVEL_LABELS[1] }}</span>
                 ：基礎はあるが不安定
               </li>
               <li>
-                <span>{{ LEVEL_LABELS[3] }}</span>
+                <span>{{ LEVEL_LABELS[2] }}</span>
                 ：期待どおりにできる
               </li>
               <li>
-                <span>{{ LEVEL_LABELS[4] }}</span>
+                <span>{{ LEVEL_LABELS[3] }}</span>
                 ：期待以上の成果を出す
               </li>
               <li>
-                <span>{{ LEVEL_LABELS[5] }}</span>
+                <span>{{ LEVEL_LABELS[4] }}</span>
                 ：卓越したレベルで発揮する
               </li>
             </ul>
@@ -187,15 +187,15 @@ const isSubmitDisabled = () => {
           すべてのチェック項目に習熟度を選択してください
         </p>
         <button
-          @mouseenter="isHover = true"
-          @mouseleave="isHover = false"
-          @click="toNext"
+          @mouseenter="isHovering = true"
+          @mouseleave="isHovering = false"
+          @click="onSubmit"
           class="submit-button"
           :class="{ disabled: isSubmitDisabled() }"
           :disabled="isSubmitDisabled()"
         >
           次へ進む &ensp;
-          <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHover" />
+          <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHovering" />
         </button>
       </div>
     </div>

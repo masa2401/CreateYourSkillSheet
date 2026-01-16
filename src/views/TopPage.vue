@@ -6,7 +6,7 @@ import { STORAGE_KEYS, ROUTES } from '@/utils/constants'
 import { setStorageValue } from '@/utils/utils'
 
 const router = useRouter()
-const isHover = ref(false)
+const isHovering = ref(false)
 
 // フォームデータ
 const userName = ref('')
@@ -26,8 +26,8 @@ const performValidation = () => {
   // 名前が空の場合
   if (!userName.value.trim()) {
     errors.push({
-      category: '入力必須項目',
-      question: 'お名前の入力',
+      category: '入力必須項目（名前）',
+      questionText: '',
       answer: 'お名前を入力してください',
     })
   }
@@ -36,7 +36,7 @@ const performValidation = () => {
 }
 
 // 入力時にエラーをクリア
-const handleNameInput = () => {
+const onNameInput = () => {
   if (hasAttemptedSubmit.value) {
     validationErrors.value = performValidation()
   }
@@ -85,7 +85,7 @@ const validateAndProceed = () => {
             :class="{ 'input-error': validationErrors.length > 0 }"
             v-model="userName"
             placeholder="お名前を入力"
-            @input="handleNameInput"
+            @input="onNameInput"
           />
         </div>
 
@@ -156,11 +156,11 @@ const validateAndProceed = () => {
         <button
           @click="validateAndProceed"
           class="start-button"
-          @mouseenter="isHover = true"
-          @mouseleave="isHover = false"
+          @mouseenter="isHovering = true"
+          @mouseleave="isHovering = false"
         >
           アンケートを開始 &ensp;
-          <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHover" />
+          <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHovering" />
         </button>
       </div>
     </div>

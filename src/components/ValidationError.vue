@@ -1,9 +1,28 @@
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   errors: {
     type: Array,
     default: () => [],
   },
+})
+
+// エラーをカテゴリごとにグループ化
+const groupedErrors = computed(() => {
+  const groups = {}
+
+  props.errors.forEach((error) => {
+    if (!groups[error.category]) {
+      groups[error.category] = []
+    }
+    groups[error.category].push(error)
+  })
+
+  return Object.entries(groups).map(([category, items]) => ({
+    category,
+    count: items.length,
+  }))
 })
 </script>
 
@@ -20,8 +39,10 @@ defineProps({
         <div class="error-text">
           <slot name="description"></slot>
           <ul class="error-list">
-            <li v-for="(error, index) in errors" :key="index" class="error-item">
-              <strong>{{ error.category }}</strong> - {{ error.answer }}
+            <li v-for="(group, index) in groupedErrors" :key="index" class="error-item">
+              <font-awesome-icon icon="fa-solid fa-circle-exclamation" class="error-bullet" />
+              <strong>{{ group.category }}</strong>
+              <span class="error-count">（{{ group.count }}件の未選択項目）</span>
             </li>
           </ul>
         </div>
@@ -57,7 +78,7 @@ defineProps({
 }
 
 .error-icon {
-  color: #f59e0b;
+  color: #ef4444;
   font-size: 2rem;
   flex-shrink: 0;
 }
@@ -75,6 +96,7 @@ defineProps({
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: var(--p-4, 0.5rem);
 }
 
 .error-title > h4 {
@@ -83,25 +105,41 @@ defineProps({
   font-weight: 700;
 }
 
-.error-description {
-  margin: 0 0 var(--p-12, 1.5rem) 0;
-  font-size: 1rem;
-  line-height: 1.5;
+.error-text {
+  width: 100%;
+  text-align: center;
 }
 
 .error-list {
-  margin: var(--p-4, 0.5rem) 0 0;
-  padding-left: var(--p-12, 1.5rem);
-  list-style: disc;
+  width: fit-content;
+  margin: var(--p-4, 0.5rem) auto 0;
+  padding: 0;
+  list-style: none;
 }
 
 .error-item {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  padding: 0 var(--p-4, 0.5rem);
   margin-bottom: var(--p-4, 0.5rem);
   line-height: 1.4;
 }
 
+.error-bullet {
+  color: #ef4444;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
 .error-item strong {
   font-weight: 700;
+}
+
+.error-count {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .fade-enter-active,
@@ -116,8 +154,7 @@ defineProps({
 
 @media (max-width: 768px) {
   .error-message {
-    padding: var(--p-4, 0.5rem);
-    gap: var(--p-4, 0.5rem);
+    padding: var(--p-12, 1.5rem);
   }
 
   .error-icon {
@@ -125,11 +162,7 @@ defineProps({
   }
 
   .error-title > h4 {
-    font-size: 1.1rem;
-  }
-
-  .error-description {
-    font-size: 0.95rem;
+    font-size: 1.2rem;
   }
 
   .error-item {

@@ -67,7 +67,7 @@ export const removeStorageValue = (key) => {
 export const createReactiveQuestions = (data) => {
     return data.map((q) => ({
         id: q.id,
-        question: q.question,
+        questionText: q.questionText,
         answers: q.answers.map((text) => ({
             text,
             isChecked: false,
@@ -85,7 +85,7 @@ export const createReactiveQuestions = (data) => {
 export const serializeQuestions = (questions) => {
     return questions.map((q) => ({
         id: q.id,
-        question: q.question,
+        questionText: q.questionText,
         answers: q.answers.map((a) => ({
             text: a.text,
             isChecked: a.isChecked,
@@ -117,7 +117,7 @@ export const validateQuestions = (allQuestions, categories) => {
                 if (answer.isChecked && !answer.value) {
                     errors.push({
                         category: name,
-                        question: question.question,
+                        questionText: question.questionText,
                         answer: answer.text,
                     })
                 }

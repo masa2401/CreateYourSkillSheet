@@ -2,7 +2,7 @@
 export const commonQuestionData = [
     {
         id: 1,
-        question: 'Q. 実務で使用経験のあるオフィスソフトをすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のあるオフィスソフトをすべて選択してください。',
         answers: [
             'Microsoft Word （報告書・議事録作成など）',
             'Microsoft Excel （関数、ピボットテーブル、グラフ作成など）',
@@ -12,7 +12,7 @@ export const commonQuestionData = [
     },
     {
         id: 2,
-        question: 'Q. 業務で日常的に使用したことのあるコミュニケーションツールをすべて選択してください。',
+        questionText: 'Q. 業務で日常的に使用したことのあるコミュニケーションツールをすべて選択してください。',
         answers: [
             'Slack',
             'Microsoft Teams',
@@ -22,7 +22,7 @@ export const commonQuestionData = [
     },
     {
         id: 3,
-        question: 'Q. 以下のIT関連知識・スキルについて、当てはまるものをすべて選択してください。',
+        questionText: 'Q. 以下のIT関連知識・スキルについて、当てはまるものをすべて選択してください。',
         answers: [
             'Windowsの基本操作・設定ができる',
             'macOSの基本操作・設定ができる',
@@ -37,17 +37,17 @@ export const commonQuestionData = [
 export const engineerQuestionData = [
     {
         id: 1,
-        question: 'Q. 実務で使用経験のあるフロントエンド言語・マークアップ言語をすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のあるフロントエンド言語・マークアップ言語をすべて選択してください。',
         answers: ['HTML', 'CSS', 'Sass/SCSS', 'JavaScript', 'TypeScript'],
     },
     {
         id: 2,
-        question: 'Q. 実務で使用経験のあるバックエンド言語をすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のあるバックエンド言語をすべて選択してください。',
         answers: ['PHP', 'Ruby', 'Python', 'Java', 'Go'],
     },
     {
         id: 3,
-        question: 'Q. 実務で使用経験のあるフレームワーク/ライブラリをすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のあるフレームワーク/ライブラリをすべて選択してください。',
         answers: [
             'React',
             'Vue.js',
@@ -61,37 +61,37 @@ export const engineerQuestionData = [
     },
     {
         id: 4,
-        question: 'Q. 実務で使用経験のあるデータベースをすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のあるデータベースをすべて選択してください。',
         answers: ['MySQL / MariaDB', 'PostgreSQL', 'Oracle Database', 'MongoDB', 'Redis'],
     },
     {
         id: 5,
-        question: 'Q. 実務で使用経験のあるバージョン管理ツールをすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のあるバージョン管理ツールをすべて選択してください。',
         answers: ['Git / GitHub / GitLab', 'Subversion (SVN)', 'Mercurial', 'Perforce'],
     },
     {
         id: 6,
-        question: 'Q. サーバーとして構築・運用経験のあるOSをすべて選択してください。',
+        questionText: 'Q. サーバーとして構築・運用経験のあるOSをすべて選択してください。',
         answers: ['Linux (RHEL/CentOS系)', 'Linux (Ubuntu/Debian系)', 'Windows Server'],
     },
     {
         id: 7,
-        question: 'Q. 主な業務で利用したことのあるクラウドプラットフォームをすべて選択してください。',
+        questionText: 'Q. 主な業務で利用したことのあるクラウドプラットフォームをすべて選択してください。',
         answers: ['AWS (Amazon Web Services)', 'Microsoft Azure', 'GCP (Google Cloud Platform)'],
     },
     {
         id: 8,
-        question: 'Q. 実務で使用経験のある仮想化・コンテナ技術をすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のある仮想化・コンテナ技術をすべて選択してください。',
         answers: ['VMware vSphere', 'Docker', 'Kubernetes'],
     },
     {
         id: 9,
-        question: 'Q. 実務で使用経験のある構成管理・自動化ツールをすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のある構成管理・自動化ツールをすべて選択してください。',
         answers: ['Ansible', 'Terraform', 'シェルスクリプト (Bashなど)'],
     },
     {
         id: 10,
-        question: 'Q. 実務で設定・運用経験のあるネットワーク機器や監視ツールをすべて選択してください。',
+        questionText: 'Q. 実務で設定・運用経験のあるネットワーク機器や監視ツールをすべて選択してください。',
         answers: [
             'L2/L3スイッチ (Ciscoなど)',
             'ルーター',
@@ -108,7 +108,7 @@ export const engineerQuestionData = [
 export const designerQuestionData = [
     {
         id: 1,
-        question: 'Q. WebサイトやアプリのUI/UXデザインで使用経験のあるツールをすべて選択してください。',
+        questionText: 'Q. WebサイトやアプリのUI/UXデザインで使用経験のあるツールをすべて選択してください。',
         answers: [
             'Figma',
             'Sketch',
@@ -118,12 +118,12 @@ export const designerQuestionData = [
     },
     {
         id: 2,
-        question: 'Q. イラスト制作を主目的として使用したことのあるツールをすべて選択してください。',
+        questionText: 'Q. イラスト制作を主目的として使用したことのあるツールをすべて選択してください。',
         answers: ['Illustrator', 'Photoshop', 'Clip Studio Paint', 'Procreate'],
     },
     {
         id: 3,
-        question: 'Q. Webデザインの実装（コーディング）において、対応可能なものをすべて選択してください。',
+        questionText: 'Q. Webデザインの実装（コーディング）において、対応可能なものをすべて選択してください。',
         answers: [
             'HTML/CSSによるコーディング',
             'レスポンシブデザイン対応',
@@ -133,7 +133,7 @@ export const designerQuestionData = [
     },
     {
         id: 4,
-        question: 'Q. DTP（印刷物）デザインにおいて、経験のある業務をすべて選択してください。',
+        questionText: 'Q. DTP（印刷物）デザインにおいて、経験のある業務をすべて選択してください。',
         answers: [
             '名刺・チラシ・ポスターなどの制作',
             'パンフレット・冊子などのページレイアウト',
@@ -143,7 +143,7 @@ export const designerQuestionData = [
     },
     {
         id: 5,
-        question: 'Q. 実務で使用経験のある動画編集ソフトをすべて選択してください。',
+        questionText: 'Q. 実務で使用経験のある動画編集ソフトをすべて選択してください。',
         answers: [
             'Adobe Premiere Pro （カット編集、テロップ入れ、整音など標準的な編集）',
             'Adobe After Effects （モーショングラフィックス、VFX、高度なアニメーション作成）',
@@ -154,7 +154,7 @@ export const designerQuestionData = [
     },
     {
         id: 6,
-        question: 'Q. 以下の編集スキル・操作について、自信を持って対応できるものをすべて選択してください。',
+        questionText: 'Q. 以下の編集スキル・操作について、自信を持って対応できるものをすべて選択してください。',
         answers: [
             'カット編集（ジェットカット、マルチカメラ編集など）',
             'テロップ・字幕の挿入（見やすいフォント選定、装飾、タイミング調整）',
@@ -167,7 +167,7 @@ export const designerQuestionData = [
     },
     {
         id: 7,
-        question: 'Q. 動画制作に関連する知識・周辺スキルについて、当てはまるものをすべて選択してください。',
+        questionText: 'Q. 動画制作に関連する知識・周辺スキルについて、当てはまるものをすべて選択してください。',
         answers: [
             'サムネイル画像の作成（PhotoshopやCanva等を使用し、クリック率を意識した画像が作れる）',
             'エンコード・書き出し設定の知識（解像度、フレームレート、コーデック、ビットレートの理解）',
@@ -178,7 +178,7 @@ export const designerQuestionData = [
     },
     {
         id: 8,
-        question: 'Q. これまでに制作・編集経験のある動画ジャンルを選択してください。',
+        questionText: 'Q. これまでに制作・編集経験のある動画ジャンルを選択してください。',
         answers: [
             'YouTube動画（エンタメ、ビジネス系、Vlogなど）',
             'ショート動画（TikTok、Instagram Reels、YouTube Shorts）',

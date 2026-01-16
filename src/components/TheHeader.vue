@@ -16,7 +16,7 @@ const goHome = () => {
   <header class="header">
     <h1 class="title" @click="goHome">
       <span class="icon">
-        <font-awesome-icon icon="fa-regular fa-clipboard" />
+        <font-awesome-icon icon="fa-solid fa-pen-to-square" />
       </span>
       スキルシート制作ページ
     </h1>

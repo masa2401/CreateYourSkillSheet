@@ -1,7 +1,7 @@
 <script setup>
 import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
 import { ref, computed } from 'vue'
-import { generateShareUrl, copyToClipboard } from '@/utils/shareUtils'
+import { createShareUrl, copyToClipboard } from '@/utils/shareUtils'
 
 const props = defineProps({
   surveyData: {
@@ -16,7 +16,7 @@ const copySuccess = ref(false)
 // 共有URLを生成
 const shareUrl = computed(() => {
   try {
-    return generateShareUrl(props.surveyData)
+    return createShareUrl(props.surveyData)
   } catch (error) {
     console.error('URL生成エラー:', error)
     return ''
@@ -45,8 +45,8 @@ const toggleMenu = () => {
   <div class="share-button-container">
     <AnimatedIconButton
       icon="fa-solid fa-arrow-up-right-from-square"
-      text="結果を共有"
-      animation="bounce"
+      label="結果を共有"
+      animationType="bounce"
       button-class="share-button"
       @click="toggleMenu"
     />
