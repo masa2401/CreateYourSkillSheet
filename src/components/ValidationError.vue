@@ -8,22 +8,30 @@ const props = defineProps({
   },
 })
 
-// エラーをカテゴリごとにグループ化
+// エラーをカテゴリと質問ごとにグループ化
 const groupedErrors = computed(() => {
   const groups = {}
 
   props.errors.forEach((error) => {
-    if (!groups[error.category]) {
-      groups[error.category] = []
+    const key = `${error.category}|${error.questionText || ''}`
+    if (!groups[key]) {
+      groups[key] = {
+        category: error.category,
+        questionText: error.questionText,
+        count: 0,
+      }
     }
-    groups[error.category].push(error)
+    groups[key].count++
   })
 
-  return Object.entries(groups).map(([category, items]) => ({
-    category,
-    count: items.length,
-  }))
+  return Object.values(groups)
 })
+
+// 質問文の冒頭30文字を取得
+const getQuestionPreview = (questionText) => {
+  if (!questionText) return ''
+  return questionText.length > 30 ? questionText.substring(0, 30) + '...' : questionText
+}
 </script>
 
 <template>
@@ -41,8 +49,15 @@ const groupedErrors = computed(() => {
           <ul class="error-list">
             <li v-for="(group, index) in groupedErrors" :key="index" class="error-item">
               <font-awesome-icon icon="fa-solid fa-circle-exclamation" class="error-bullet" />
-              <strong>{{ group.category }}</strong>
-              <span class="error-count">（{{ group.count }}件の未選択項目）</span>
+              <div class="error-details">
+                <div class="error-main">
+                  <strong>{{ group.category }}</strong>
+                  <span class="error-count">（{{ group.count }}件）</span>
+                </div>
+                <div v-if="group.questionText" class="error-question">
+                  {{ getQuestionPreview(group.questionText) }}
+                </div>
+              </div>
             </li>
           </ul>
         </div>
@@ -88,7 +103,7 @@ const groupedErrors = computed(() => {
   flex-direction: column;
   align-items: center;
   flex: 1;
-  gap: var(--p-4, 0.5rem);
+  gap: var(--p-8, 1rem);
   color: #c00;
 }
 
@@ -112,17 +127,16 @@ const groupedErrors = computed(() => {
 
 .error-list {
   width: fit-content;
-  margin: var(--p-4, 0.5rem) auto 0;
+  margin: var(--p-8, 1rem) auto 0;
   padding: 0;
   list-style: none;
 }
 
 .error-item {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   width: fit-content;
-  padding: 0 var(--p-4, 0.5rem);
-  margin-bottom: var(--p-4, 0.5rem);
+  padding: var(--p-4, 0.5rem);
   line-height: 1.4;
 }
 
@@ -132,7 +146,13 @@ const groupedErrors = computed(() => {
   flex-shrink: 0;
 }
 
-.error-item strong {
+.error-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.error-main strong {
   font-weight: 700;
 }
 
@@ -140,6 +160,13 @@ const groupedErrors = computed(() => {
   color: #666;
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+.error-question {
+  color: #666;
+  font-size: 0.85rem;
+  margin-left: 0;
+  line-height: 1.3;
 }
 
 .fade-enter-active,

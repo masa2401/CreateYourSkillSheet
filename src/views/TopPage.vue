@@ -26,9 +26,8 @@ const performValidation = () => {
   // 名前が空の場合
   if (!userName.value.trim()) {
     errors.push({
-      category: '入力必須項目（名前）',
-      questionText: '',
-      answer: 'お名前を入力してください',
+      category: '入力必須項目',
+      questionText: 'お名前を入力してください',
     })
   }
 

@@ -55,7 +55,6 @@ const performValidation = () => {
           errors.push({
             category: category.genre,
             questionText: question.questionText,
-            answer: answer.text,
           })
         }
       })
