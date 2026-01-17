@@ -210,13 +210,13 @@ const handlePrint = () => {
   display: flex;
   justify-content: center;
   gap: var(--p-24, 3rem);
+  padding-bottom: var(--p-16, 2rem);
 }
 
 .stars-description {
   display: flex;
   flex-direction: column;
   width: fit-content;
-  padding: 0 0 var(--p-16, 2rem);
 }
 
 .header-icon {
@@ -411,10 +411,6 @@ const handlePrint = () => {
 
   .image {
     display: none;
-  }
-
-  .stars-description {
-    margin-left: 0;
   }
 
   .category-header {

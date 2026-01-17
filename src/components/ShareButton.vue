@@ -2,6 +2,7 @@
 import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
 import { ref, computed } from 'vue'
 import { createShareUrl, copyToClipboard } from '@/utils/shareUtils'
+import { downloadCSV } from '@/utils/csvUtils'
 
 const props = defineProps({
   surveyData: {
@@ -12,6 +13,7 @@ const props = defineProps({
 
 const showMenu = ref(false)
 const copySuccess = ref(false)
+const downloadSuccess = ref(false)
 
 // 共有URLを生成
 const shareUrl = computed(() => {
@@ -35,9 +37,28 @@ const handleCopy = async () => {
   }
 }
 
+// CSVダウンロード
+const handleDownloadCSV = () => {
+  const success = downloadCSV(props.surveyData)
+  if (success) {
+    downloadSuccess.value = true
+    setTimeout(() => {
+      downloadSuccess.value = false
+      showMenu.value = false
+    }, 2000)
+  } else {
+    alert('CSVのダウンロードに失敗しました')
+  }
+}
+
 // メニューの表示切替
 const toggleMenu = () => {
   showMenu.value = !showMenu.value
+  // メニューを開いた時に成功状態をリセット
+  if (showMenu.value) {
+    copySuccess.value = false
+    downloadSuccess.value = false
+  }
 }
 </script>
 
@@ -61,6 +82,16 @@ const toggleMenu = () => {
             <font-awesome-icon icon="fa-regular fa-copy" />
           </span>
           <span class="menu-text">{{ copySuccess ? 'コピーしました!' : 'URLをコピー' }}</span>
+        </button>
+
+        <button @click="handleDownloadCSV" class="menu-item" :class="{ success: downloadSuccess }">
+          <span class="menu-icon" v-if="downloadSuccess">
+            <font-awesome-icon icon="fa-solid fa-check" />
+          </span>
+          <span class="menu-icon" v-else>
+            <font-awesome-icon icon="fa-solid fa-file-csv" />
+          </span>
+          <span class="menu-text">{{ downloadSuccess ? 'ダウンロード完了!' : 'CSV保存' }}</span>
         </button>
       </div>
     </transition>
@@ -99,13 +130,13 @@ const toggleMenu = () => {
 
 .share-menu {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  bottom: calc(100% + 0.5rem);
   left: 50%;
   transform: translateX(-50%);
   background: #ffffff;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(72, 60, 50, 0.15);
-  border: 1px solid rgba(72, 60, 50, 0.1);
+  border: 1px solid #483c32;
   padding: var(--p-4, 0.5rem);
   min-width: 200px;
   z-index: 100;
@@ -118,7 +149,7 @@ const toggleMenu = () => {
   background: transparent;
   cursor: pointer;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   gap: var(--p-4, 0.5rem);
   border-radius: 10px;
@@ -155,12 +186,12 @@ const toggleMenu = () => {
 }
 
 .slide-fade-enter-from {
-  transform: translateX(-50%) translateY(-10px);
+  transform: translateX(-50%) translateY(10px);
   opacity: 0;
 }
 
 .slide-fade-leave-to {
-  transform: translateX(-50%) translateY(-10px);
+  transform: translateX(-50%) translateY(10px);
   opacity: 0;
 }
 
