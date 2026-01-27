@@ -62,16 +62,10 @@ export const createShareUrl = (surveyData) => {
 export const getDataFromUrl = () => {
     try {
         let searchString = ''
-
-        // Hash Modeの場合（#の後ろにクエリパラメータがある）
         if (window.location.hash.includes('?')) {
             // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
             const hashParts = window.location.hash.split('?')
             searchString = hashParts.length > 1 ? '?' + hashParts.slice(1).join('?') : ''
-        }
-        // History Modeの場合（従来通り）
-        else if (window.location.search) {
-            searchString = window.location.search
         }
 
         // クエリパラメータが存在しない場合
@@ -141,7 +135,6 @@ export const getDataFromUrl = () => {
         // すべての検証を通過
         console.info('URLからデータを正常に取得しました')
         return decoded
-
     } catch (error) {
         // 予期しないエラーをキャッチ
         console.error('URLからのデータ取得中に予期しないエラーが発生しました:', error)

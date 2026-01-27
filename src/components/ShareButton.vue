@@ -47,7 +47,7 @@ const handleDownloadCSV = () => {
       showMenu.value = false
     }, 2000)
   } else {
-    alert('CSVのダウンロードに失敗しました')
+    console.log('CSVのダウンロードに失敗しました')
   }
 }
 
@@ -69,7 +69,7 @@ const toggleMenu = () => {
       label="結果を共有"
       animationType="bounce"
       button-class="share-button"
-      @click="toggleMenu"
+      @focus="toggleMenu"
     />
 
     <transition name="slide-fade">
