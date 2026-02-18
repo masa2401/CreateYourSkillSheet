@@ -1,4 +1,3 @@
-
 // ========================================
 // LocalStorage操作
 // ========================================
@@ -11,14 +10,14 @@
  */
 
 export const getStorageValue = (key, defaultValue = null) => {
-    try {
-        const item = localStorage.getItem(key)
-        if (item === null) return defaultValue
-        return JSON.parse(item)
-    } catch (error) {
-        console.error(`LocalStorage取得・パースエラー: ${key}`, error)
-        return defaultValue
-    }
+  try {
+    const item = localStorage.getItem(key)
+    if (item === null) return defaultValue
+    return JSON.parse(item)
+  } catch (error) {
+    console.error(`LocalStorage取得・パースエラー: ${key}`, error)
+    return defaultValue
+  }
 }
 
 /**
@@ -29,13 +28,13 @@ export const getStorageValue = (key, defaultValue = null) => {
  */
 
 export const setStorageValue = (key, value) => {
-    try {
-        localStorage.setItem(key, JSON.stringify(value))
-        return true
-    } catch (error) {
-        console.error(`LocalStorage保存エラー: ${key}`, error)
-        return false
-    }
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+    return true
+  } catch (error) {
+    console.error(`LocalStorage保存エラー: ${key}`, error)
+    return false
+  }
 }
 
 /**
@@ -45,13 +44,13 @@ export const setStorageValue = (key, value) => {
  */
 
 export const removeStorageValue = (key) => {
-    try {
-        localStorage.removeItem(key)
-        return true
-    } catch (error) {
-        console.error(`LocalStorage削除エラー: ${key}`, error)
-        return false
-    }
+  try {
+    localStorage.removeItem(key)
+    return true
+  } catch (error) {
+    console.error(`LocalStorage削除エラー: ${key}`, error)
+    return false
+  }
 }
 
 // ========================================
@@ -65,15 +64,15 @@ export const removeStorageValue = (key) => {
  */
 
 export const createReactiveQuestions = (data) => {
-    return data.map((q) => ({
-        id: q.id,
-        questionText: q.questionText,
-        answers: q.answers.map((text) => ({
-            text,
-            isChecked: false,
-            value: null,
-        })),
-    }))
+  return data.map((q) => ({
+    id: q.id,
+    questionText: q.questionText,
+    answers: q.answers.map((text) => ({
+      text,
+      isChecked: false,
+      value: null,
+    })),
+  }))
 }
 
 /**
@@ -83,15 +82,15 @@ export const createReactiveQuestions = (data) => {
  */
 
 export const serializeQuestions = (questions) => {
-    return questions.map((q) => ({
-        id: q.id,
-        questionText: q.questionText,
-        answers: q.answers.map((a) => ({
-            text: a.text,
-            isChecked: a.isChecked,
-            value: a.value,
-        })),
-    }))
+  return questions.map((q) => ({
+    id: q.id,
+    questionText: q.questionText,
+    answers: q.answers.map((a) => ({
+      text: a.text,
+      isChecked: a.isChecked,
+      value: a.value,
+    })),
+  }))
 }
 
 // ========================================
@@ -106,26 +105,26 @@ export const serializeQuestions = (questions) => {
  */
 
 export const validateQuestions = (allQuestions, categories) => {
-    const errors = []
+  const errors: Array<{ category: string; questionText: string; answer: string }> = []
 
-    allQuestions.forEach(({ name, questions, categoryId }) => {
-        const category = categories.find((c) => c.id === categoryId)
-        if (!category?.isChecked) return
+  allQuestions.forEach(({ name, questions, categoryId }) => {
+    const category = categories.find((c) => c.id === categoryId)
+    if (!category?.isChecked) return
 
-        questions.forEach((question) => {
-            question.answers.forEach((answer) => {
-                if (answer.isChecked && !answer.value) {
-                    errors.push({
-                        category: name,
-                        questionText: question.questionText,
-                        answer: answer.text,
-                    })
-                }
-            })
-        })
+    questions.forEach((question) => {
+      question.answers.forEach((answer) => {
+        if (answer.isChecked && !answer.value) {
+          errors.push({
+            category: name,
+            questionText: question.questionText,
+            answer: answer.text,
+          })
+        }
+      })
     })
+  })
 
-    return errors
+  return errors
 }
 
 // ========================================
@@ -138,10 +137,10 @@ export const validateQuestions = (allQuestions, categories) => {
  */
 
 export const scrollToElement = (elementId) => {
-    const element = document.getElementById(elementId)
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+  const element = document.getElementById(elementId)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 }

@@ -11,7 +11,7 @@ import { LEVEL_LABELS } from '@/utils/constants'
  */
 export const convertToCSV = (surveyData) => {
   try {
-    const rows = []
+    const rows: Array<string | string[]> = []
 
     // ヘッダー行
     rows.push(['ユーザー名', surveyData.userName])
@@ -61,8 +61,12 @@ export const convertToCSV = (surveyData) => {
 
     // CSVフォーマットに変換（ダブルクォートでエスケープ）
     const csvContent = rows
-      .map((row) =>
-        row
+      .map((row) => {
+        if (typeof row === 'string') {
+          const escapedRow = row.replace(/"/g, '""')
+          return `"${escapedRow}"`
+        }
+        return row
           .map((cell) => {
             // セルの値を文字列に変換
             const cellValue = cell === null || cell === undefined ? '' : String(cell)
@@ -71,8 +75,8 @@ export const convertToCSV = (surveyData) => {
             // 各セルをダブルクォートで囲む
             return `"${escapedValue}"`
           })
-          .join(','),
-      )
+          .join(',')
+      })
       .join('\r\n')
 
     // BOM付きUTF-8（Excelでの文字化け防止）
