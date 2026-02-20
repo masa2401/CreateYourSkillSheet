@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { ROUTES } from '@/utils/constants'
 
 const router = useRouter()
 const route = useRoute()
 
-const goHome = () => {
+const goToTop = () => {
   if (route.path !== ROUTES.TOP) {
     router.push(ROUTES.TOP)
   }
@@ -14,7 +14,7 @@ const goHome = () => {
 
 <template>
   <header class="header">
-    <h1 class="title" @click="goHome">
+    <h1 class="title" @click="goToTop">
       <span class="icon">
         <font-awesome-icon icon="fa-solid fa-pen-to-square" />
       </span>

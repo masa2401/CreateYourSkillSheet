@@ -27,7 +27,7 @@ export const commonQuestionData = [
       '基本的なセキュリティ対策（パスワード管理、フィッシング対策など）を実践している',
     ],
   },
-]
+];
 
 // エンジニア向けの質問データ
 export const engineerQuestionData = [
@@ -101,7 +101,7 @@ export const engineerQuestionData = [
       'Datadog',
     ],
   },
-]
+];
 
 // デザイナー向けの質問データ
 export const designerQuestionData = [
@@ -186,4 +186,4 @@ export const designerQuestionData = [
       'ゲーム実況動画',
     ],
   },
-]
+];

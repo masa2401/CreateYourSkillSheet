@@ -1,16 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
 import { ref, computed } from 'vue'
 import { createShareUrl, copyToClipboard } from '@/utils/shareUtils'
 import { downloadCSV } from '@/utils/csvUtils'
 
-const props = defineProps({
-  surveyData: {
-    type: Object,
-    required: true,
-  },
-})
+interface Props {
+  surveyData: Record<string, any>
+}
 
+const props = defineProps<Props>()
 const showMenu = ref(false)
 const copySuccess = ref(false)
 const downloadSuccess = ref(false)

@@ -1,60 +1,60 @@
-﻿<script setup>
-import ShareButton from '@/components/ShareButton.vue'
-import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
-import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants'
-import { getDataFromUrl } from '@/utils/shareUtils'
-import { getStorageValue } from '@/utils/utils'
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+﻿<script setup lang="ts">
+import ShareButton from '@/components/ShareButton.vue';
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
+import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants';
+import { getDataFromUrl } from '@/utils/shareUtils';
+import { getStorageValue } from '@/utils/utils';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
-const router = useRouter()
-const surveyData = ref(null)
-const isSharedView = ref(false)
+const router = useRouter();
+const surveyData = ref(null);
+const isSharedView = ref(false);
 
 // データ取得
 onMounted(() => {
-  const urlData = getDataFromUrl()
+  const urlData = getDataFromUrl();
   if (urlData) {
-    surveyData.value = urlData
-    isSharedView.value = true
-    return
+    surveyData.value = urlData;
+    isSharedView.value = true;
+    return;
   }
 
-  const localData = getStorageValue(STORAGE_KEYS.SURVEY_DATA, '')
+  const localData = getStorageValue(STORAGE_KEYS.SURVEY_DATA, '');
   if (localData) {
-    surveyData.value = localData
-    isSharedView.value = false
-    return
+    surveyData.value = localData;
+    isSharedView.value = false;
+    return;
   }
 
-  router.push(ROUTES.SURVEY)
-})
+  router.push(ROUTES.SURVEY);
+});
 
 const getQuestionsByCategory = (categoryId) => {
-  if (!surveyData.value) return []
-  const category = surveyData.value.categories.find((c) => c.id === categoryId)
-  return category.questions || []
-}
+  if (!surveyData.value) return [];
+  const category = surveyData.value.categories.find((c) => c.id === categoryId);
+  return category.questions || [];
+};
 
 const getCheckedAnswers = (answers) => {
-  return answers.filter((answer) => answer.isChecked)
-}
+  return answers.filter((answer) => answer.isChecked);
+};
 
 const goToTop = () => {
-  router.push(ROUTES.TOP)
-}
+  router.push(ROUTES.TOP);
+};
 
 const goBack = () => {
-  router.push(ROUTES.SURVEY)
-}
+  router.push(ROUTES.SURVEY);
+};
 
 const createMyOwn = () => {
-  router.push(ROUTES.TOP)
-}
+  router.push(ROUTES.TOP);
+};
 
 const handlePrint = () => {
-  window.print()
-}
+  window.print();
+};
 </script>
 
 <template>

@@ -1,13 +1,13 @@
-<script setup>
-import { useRouter } from 'vue-router'
-import { ROUTES } from '@/utils/constants'
-import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+import { ROUTES } from '@/utils/constants';
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
 
-const router = useRouter()
+const router = useRouter();
 
 const goToTop = () => {
-  router.push(ROUTES.TOP)
-}
+  router.push(ROUTES.TOP);
+};
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const goToTop = () => {
       </p>
       <AnimatedIconButton
         icon="fa-regular fa-house"
-        text="トップへ戻る"
+        label="トップへ戻る"
         animation="bounce"
         button-class="action-button primary-button"
         @click="goToTop"

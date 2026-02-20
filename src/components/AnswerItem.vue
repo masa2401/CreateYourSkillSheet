@@ -1,14 +1,13 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+interface Props {
   answer: {
-    type: Object,
-    required: true,
-  },
-  answerIndex: {
-    type: Number,
-    required: true,
-  },
-})
+    text: string
+    isChecked: boolean
+    value: number | null
+  }
+  answerIndex: number
+}
+const props = defineProps<Props>()
 
 const emit = defineEmits(['update:answer'])
 

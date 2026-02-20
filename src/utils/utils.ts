@@ -11,14 +11,14 @@
 
 export const getStorageValue = (key, defaultValue = null) => {
   try {
-    const item = localStorage.getItem(key)
-    if (item === null) return defaultValue
-    return JSON.parse(item)
+    const item = localStorage.getItem(key);
+    if (item === null) return defaultValue;
+    return JSON.parse(item);
   } catch (error) {
-    console.error(`LocalStorage取得・パースエラー: ${key}`, error)
-    return defaultValue
+    console.error(`LocalStorage取得・パースエラー: ${key}`, error);
+    return defaultValue;
   }
-}
+};
 
 /**
  * LocalStorageに値を保存
@@ -29,13 +29,13 @@ export const getStorageValue = (key, defaultValue = null) => {
 
 export const setStorageValue = (key, value) => {
   try {
-    localStorage.setItem(key, JSON.stringify(value))
-    return true
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch (error) {
-    console.error(`LocalStorage保存エラー: ${key}`, error)
-    return false
+    console.error(`LocalStorage保存エラー: ${key}`, error);
+    return false;
   }
-}
+};
 
 /**
  * LocalStorageから値を削除
@@ -45,13 +45,13 @@ export const setStorageValue = (key, value) => {
 
 export const removeStorageValue = (key) => {
   try {
-    localStorage.removeItem(key)
-    return true
+    localStorage.removeItem(key);
+    return true;
   } catch (error) {
-    console.error(`LocalStorage削除エラー: ${key}`, error)
-    return false
+    console.error(`LocalStorage削除エラー: ${key}`, error);
+    return false;
   }
-}
+};
 
 // ========================================
 // データ変換
@@ -72,8 +72,8 @@ export const createReactiveQuestions = (data) => {
       isChecked: false,
       value: null,
     })),
-  }))
-}
+  }));
+};
 
 /**
  * 質問データをシリアライズ（保存用）
@@ -90,8 +90,8 @@ export const serializeQuestions = (questions) => {
       isChecked: a.isChecked,
       value: a.value,
     })),
-  }))
-}
+  }));
+};
 
 // ========================================
 // バリデーション
@@ -105,12 +105,10 @@ export const serializeQuestions = (questions) => {
  */
 
 export const validateQuestions = (allQuestions, categories) => {
-  const errors: Array<{ category: string; questionText: string; answer: string }> = []
-
+  const errors: Array<{ category: string; questionText: string; answer: string }> = [];
   allQuestions.forEach(({ name, questions, categoryId }) => {
-    const category = categories.find((c) => c.id === categoryId)
-    if (!category?.isChecked) return
-
+    const category = categories.find((c) => c.id === categoryId);
+    if (!category?.isChecked) return;
     questions.forEach((question) => {
       question.answers.forEach((answer) => {
         if (answer.isChecked && !answer.value) {
@@ -118,14 +116,13 @@ export const validateQuestions = (allQuestions, categories) => {
             category: name,
             questionText: question.questionText,
             answer: answer.text,
-          })
+          });
         }
-      })
-    })
-  })
-
-  return errors
-}
+      });
+    });
+  });
+  return errors;
+};
 
 // ========================================
 // スクロール
@@ -137,10 +134,10 @@ export const validateQuestions = (allQuestions, categories) => {
  */
 
 export const scrollToElement = (elementId) => {
-  const element = document.getElementById(elementId)
+  const element = document.getElementById(elementId);
   if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-}
+};

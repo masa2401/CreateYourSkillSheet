@@ -1,23 +1,27 @@
-﻿<script setup>
-import { ref, watch, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-import QuestionCard from '@/components/QuestionCard.vue'
-import ValidationError from '@/components/ValidationError.vue'
-import { commonQuestionData, engineerQuestionData, designerQuestionData } from '@/data/questionData'
-import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constants'
+﻿<script setup lang="ts">
+import { ref, watch, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
+import QuestionCard from '@/components/QuestionCard.vue';
+import ValidationError from '@/components/ValidationError.vue';
+import {
+  commonQuestionData,
+  engineerQuestionData,
+  designerQuestionData,
+} from '@/data/questionData';
+import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constants';
 import {
   getStorageValue,
   setStorageValue,
   createReactiveQuestions,
   serializeQuestions,
   scrollToElement,
-} from '@/utils/utils'
+} from '@/utils/utils';
 
-const router = useRouter()
-const isHovering = ref(false)
+const router = useRouter();
+const isHovering = ref(false);
 
 // ユーザー情報の取得
-const userName = getStorageValue(STORAGE_KEYS.USER_NAME, '')
+const userName = getStorageValue(STORAGE_KEYS.USER_NAME, '');
 
 // カテゴリと質問データを統合管理
 const categoryData = ref([
@@ -36,18 +40,18 @@ const categoryData = ref([
     isChecked: getStorageValue(STORAGE_KEYS.CATEGORY_DESIGNER, false),
     questions: createReactiveQuestions(designerQuestionData),
   },
-])
+]);
 
 // バリデーション状態
-const validationErrors = ref([])
-const hasAttemptedSubmit = ref(false)
+const validationErrors = ref([]);
+const hasAttemptedSubmit = ref(false);
 
 // バリデーション実行
 const performValidation = () => {
-  const errors = []
+  const errors = [];
 
   categoryData.value.forEach((category) => {
-    if (!category.isChecked) return
+    if (!category.isChecked) return;
 
     category.questions.forEach((question) => {
       question.answers.forEach((answer) => {
@@ -55,40 +59,40 @@ const performValidation = () => {
           errors.push({
             category: category.genre,
             questionText: question.questionText,
-          })
+          });
         }
-      })
-    })
-  })
+      });
+    });
+  });
 
-  return errors
-}
+  return errors;
+};
 
 // 回答が変更されたらバリデーションを実行（送信ボタンを押した後のみ）
 watch(
   categoryData,
   () => {
     if (hasAttemptedSubmit.value) {
-      validationErrors.value = performValidation()
+      validationErrors.value = performValidation();
     }
   },
   { deep: true },
-)
+);
 
 // 質問の更新ハンドラ
 const handleQuestionUpdate = (categoryIndex, questionIndex, updatedQuestion) => {
-  categoryData.value[categoryIndex].questions[questionIndex] = updatedQuestion
-}
+  categoryData.value[categoryIndex].questions[questionIndex] = updatedQuestion;
+};
 
 // 次へ進む処理
 const onSubmit = async () => {
-  hasAttemptedSubmit.value = true
-  validationErrors.value = performValidation()
+  hasAttemptedSubmit.value = true;
+  validationErrors.value = performValidation();
 
   if (validationErrors.value.length > 0) {
-    await nextTick()
-    scrollToElement('error-message')
-    return
+    await nextTick();
+    scrollToElement('error-message');
+    return;
   }
 
   // データ保存
@@ -101,16 +105,16 @@ const onSubmit = async () => {
       icon: cat.icon,
       questions: serializeQuestions(cat.questions),
     })),
-  }
+  };
 
-  setStorageValue(STORAGE_KEYS.SURVEY_DATA, surveyData)
-  router.push(ROUTES.RESULT)
-}
+  setStorageValue(STORAGE_KEYS.SURVEY_DATA, surveyData);
+  router.push(ROUTES.RESULT);
+};
 
 // 次へ進むボタンの有効/無効判定
 const isSubmitDisabled = () => {
-  return hasAttemptedSubmit.value && validationErrors.value.length > 0
-}
+  return hasAttemptedSubmit.value && validationErrors.value.length > 0;
+};
 </script>
 
 <template>

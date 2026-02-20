@@ -2,11 +2,24 @@
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
     "types": ["vite/client"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": false, // 最初は緩く設定し、移行が進んだら true に
+    "jsx": "preserve",
+    "allowJs": true, // JSファイルの共存を許可 (最重要)
+    "checkJs": false, // JSファイル自体の型チェックは行わない
+    "noEmit": true, // Viteがビルドを行うため、TSによるファイル出力は不要
+    "isolatedModules": true, // Vite（esbuild）の仕様に合わせる
+    "esModuleInterop": true, // CommonJSとの互換性
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
     "paths": {
       "@/*": ["./src/*"]
     },
     // 最初は "any" を許容してエラーを抑える
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "useUnknownInCatchVariables": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

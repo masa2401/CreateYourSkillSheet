@@ -1,16 +1,23 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 
-const props = defineProps({
-  errors: {
-    type: Array,
-    default: () => [],
-  },
-})
+interface Props {
+  errors: Array<{
+    category: string
+    questionText?: string
+  }>
+}
+interface GroupedError {
+  category: string
+  questionText?: string
+  count: number
+}
+
+const props = defineProps<Props>()
 
 // エラーをカテゴリと質問ごとにグループ化
-const groupedErrors = computed(() => {
-  const groups = {}
+const groupedErrors = computed<GroupedError[]>(() => {
+  const groups: Record<string, GroupedError> = {}
 
   props.errors.forEach((error) => {
     const key = `${error.category}|${error.questionText || ''}`
@@ -28,7 +35,7 @@ const groupedErrors = computed(() => {
 })
 
 // 質問文の冒頭30文字を取得
-const getQuestionPreview = (questionText) => {
+const getQuestionPreview = (questionText: string | undefined) => {
   if (!questionText) return ''
   return questionText.length > 30 ? questionText.substring(0, 30) + '...' : questionText
 }
