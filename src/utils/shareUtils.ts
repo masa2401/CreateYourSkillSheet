@@ -1,18 +1,57 @@
 import LZString from 'lz-string';
 
 // ========================================
+// 型定義
+// ========================================
+
+interface Question {
+  [key: string]: unknown;
+}
+
+interface Category {
+  id: number;
+  genre: string;
+  isChecked: boolean;
+  questions: Question[];
+}
+
+interface SurveyData {
+  userName: string;
+  categories: Category[];
+}
+
+// ========================================
+// 型ガード
+// ========================================
+
+const isCategory = (value: unknown): value is Category =>
+  typeof value === 'object' &&
+  value !== null &&
+  typeof (value as Category).id === 'number' &&
+  typeof (value as Category).genre === 'string' &&
+  typeof (value as Category).isChecked === 'boolean' &&
+  Array.isArray((value as Category).questions);
+
+const isSurveyData = (value: unknown): value is SurveyData =>
+  typeof value === 'object' &&
+  value !== null &&
+  typeof (value as SurveyData).userName === 'string' &&
+  !!(value as SurveyData).userName &&
+  Array.isArray((value as SurveyData).categories) &&
+  (value as SurveyData).categories.every(isCategory);
+
+// ========================================
 // データの圧縮・展開
 // ========================================
 
 /**
  * オブジェクトを圧縮してBase64エンコード
  */
-export const encodeData = (data: string) => {
+export const encodeData = (data: string): string | null => {
   try {
     const jsonString = JSON.stringify(data);
     // LZ-stringで圧縮 + URL安全なBase64エンコード
-    const compressed = LZString.compressToEncodedURIComponent(jsonString);
-    return compressed;
+    return LZString.compressToEncodedURIComponent(jsonString);
   } catch (error) {
     console.error('エンコードエラー:', error);
     return null;
@@ -22,17 +61,14 @@ export const encodeData = (data: string) => {
 /**
  * 圧縮されたBase64文字列をデコードしてオブジェクトに変換
  */
-export const decodeData = (compressedString: string) => {
+export const decodeData = (compressedString: string): string | null => {
   try {
     // LZ-stringで解凍
     const jsonString = LZString.decompressFromEncodedURIComponent(compressedString);
-
     if (!jsonString) {
       throw new Error('解凍に失敗しました');
     }
-
-    const data = JSON.parse(jsonString);
-    return data;
+    return JSON.parse(jsonString) as string;
   } catch (error) {
     console.error('デコードエラー:', error);
     return null;
@@ -46,12 +82,11 @@ export const decodeData = (compressedString: string) => {
 /**
  * 共有用URLを生成
  */
-export const createShareUrl = (surveyData) => {
+export const createShareUrl = (surveyData: string): string => {
   const encoded = encodeData(surveyData);
   if (!encoded) {
     throw new Error('データのエンコードに失敗しました');
   }
-
   const { origin, pathname } = window.location;
   return `${origin}${pathname}#/result?data=${encoded}`;
 };
@@ -59,7 +94,7 @@ export const createShareUrl = (surveyData) => {
 /**
  * URLからデータを取得
  */
-export const getDataFromUrl = () => {
+export const getDataFromUrl = (): SurveyData | null => {
   try {
     let searchString = '';
     if (window.location.hash.includes('?')) {
@@ -78,74 +113,28 @@ export const getDataFromUrl = () => {
     const urlParams = new URLSearchParams(searchString);
     const encodedData = urlParams.get('data');
 
-    // dataパラメータが存在しない場合
+    // dataパラメータが存在しない・空の場合
     if (!encodedData) {
       console.warn('URLに"data"パラメータが見つかりません');
       return null;
     }
 
-    // 空文字列チェック
-    if (encodedData.trim() === '') {
-      console.error('dataパラメータが空です');
-      return null;
-    }
-
     // デコード処理
     const decoded = decodeData(encodedData);
-
-    // デコード失敗
     if (!decoded) {
       console.error('データのデコードに失敗しました。URLが破損している可能性があります。');
       return null;
     }
 
-    // データ構造の検証
-    if (typeof decoded !== 'object' || decoded === null) {
-      console.error('デコードされたデータが無効な形式です（オブジェクトではありません）');
+    // 型ガードによるデータ構造の検証
+    if (!isSurveyData(decoded)) {
+      console.error('デコードされたデータの構造が無効です');
       return null;
     }
-
-    // 必須フィールドの検証
-    if (!decoded.userName || typeof decoded.userName !== 'string') {
-      console.error('データに有効なuserNameフィールドがありません');
-      return null;
-    }
-
-    if (!Array.isArray(decoded.categories)) {
-      console.error('データに有効なcategoriesフィールドがありません（配列ではありません）');
-      return null;
-    }
-
-    // categoriesの各要素を検証
-    const isValidCategories = decoded.categories.every((category) => {
-      return (
-        category &&
-        typeof category.id === 'number' &&
-        typeof category.genre === 'string' &&
-        typeof category.isChecked === 'boolean' &&
-        Array.isArray(category.questions)
-      );
-    });
-
-    if (!isValidCategories) {
-      console.error('categoriesの構造が無効です');
-      return null;
-    }
-
-    // すべての検証を通過
     console.info('URLからデータを正常に取得しました');
     return decoded;
   } catch (error) {
-    // 予期しないエラーをキャッチ
     console.error('URLからのデータ取得中に予期しないエラーが発生しました:', error);
-
-    // エラーの詳細をログ出力（デバッグ用）
-    if (error instanceof TypeError) {
-      console.error('型エラー: データ構造が想定と異なる可能性があります');
-    } else if (error instanceof SyntaxError) {
-      console.error('構文エラー: JSONのパースに失敗しました');
-    }
-
     return null;
   }
 };
@@ -157,26 +146,10 @@ export const getDataFromUrl = () => {
 /**
  * URLをクリップボードにコピー
  */
-export const copyToClipboard = async (text) => {
+export const copyToClipboard = async (text: string): Promise<boolean> => {
   try {
-    // モダンブラウザ
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-
-    // フォールバック（古いブラウザ）
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-
-    const success = document.execCommand('copy');
-    document.body.removeChild(textarea);
-
-    return success;
+    await navigator.clipboard.writeText(text);
+    return true;
   } catch (error) {
     console.error('クリップボードコピーエラー:', error);
     return false;

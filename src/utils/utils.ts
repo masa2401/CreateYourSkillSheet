@@ -1,4 +1,44 @@
 // ========================================
+// 型定義
+// ========================================
+
+interface Answer {
+  text: string;
+  isChecked: boolean;
+  value: number | null;
+}
+
+interface Question {
+  id: number;
+  questionText: string;
+  answers: Answer[];
+}
+
+// createReactiveQuestionsの引数用（生データ）
+interface RawQuestion {
+  id: number;
+  questionText: string;
+  answers: string[];
+}
+
+interface CategoryQuestions {
+  name: string;
+  categoryId: number;
+  questions: Question[];
+}
+
+interface Category {
+  id: number;
+  isChecked: boolean;
+}
+
+interface ValidationError {
+  category: string;
+  questionText: string;
+  answer: string;
+}
+
+// ========================================
 // LocalStorage操作
 // ========================================
 
@@ -9,11 +49,11 @@
  * @returns {*} 取得した値またはデフォルト値
  */
 
-export const getStorageValue = (key, defaultValue = null) => {
+export const getStorageValue = <T>(key: string, defaultValue?: T): T | undefined => {
   try {
     const item = localStorage.getItem(key);
     if (item === null) return defaultValue;
-    return JSON.parse(item);
+    return JSON.parse(item) as T;
   } catch (error) {
     console.error(`LocalStorage取得・パースエラー: ${key}`, error);
     return defaultValue;
@@ -27,7 +67,7 @@ export const getStorageValue = (key, defaultValue = null) => {
  * @returns {boolean} 成功/失敗
  */
 
-export const setStorageValue = (key, value) => {
+export const setStorageValue = (key: string, value: unknown): boolean => {
   try {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
@@ -43,7 +83,7 @@ export const setStorageValue = (key, value) => {
  * @returns {boolean} 成功/失敗
  */
 
-export const removeStorageValue = (key) => {
+export const removeStorageValue = (key: string): boolean => {
   try {
     localStorage.removeItem(key);
     return true;
@@ -59,11 +99,11 @@ export const removeStorageValue = (key) => {
 
 /**
  * 質問データをリアクティブな形式に変換
- * @param {Array} data - 質問データ配列
- * @returns {Array} リアクティブな質問データ
+ * @param {RawQuestion[]} data - 質問データ配列
+ * @returns {Question[]} リアクティブな質問データ
  */
 
-export const createReactiveQuestions = (data) => {
+export const createReactiveQuestions = (data: RawQuestion[]): Question[] => {
   return data.map((q) => ({
     id: q.id,
     questionText: q.questionText,
@@ -77,11 +117,11 @@ export const createReactiveQuestions = (data) => {
 
 /**
  * 質問データをシリアライズ（保存用）
- * @param {Array} questions - 質問データ配列
- * @returns {Array} シリアライズされた質問データ
+ * @param {Question[]} questions - 質問データ配列
+ * @returns {Question[]} シリアライズされた質問データ
  */
 
-export const serializeQuestions = (questions) => {
+export const serializeQuestions = (questions: Question[]): Question[] => {
   return questions.map((q) => ({
     id: q.id,
     questionText: q.questionText,
@@ -99,13 +139,16 @@ export const serializeQuestions = (questions) => {
 
 /**
  * チェックされた回答で習熟度が未選択のものを検証
- * @param {Array} allQuestions - すべての質問データ
- * @param {Array} categories - カテゴリ設定
- * @returns {Array} エラー配列
+ * @param {CategoryQuestions[]} allQuestions - すべての質問データ
+ * @param {Category[]} categories - カテゴリ設定
+ * @returns {ValidationError[]} エラー配列
  */
 
-export const validateQuestions = (allQuestions, categories) => {
-  const errors: Array<{ category: string; questionText: string; answer: string }> = [];
+export const validateQuestions = (
+  allQuestions: CategoryQuestions[],
+  categories: Category[],
+): ValidationError[] => {
+  const errors: ValidationError[] = [];
   allQuestions.forEach(({ name, questions, categoryId }) => {
     const category = categories.find((c) => c.id === categoryId);
     if (!category?.isChecked) return;
@@ -122,22 +165,4 @@ export const validateQuestions = (allQuestions, categories) => {
     });
   });
   return errors;
-};
-
-// ========================================
-// スクロール
-// ========================================
-
-/**
- * 要素までスムーズスクロール
- * @param {string} elementId - 要素のID
- */
-
-export const scrollToElement = (elementId) => {
-  const element = document.getElementById(elementId);
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
 };

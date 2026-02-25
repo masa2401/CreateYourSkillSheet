@@ -1,17 +1,49 @@
+import { LEVEL_LABELS } from '@/utils/constants';
+
+// ========================================
+// 型定義
+// ========================================
+
+interface LevelLabel {
+  stars: string;
+  text: string;
+}
+
+interface Answer {
+  text: string;
+  isChecked: boolean;
+  value: number | null;
+}
+
+interface Question {
+  questionText: string;
+  answers: Answer[];
+}
+
+interface Category {
+  id: number;
+  genre: string;
+  isChecked: boolean;
+  questions: Question[];
+}
+
+interface SurveyData {
+  userName: string;
+  categories: Category[];
+}
+
 // ========================================
 // CSV変換・ダウンロード
 // ========================================
 
-import { LEVEL_LABELS } from '@/utils/constants';
-
 /**
  * スキルシートデータをCSV形式に変換
- * @param {Object} surveyData - アンケートデータ
+ * @param {SurveyData} surveyData - アンケートデータ
  * @returns {string} CSV文字列
  */
-export const convertToCSV = (surveyData) => {
+export const convertToCSV = (surveyData: SurveyData): string => {
   try {
-    const rows: Array<string | string[]> = [];
+    const rows: Array<string[]> = [];
 
     // ヘッダー行
     rows.push(['ユーザー名', surveyData.userName]);
@@ -19,11 +51,9 @@ export const convertToCSV = (surveyData) => {
 
     // 習熟度の説明
     rows.push(['習熟度の説明']);
-    rows.push(['★☆☆☆☆', '習得が不十分な状態']);
-    rows.push(['★★☆☆☆', '基礎はあるが不安定']);
-    rows.push(['★★★☆☆', '期待どおりにできる']);
-    rows.push(['★★★★☆', '期待以上の成果を出す']);
-    rows.push(['★★★★★', '卓越したレベルで発揮する']);
+    LEVEL_LABELS.forEach((level) => {
+      rows.push([level.stars, level.text]);
+    });
     rows.push([]); // 空行
 
     // カテゴリごとのデータ
@@ -39,12 +69,14 @@ export const convertToCSV = (surveyData) => {
         let questionRowAdded = false;
         checkedAnswers.forEach((answer) => {
           // 習熟度のラベルを取得
-          const level = answer.value ? LEVEL_LABELS[answer.value - 1] : '';
+          const level: LevelLabel | undefined = answer.value
+            ? LEVEL_LABELS[answer.value - 1]
+            : undefined;
           rows.push([
             !categoryRowAdded ? category.genre : '',
             !questionRowAdded ? question.questionText : '',
             answer.text,
-            level,
+            level?.stars ?? '',
           ]);
           categoryRowAdded = true;
           questionRowAdded = true;
@@ -54,12 +86,8 @@ export const convertToCSV = (surveyData) => {
 
     // CSVフォーマットに変換（ダブルクォートでエスケープ）
     const csvContent = rows
-      .map((row) => {
-        if (typeof row === 'string') {
-          const escapedRow = row.replace(/"/g, '""');
-          return `"${escapedRow}"`;
-        }
-        return row
+      .map((row) =>
+        row
           .map((cell) => {
             // セルの値を文字列に変換
             const cellValue = cell === null || cell === undefined ? '' : String(cell);
@@ -68,8 +96,8 @@ export const convertToCSV = (surveyData) => {
             // 各セルをダブルクォートで囲む
             return `"${escapedValue}"`;
           })
-          .join(',');
-      })
+          .join(','),
+      )
       .join('\r\n');
 
     // BOM付きUTF-8（Excelでの文字化け防止）
@@ -82,10 +110,10 @@ export const convertToCSV = (surveyData) => {
 
 /**
  * CSVファイルをダウンロード
- * @param {Object} surveyData - アンケートデータ
+ * @param {SurveyData} surveyData - アンケートデータ
  * @returns {boolean} 成功/失敗
  */
-export const downloadCSV = (surveyData) => {
+export const downloadCSV = (surveyData: SurveyData): boolean => {
   try {
     // データ検証
     if (!surveyData || !surveyData.userName || !surveyData.categories) {

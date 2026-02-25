@@ -5,7 +5,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "strict": false, // 最初は緩く設定し、移行が進んだら true に
+    "strict": true, // 最初は緩く設定し、移行が進んだら true に
     "jsx": "preserve",
     "allowJs": true, // JSファイルの共存を許可 (最重要)
     "checkJs": false, // JSファイル自体の型チェックは行わない
@@ -18,7 +18,7 @@
       "@/*": ["./src/*"]
     },
     // 最初は "any" を許容してエラーを抑える
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "useUnknownInCatchVariables": true
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]

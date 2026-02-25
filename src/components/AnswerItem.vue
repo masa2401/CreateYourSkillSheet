@@ -1,31 +1,36 @@
 <script setup lang="ts">
-interface Props {
-  answer: {
-    text: string
-    isChecked: boolean
-    value: number | null
-  }
-  answerIndex: number
+interface Answer {
+  text: string;
+  isChecked: boolean;
+  value: number | null;
 }
-const props = defineProps<Props>()
 
-const emit = defineEmits(['update:answer'])
+interface Props {
+  answer: Answer;
+  answerIndex: number;
+}
+
+const props = defineProps<Props>();
+const emit = defineEmits<{
+  'update:answer': [answer: Answer];
+}>();
 
 // チェックボックスの変更
-const handleCheckChange = (event) => {
+const handleCheckChange = (e: Event) => {
+  const target = e.target as HTMLInputElement;
   emit('update:answer', {
     ...props.answer,
-    isChecked: event.target.checked,
-  })
-}
+    isChecked: target.checked,
+  });
+};
 
 // 習熟度の変更
-const handleLevelChange = (level) => {
+const handleLevelChange = (level: number) => {
   emit('update:answer', {
     ...props.answer,
     value: level,
-  })
-}
+  });
+};
 </script>
 
 <template>
