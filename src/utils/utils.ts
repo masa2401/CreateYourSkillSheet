@@ -1,18 +1,8 @@
+import type { Question, Category, ValidationError } from '@/types/interfaces';
+
 // ========================================
 // 型定義
 // ========================================
-
-interface Answer {
-  text: string;
-  isChecked: boolean;
-  value: number | null;
-}
-
-interface Question {
-  id: number;
-  questionText: string;
-  answers: Answer[];
-}
 
 // createReactiveQuestionsの引数用（生データ）
 interface RawQuestion {
@@ -27,17 +17,6 @@ interface CategoryQuestions {
   questions: Question[];
 }
 
-interface Category {
-  id: number;
-  isChecked: boolean;
-}
-
-interface ValidationError {
-  category: string;
-  questionText: string;
-  answer: string;
-}
-
 // ========================================
 // LocalStorage操作
 // ========================================
@@ -49,7 +28,12 @@ interface ValidationError {
  * @returns {*} 取得した値またはデフォルト値
  */
 
-export const getStorageValue = <T>(key: string, defaultValue?: T): T | undefined => {
+// defaultValue あり → T が確実に返る
+export function getStorageValue<T>(key: string, defaultValue: T): T;
+// defaultValue なし → undefined が返る可能性あり
+export function getStorageValue<T>(key: string, defaultValue?: T): T | undefined;
+// 実装シグネチャ
+export function getStorageValue<T>(key: string, defaultValue?: T): T | undefined {
   try {
     const item = localStorage.getItem(key);
     if (item === null) return defaultValue;
@@ -58,7 +42,7 @@ export const getStorageValue = <T>(key: string, defaultValue?: T): T | undefined
     console.error(`LocalStorage取得・パースエラー: ${key}`, error);
     return defaultValue;
   }
-};
+}
 
 /**
  * LocalStorageに値を保存

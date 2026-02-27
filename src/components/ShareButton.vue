@@ -1,63 +1,64 @@
 <script setup lang="ts">
-import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
-import { ref, computed } from 'vue'
-import { createShareUrl, copyToClipboard } from '@/utils/shareUtils'
-import { downloadCSV } from '@/utils/csvUtils'
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
+import { ref, computed } from 'vue';
+import { createShareUrl, copyToClipboard } from '@/utils/shareUtils';
+import { downloadCSV } from '@/utils/csvUtils';
+import type { SurveyData } from '@/types/interfaces';
 
 interface Props {
-  surveyData: Record<string, any>
+  surveyData: SurveyData;
 }
 
-const props = defineProps<Props>()
-const showMenu = ref(false)
-const copySuccess = ref(false)
-const downloadSuccess = ref(false)
+const props = defineProps<Props>();
+const showMenu = ref<boolean>(false);
+const copySuccess = ref<boolean>(false);
+const downloadSuccess = ref<boolean>(false);
 
 // 共有URLを生成
-const shareUrl = computed(() => {
+const shareUrl = computed((): string => {
   try {
-    return createShareUrl(props.surveyData)
+    return createShareUrl(props.surveyData);
   } catch (error) {
-    console.error('URL生成エラー:', error)
-    return ''
+    console.error('URL生成エラー:', error);
+    return '';
   }
-})
+});
 
 // クリップボードにコピー
 const handleCopy = async () => {
-  const success = await copyToClipboard(shareUrl.value)
+  const success = await copyToClipboard(shareUrl.value);
   if (success) {
-    copySuccess.value = true
+    copySuccess.value = true;
     setTimeout(() => {
-      copySuccess.value = false
-      showMenu.value = false
-    }, 2000)
+      copySuccess.value = false;
+      showMenu.value = false;
+    }, 2000);
   }
-}
+};
 
 // CSVダウンロード
 const handleDownloadCSV = () => {
-  const success = downloadCSV(props.surveyData)
+  const success = downloadCSV(props.surveyData);
   if (success) {
-    downloadSuccess.value = true
+    downloadSuccess.value = true;
     setTimeout(() => {
-      downloadSuccess.value = false
-      showMenu.value = false
-    }, 2000)
+      downloadSuccess.value = false;
+      showMenu.value = false;
+    }, 2000);
   } else {
-    console.log('CSVのダウンロードに失敗しました')
+    console.log('CSVのダウンロードに失敗しました');
   }
-}
+};
 
 // メニューの表示切替
 const toggleMenu = () => {
-  showMenu.value = !showMenu.value
+  showMenu.value = !showMenu.value;
   // メニューを開いた時に成功状態をリセット
   if (showMenu.value) {
-    copySuccess.value = false
-    downloadSuccess.value = false
+    copySuccess.value = false;
+    downloadSuccess.value = false;
   }
-}
+};
 </script>
 
 <template>
@@ -79,7 +80,7 @@ const toggleMenu = () => {
           <span class="menu-icon" v-else>
             <font-awesome-icon icon="fa-regular fa-copy" />
           </span>
-          <span class="menu-text">{{ copySuccess ? 'コピーしました!' : 'URLをコピー' }}</span>
+          <span class="menu-text">{{ copySuccess ? 'コピー完了' : 'URLをコピー' }}</span>
         </button>
 
         <button @click="handleDownloadCSV" class="menu-item" :class="{ success: downloadSuccess }">
@@ -89,7 +90,7 @@ const toggleMenu = () => {
           <span class="menu-icon" v-else>
             <font-awesome-icon icon="fa-solid fa-file-csv" />
           </span>
-          <span class="menu-text">{{ downloadSuccess ? 'ダウンロード完了!' : 'CSV保存' }}</span>
+          <span class="menu-text">{{ downloadSuccess ? 'DownLoad完了' : 'CSV保存' }}</span>
         </button>
       </div>
     </transition>

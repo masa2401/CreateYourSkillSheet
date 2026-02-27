@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 interface Props {
   icon: string;
   label: string;
@@ -8,9 +9,11 @@ interface Props {
 }
 defineProps<Props>();
 
-const emit = defineEmits(['click']);
 const isHovering = ref(false);
 
+const emit = defineEmits<{
+  click: [];
+}>();
 const handleClick = () => {
   emit('click');
 };

@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import AnswerItem from './AnswerItem.vue';
+import type { Question } from '@/types/interfaces';
 
 interface Props {
-  question: {
-    questionText: string;
-    answers: Array<{
-      answerText: string;
-      isChecked: boolean;
-    }>;
-  };
+  question: Question;
 }
 const props = defineProps<Props>();
 
-const emit = defineEmits(['update:question']);
+const emit = defineEmits<{
+  'update:question': [updatedQuestion: Props['question']];
+}>();
 
 // 回答の更新を親コンポーネントに伝達
-const handleAnswerUpdate = (answerIndex: number, updatedAnswer: string) => {
-  const updatedQuestion = {
+type Answer = Props['question']['answers'][number];
+
+const handleAnswerUpdate = (answerIndex: number, updatedAnswer: Answer) => {
+  const updatedQuestion: Props['question'] = {
     ...props.question,
     answers: props.question.answers.map((answer, index) =>
       index === answerIndex ? updatedAnswer : answer,

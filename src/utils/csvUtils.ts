@@ -1,4 +1,5 @@
 import { LEVEL_LABELS } from '@/utils/constants';
+import type { SurveyData } from '@/types/interfaces';
 
 // ========================================
 // 型定義
@@ -7,29 +8,6 @@ import { LEVEL_LABELS } from '@/utils/constants';
 interface LevelLabel {
   stars: string;
   text: string;
-}
-
-interface Answer {
-  text: string;
-  isChecked: boolean;
-  value: number | null;
-}
-
-interface Question {
-  questionText: string;
-  answers: Answer[];
-}
-
-interface Category {
-  id: number;
-  genre: string;
-  isChecked: boolean;
-  questions: Question[];
-}
-
-interface SurveyData {
-  userName: string;
-  categories: Category[];
 }
 
 // ========================================

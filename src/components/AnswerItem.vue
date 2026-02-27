@@ -1,9 +1,5 @@
 <script setup lang="ts">
-interface Answer {
-  text: string;
-  isChecked: boolean;
-  value: number | null;
-}
+import type { Answer } from '@/types/interfaces';
 
 interface Props {
   answer: Answer;

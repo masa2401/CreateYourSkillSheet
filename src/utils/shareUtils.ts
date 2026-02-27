@@ -1,24 +1,5 @@
 import LZString from 'lz-string';
-
-// ========================================
-// 型定義
-// ========================================
-
-interface Question {
-  [key: string]: unknown;
-}
-
-interface Category {
-  id: number;
-  genre: string;
-  isChecked: boolean;
-  questions: Question[];
-}
-
-interface SurveyData {
-  userName: string;
-  categories: Category[];
-}
+import type { Category, SurveyData } from '../types/interfaces';
 
 // ========================================
 // 型ガード
@@ -47,21 +28,21 @@ const isSurveyData = (value: unknown): value is SurveyData =>
 /**
  * オブジェクトを圧縮してBase64エンコード
  */
-export const encodeData = (data: string): string | null => {
+export const encodeData = (data: SurveyData): string | undefined => {
   try {
     const jsonString = JSON.stringify(data);
     // LZ-stringで圧縮 + URL安全なBase64エンコード
     return LZString.compressToEncodedURIComponent(jsonString);
   } catch (error) {
     console.error('エンコードエラー:', error);
-    return null;
+    return undefined;
   }
 };
 
 /**
  * 圧縮されたBase64文字列をデコードしてオブジェクトに変換
  */
-export const decodeData = (compressedString: string): string | null => {
+export const decodeData = (compressedString: string): string | undefined => {
   try {
     // LZ-stringで解凍
     const jsonString = LZString.decompressFromEncodedURIComponent(compressedString);
@@ -71,7 +52,7 @@ export const decodeData = (compressedString: string): string | null => {
     return JSON.parse(jsonString) as string;
   } catch (error) {
     console.error('デコードエラー:', error);
-    return null;
+    return undefined;
   }
 };
 
@@ -82,7 +63,7 @@ export const decodeData = (compressedString: string): string | null => {
 /**
  * 共有用URLを生成
  */
-export const createShareUrl = (surveyData: string): string => {
+export const createShareUrl = (surveyData: SurveyData): string => {
   const encoded = encodeData(surveyData);
   if (!encoded) {
     throw new Error('データのエンコードに失敗しました');
@@ -94,7 +75,7 @@ export const createShareUrl = (surveyData: string): string => {
 /**
  * URLからデータを取得
  */
-export const getDataFromUrl = (): SurveyData | null => {
+export const getDataFromUrl = (): SurveyData | undefined => {
   try {
     let searchString = '';
     if (window.location.hash.includes('?')) {
@@ -106,7 +87,7 @@ export const getDataFromUrl = (): SurveyData | null => {
     // クエリパラメータが存在しない場合
     if (!searchString) {
       console.info('URLにデータパラメータが含まれていません');
-      return null;
+      return undefined;
     }
 
     // URLパラメータの解析
@@ -116,26 +97,26 @@ export const getDataFromUrl = (): SurveyData | null => {
     // dataパラメータが存在しない・空の場合
     if (!encodedData) {
       console.warn('URLに"data"パラメータが見つかりません');
-      return null;
+      return undefined;
     }
 
     // デコード処理
     const decoded = decodeData(encodedData);
     if (!decoded) {
       console.error('データのデコードに失敗しました。URLが破損している可能性があります。');
-      return null;
+      return undefined;
     }
 
     // 型ガードによるデータ構造の検証
     if (!isSurveyData(decoded)) {
       console.error('デコードされたデータの構造が無効です');
-      return null;
+      return undefined;
     }
     console.info('URLからデータを正常に取得しました');
     return decoded;
   } catch (error) {
     console.error('URLからのデータ取得中に予期しないエラーが発生しました:', error);
-    return null;
+    return undefined;
   }
 };
 

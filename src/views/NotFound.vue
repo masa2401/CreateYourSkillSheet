@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
 import { useRouter } from 'vue-router';
 import { ROUTES } from '@/utils/constants';
-import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
 
 const router = useRouter();
 
