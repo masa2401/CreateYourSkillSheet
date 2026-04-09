@@ -1,4 +1,4 @@
-import type { Question, Category, ValidationError } from '@/types/interfaces';
+import type { Question } from '@/types/interfaces';
 
 // ========================================
 // 型定義
@@ -9,12 +9,6 @@ interface RawQuestion {
   id: number;
   questionText: string;
   answers: string[];
-}
-
-interface CategoryQuestions {
-  name: string;
-  categoryId: number;
-  questions: Question[];
 }
 
 // ========================================
@@ -94,7 +88,7 @@ export const createReactiveQuestions = (data: RawQuestion[]): Question[] => {
     answers: q.answers.map((text) => ({
       text,
       isChecked: false,
-      value: null,
+      value: 0,
     })),
   }));
 };
@@ -115,38 +109,4 @@ export const serializeQuestions = (questions: Question[]): Question[] => {
       value: a.value,
     })),
   }));
-};
-
-// ========================================
-// バリデーション
-// ========================================
-
-/**
- * チェックされた回答で習熟度が未選択のものを検証
- * @param {CategoryQuestions[]} allQuestions - すべての質問データ
- * @param {Category[]} categories - カテゴリ設定
- * @returns {ValidationError[]} エラー配列
- */
-
-export const validateQuestions = (
-  allQuestions: CategoryQuestions[],
-  categories: Category[],
-): ValidationError[] => {
-  const errors: ValidationError[] = [];
-  allQuestions.forEach(({ name, questions, categoryId }) => {
-    const category = categories.find((c) => c.id === categoryId);
-    if (!category?.isChecked) return;
-    questions.forEach((question) => {
-      question.answers.forEach((answer) => {
-        if (answer.isChecked && !answer.value) {
-          errors.push({
-            category: name,
-            questionText: question.questionText,
-            answer: answer.text,
-          });
-        }
-      });
-    });
-  });
-  return errors;
 };

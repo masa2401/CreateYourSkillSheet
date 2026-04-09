@@ -2,15 +2,6 @@ import { LEVEL_LABELS } from '@/utils/constants';
 import type { SurveyData } from '@/types/interfaces';
 
 // ========================================
-// 型定義
-// ========================================
-
-interface LevelLabel {
-  stars: string;
-  text: string;
-}
-
-// ========================================
 // CSV変換・ダウンロード
 // ========================================
 
@@ -21,58 +12,47 @@ interface LevelLabel {
  */
 export const convertToCSV = (surveyData: SurveyData): string => {
   try {
-    const rows: Array<string[]> = [];
-
     // ヘッダー行
-    rows.push(['ユーザー名', surveyData.userName]);
-    rows.push([]); // 空行
+    const header = [['ユーザー名', surveyData.userName], []];
 
-    // 習熟度の説明
-    rows.push(['習熟度の説明']);
-    LEVEL_LABELS.forEach((level) => {
-      rows.push([level.stars, level.text]);
-    });
-    rows.push([]); // 空行
+    // 習熟度説明行
+    const labels = [
+      ['習熟度の説明'],
+      ...LEVEL_LABELS.map((level) => [level.stars, level.text]),
+      [],
+    ];
 
-    // カテゴリごとのデータ
-    rows.push(['カテゴリ', '質問', 'スキル', '習熟度']);
-
-    // チェックされたカテゴリのみ処理
-    surveyData.categories.forEach((category) => {
-      if (!category.isChecked) return;
-      let categoryRowAdded = false;
-      category.questions.forEach((question) => {
-        const checkedAnswers = question.answers.filter((a) => a.isChecked);
-        if (checkedAnswers.length === 0) return;
-        let questionRowAdded = false;
-        checkedAnswers.forEach((answer) => {
-          // 習熟度のラベルを取得
-          const level: LevelLabel | undefined = answer.value
-            ? LEVEL_LABELS[answer.value - 1]
-            : undefined;
-          rows.push([
-            !categoryRowAdded ? category.genre : '',
-            !questionRowAdded ? question.questionText : '',
-            answer.text,
-            level?.stars ?? '',
-          ]);
-          categoryRowAdded = true;
-          questionRowAdded = true;
+    // テーブルヘッダー
+    const tableHeader = ['カテゴリ', '質問', 'スキル', '習熟度'];
+    const body = surveyData.categories
+      .filter((category) => category.isChecked)
+      .flatMap((category) => {
+        let categoryShown = false; // カテゴリ行表示済フラグ
+        return category.questions.flatMap((question) => {
+          const checkedAnswers = question.answers.filter((answer) => answer.isChecked);
+          let questionShown = false; // 質問行表示済フラグ
+          return checkedAnswers.map((answer) => {
+            const level = answer.value ? LEVEL_LABELS[answer.value - 1] : undefined;
+            const row = [
+              !categoryShown ? category.genre : '',
+              !questionShown ? question.questionText : '',
+              answer.text,
+              level ? level.stars : '',
+            ];
+            categoryShown = true;
+            questionShown = true;
+            return row;
+          });
         });
       });
-    });
 
-    // CSVフォーマットに変換（ダブルクォートでエスケープ）
+    const rows = [...header, ...labels, [tableHeader], ...body];
     const csvContent = rows
       .map((row) =>
         row
           .map((cell) => {
-            // セルの値を文字列に変換
-            const cellValue = cell === null || cell === undefined ? '' : String(cell);
-            // ダブルクォートを2つにエスケープ
-            const escapedValue = cellValue.replace(/"/g, '""');
-            // 各セルをダブルクォートで囲む
-            return `"${escapedValue}"`;
+            const correctValue = String(cell ?? '').replace(/"/g, '""');
+            return `"${correctValue}"`;
           })
           .join(','),
       )

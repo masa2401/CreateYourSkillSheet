@@ -46,7 +46,7 @@ const groupedErrors = computed<GroupedError[]>(() => {
 /**
  * 質問文の冒頭 30 文字のみ表示する（長い場合は末尾に "..." を付ける）。
  */
-const getQuestionPreview = (questionText: string | undefined): string => {
+const getQuestionPreview = (questionText?: string) => {
   if (!questionText) return '';
   return questionText.length > 30 ? `${questionText.substring(0, 30)}...` : questionText;
 };

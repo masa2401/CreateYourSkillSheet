@@ -11,7 +11,7 @@ const isHovering = ref<boolean>(false);
 
 // ─── フォームデータ ──────────────────────────────────────────────────────────
 
-const userName = ref<string>('');
+const userName = ref<string>('Guest');
 
 const selectedCategories = ref({
   engineer: false,

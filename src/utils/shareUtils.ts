@@ -28,21 +28,21 @@ const isSurveyData = (value: unknown): value is SurveyData =>
 /**
  * オブジェクトを圧縮してBase64エンコード
  */
-export const encodeData = (data: SurveyData): string | undefined => {
+export const encodeData = (data: SurveyData): string | null => {
   try {
     const jsonString = JSON.stringify(data);
     // LZ-stringで圧縮 + URL安全なBase64エンコード
     return LZString.compressToEncodedURIComponent(jsonString);
   } catch (error) {
     console.error('エンコードエラー:', error);
-    return undefined;
+    return null;
   }
 };
 
 /**
  * 圧縮されたBase64文字列をデコードしてオブジェクトに変換
  */
-export const decodeData = (compressedString: string): string | undefined => {
+export const decodeData = (compressedString: string): string | null => {
   try {
     // LZ-stringで解凍
     const jsonString = LZString.decompressFromEncodedURIComponent(compressedString);
@@ -52,7 +52,7 @@ export const decodeData = (compressedString: string): string | undefined => {
     return JSON.parse(jsonString) as string;
   } catch (error) {
     console.error('デコードエラー:', error);
-    return undefined;
+    return null;
   }
 };
 
@@ -68,55 +68,45 @@ export const createShareUrl = (surveyData: SurveyData): string => {
   if (!encoded) {
     throw new Error('データのエンコードに失敗しました');
   }
-  const { origin, pathname } = window.location;
-  return `${origin}${pathname}#/result?data=${encoded}`;
+  const url = new URL(window.location.href);
+  url.hash = `/result`;
+  url.searchParams.set('data', encoded);
+  return url.toString();
 };
 
 /**
  * URLからデータを取得
  */
-export const getDataFromUrl = (): SurveyData | undefined => {
+export const getDataFromUrl = (): SurveyData | null => {
   try {
-    let searchString = '';
-    if (window.location.hash.includes('?')) {
-      // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
-      const hashParts = window.location.hash.split('?');
-      searchString = hashParts.length > 1 ? '?' + hashParts.slice(1).join('?') : '';
-    }
-
-    // クエリパラメータが存在しない場合
-    if (!searchString) {
-      console.info('URLにデータパラメータが含まれていません');
-      return undefined;
-    }
+    const url = new URL(window.location.href);
+    if (!url.hash) return null;
+    // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
+    const [, hashPath] = url.hash.split('?');
+    if (!hashPath) return null;
 
     // URLパラメータの解析
-    const urlParams = new URLSearchParams(searchString);
+    const urlParams = new URLSearchParams(hashPath);
     const encodedData = urlParams.get('data');
-
-    // dataパラメータが存在しない・空の場合
-    if (!encodedData) {
-      console.warn('URLに"data"パラメータが見つかりません');
-      return undefined;
-    }
+    if (!encodedData) return null;
 
     // デコード処理
     const decoded = decodeData(encodedData);
     if (!decoded) {
       console.error('データのデコードに失敗しました。URLが破損している可能性があります。');
-      return undefined;
+      return null;
     }
 
     // 型ガードによるデータ構造の検証
     if (!isSurveyData(decoded)) {
       console.error('デコードされたデータの構造が無効です');
-      return undefined;
+      return null;
     }
     console.info('URLからデータを正常に取得しました');
     return decoded;
   } catch (error) {
     console.error('URLからのデータ取得中に予期しないエラーが発生しました:', error);
-    return undefined;
+    return null;
   }
 };
 
@@ -129,10 +119,16 @@ export const getDataFromUrl = (): SurveyData | undefined => {
  */
 export const copyToClipboard = async (text: string): Promise<boolean> => {
   try {
+    // navigator.clipboardがサポートされていない場合はfalseを返す
+    if (!navigator.clipboard) return false;
+
+    // クリップボードにテキストをコピー
     await navigator.clipboard.writeText(text);
     return true;
   } catch (error) {
-    console.error('クリップボードコピーエラー:', error);
+    if (error instanceof Error) {
+      console.error('クリップボードコピーエラー:', error.message);
+    }
     return false;
   }
 };

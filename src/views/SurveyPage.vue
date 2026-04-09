@@ -83,6 +83,7 @@ const onSubmit = async (): Promise<void> => {
     categories: categoryData.value.map((cat) => ({
       id: cat.id,
       genre: cat.genre,
+      icon: cat.icon,
       isChecked: cat.isChecked,
       questions: serializeQuestions(cat.questions),
     })),

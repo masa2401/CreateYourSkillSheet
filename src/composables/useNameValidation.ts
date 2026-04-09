@@ -2,21 +2,7 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 import type { ValidationError } from '@/types/interfaces';
 
-/**
- * useNameValidation
- *
- * TopPage の「お名前入力」バリデーションを担う composable。
- *
- * ### 使い方
- * ```ts
- * const { validationErrors, hasAttemptedSubmit, validate, onInput } =
- *   useNameValidation(userName);
- * ```
- *
- * - `validate()`   : 送信ボタン押下時に呼び出す。エラーがなければ true を返す。
- * - `onInput()`    : input イベント時に呼び出す。送信試行後のみ再バリデーションする。
- */
-export function useNameValidation(userName: Ref<string | null | undefined>) {
+export function useNameValidation(userName: Ref<string>) {
   /** バリデーションエラーの一覧 */
   const validationErrors = ref<ValidationError[]>([]);
 
@@ -29,14 +15,12 @@ export function useNameValidation(userName: Ref<string | null | undefined>) {
    */
   const buildErrors = (): ValidationError[] => {
     const errors: ValidationError[] = [];
-
     if (!userName.value || !userName.value.trim()) {
       errors.push({
         category: '入力必須項目',
         questionText: 'お名前を入力してください',
       });
     }
-
     return errors;
   };
 
@@ -59,7 +43,6 @@ export function useNameValidation(userName: Ref<string | null | undefined>) {
       validationErrors.value = buildErrors();
     }
   };
-
   return {
     validationErrors,
     hasAttemptedSubmit,

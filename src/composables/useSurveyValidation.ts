@@ -1,28 +1,9 @@
 import { ref, watch } from 'vue';
 import type { Ref } from 'vue';
-import type { Category, ValidationError } from '@/types/interfaces';
+import type { Category, Answer, ValidationError, Question } from '@/types/interfaces';
 
 // ─── composable ────────────────────────────────────────────────────────────────
 
-/**
- * useSurveyValidation
- *
- * SurveyPage の「チェック済み質問に習熟度が選択されているか」バリデーションを担う composable。
- *
- * ### 使い方
- * ```ts
- * const { validationErrors, hasAttemptedSubmit, validate, isSubmitDisabled } =
- *   useSurveyValidation(categoryData);
- * ```
- *
- * - `validate()`         : 送信ボタン押下時に呼び出す。エラーがなければ true を返す。
- * - `isSubmitDisabled`   : 送信ボタンの無効化判定に使う算出済み ref（computed ではなく ref で保持）。
- *
- * ### なぜ watch を composable の中に持つか
- * 「送信試行後にリアルタイム再バリデーションする」というロジックは
- * バリデーション責務の一部なので、ページコンポーネントに書くより
- * ここにまとめた方が保守しやすい。
- */
 export function useSurveyValidation(categoryData: Ref<Category[]>) {
   /** バリデーションエラーの一覧 */
   const validationErrors = ref<ValidationError[]>([]);
@@ -34,26 +15,33 @@ export function useSurveyValidation(categoryData: Ref<Category[]>) {
    * バリデーションルールを評価してエラー一覧を返す。
    * 副作用はなく、純粋に結果を返すだけ。
    */
+  const checkAnswerError = (
+    category: Category,
+    questionText: Question,
+    answer: Answer,
+  ): ValidationError | null => {
+    if (answer.isChecked && !answer.value) {
+      return {
+        category: category.genre,
+        questionText: questionText.questionText,
+      };
+    }
+    return null;
+  };
+
   const buildErrors = (): ValidationError[] => {
     const errors: ValidationError[] = [];
 
     categoryData.value.forEach((category) => {
       // チェックされていないカテゴリは対象外
       if (!category.isChecked) return;
-
       category.questions.forEach((question) => {
         question.answers.forEach((answer) => {
-          // チェックされているのに習熟度が未選択の場合はエラー
-          if (answer.isChecked && !answer.value) {
-            errors.push({
-              category: category.genre,
-              questionText: question.questionText,
-            });
-          }
+          const error = checkAnswerError(category, question, answer);
+          if (error) errors.push(error);
         });
       });
     });
-
     return errors;
   };
 
@@ -85,7 +73,6 @@ export function useSurveyValidation(categoryData: Ref<Category[]>) {
     },
     { deep: true },
   );
-
   return {
     validationErrors,
     hasAttemptedSubmit,
