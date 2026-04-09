@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-import TopPage from '@/views/TopPage.vue';
+import { createRouter, createWebHashHistory } from 'vue-router'
+import TopPage from '@/views/TopPage.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -7,28 +7,28 @@ const router = createRouter({
     {
       path: '/',
       name: 'top',
-      component: TopPage
+      component: TopPage,
     },
     {
       path: '/top',
       name: 'topPage',
-      component: TopPage
+      component: TopPage,
     },
     {
       path: '/survey',
       name: 'survey',
-      component: () => import('@/views/SurveyPage.vue')
+      component: () => import('@/views/SurveyPage.vue'),
     },
     {
       path: '/result',
       name: 'result',
-      component: () => import('@/views/ResultPage.vue')
+      component: () => import('@/views/ResultPage.vue'),
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
-      component: () => import('@/views/NotFound.vue')
-    }
+      component: () => import('@/views/NotFound.vue'),
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -36,7 +36,7 @@ const router = createRouter({
     } else {
       return { top: 0 }
     }
-  }
+  },
 })
 
 export default router

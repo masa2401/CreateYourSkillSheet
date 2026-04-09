@@ -1,37 +1,55 @@
-<script setup>
-import { computed } from 'vue'
+<script setup lang="ts">
+import { computed } from 'vue';
+import type { ValidationError } from '@/types/interfaces';
 
-const props = defineProps({
-  errors: {
-    type: Array,
-    default: () => [],
-  },
-})
+// ─── Props ───────────────────────────────────────────────────────────────────
 
-// エラーをカテゴリと質問ごとにグループ化
-const groupedErrors = computed(() => {
-  const groups = {}
+interface Props {
+  errors: ValidationError[];
+}
+
+const props = defineProps<Props>();
+
+// ─── 内部型 ──────────────────────────────────────────────────────────────────
+
+/** カテゴリ × 質問 でグループ化したエラーを表す型 */
+interface GroupedError {
+  category: string;
+  questionText?: string;
+  count: number;
+}
+
+// ─── ロジック ────────────────────────────────────────────────────────────────
+
+/**
+ * エラーをカテゴリと質問ごとにグループ化する。
+ * 同じ (category, questionText) の組み合わせをまとめ、件数を count に持つ。
+ */
+const groupedErrors = computed<GroupedError[]>(() => {
+  const groups: Record<string, GroupedError> = {};
 
   props.errors.forEach((error) => {
-    const key = `${error.category}|${error.questionText || ''}`
+    const key = `${error.category}|${error.questionText ?? ''}`;
     if (!groups[key]) {
       groups[key] = {
         category: error.category,
         questionText: error.questionText,
         count: 0,
-      }
+      };
     }
-    groups[key].count++
-  })
+    groups[key].count++;
+  });
 
-  return Object.values(groups)
-})
+  return Object.values(groups);
+});
 
-// 質問文の冒頭30文字を取得
-const getQuestionPreview = (questionText) => {
-  if (!questionText) return ''
-  return questionText.length > 30 ? questionText.substring(0, 30) + '...' : questionText
-}
+/**
+ * 質問文の冒頭 30 文字のみ表示する（長い場合は末尾に "..." を付ける）。
+ */
+const getQuestionPreview = (questionText?: string) => {
+  if (!questionText) return '';
+  return questionText.length > 30 ? `${questionText.substring(0, 30)}...` : questionText;
+};
 </script>
 
 <template>

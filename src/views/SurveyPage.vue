@@ -1,26 +1,33 @@
-﻿<script setup>
-import { ref, watch, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-import QuestionCard from '@/components/QuestionCard.vue'
-import ValidationError from '@/components/ValidationError.vue'
-import { commonQuestionData, engineerQuestionData, designerQuestionData } from '@/data/questionData'
-import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constants'
+﻿<script setup lang="ts">
+import QuestionCard from '@/components/QuestionCard.vue';
+import ValidationError from '@/components/ValidationError.vue';
+import { ref, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
+import { useSurveyValidation } from '@/composables/useSurveyValidation';
+import {
+  commonQuestionData,
+  engineerQuestionData,
+  designerQuestionData,
+} from '@/data/questionData';
+import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constants';
 import {
   getStorageValue,
   setStorageValue,
   createReactiveQuestions,
   serializeQuestions,
-  scrollToElement,
-} from '@/utils/utils'
+} from '@/utils/utils';
+import type { Category, Question, SurveyData } from '@/types/interfaces';
 
-const router = useRouter()
-const isHovering = ref(false)
+const router = useRouter();
+const isHovering = ref<boolean>(false);
 
-// ユーザー情報の取得
-const userName = getStorageValue(STORAGE_KEYS.USER_NAME, '')
+// ─── ユーザー情報 ────────────────────────────────────────────────────────────
 
-// カテゴリと質問データを統合管理
-const categoryData = ref([
+const userName = getStorageValue<string>(STORAGE_KEYS.USER_NAME, '');
+
+// ─── カテゴリと質問データを統合管理 ─────────────────────────────────────────
+
+const categoryData = ref<Category[]>([
   {
     ...CATEGORIES.COMMON,
     isChecked: true,
@@ -28,89 +35,63 @@ const categoryData = ref([
   },
   {
     ...CATEGORIES.ENGINEER,
-    isChecked: getStorageValue(STORAGE_KEYS.CATEGORY_ENGINEER, false),
+    isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_ENGINEER, false),
     questions: createReactiveQuestions(engineerQuestionData),
   },
   {
     ...CATEGORIES.DESIGNER,
-    isChecked: getStorageValue(STORAGE_KEYS.CATEGORY_DESIGNER, false),
+    isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_DESIGNER, false),
     questions: createReactiveQuestions(designerQuestionData),
   },
-])
+]);
 
-// バリデーション状態
-const validationErrors = ref([])
-const hasAttemptedSubmit = ref(false)
+// ─── バリデーション ──────────────────────────────────────────────────────────
+// useSurveyValidation に categoryData の ref を渡すことで、
+// バリデーションロジック（watch を含む）をこのコンポーネントから分離する。
 
-// バリデーション実行
-const performValidation = () => {
-  const errors = []
+const { validationErrors, validate, isSubmitDisabled } = useSurveyValidation(categoryData);
 
-  categoryData.value.forEach((category) => {
-    if (!category.isChecked) return
+// ─── イベントハンドラ ────────────────────────────────────────────────────────
 
-    category.questions.forEach((question) => {
-      question.answers.forEach((answer) => {
-        if (answer.isChecked && !answer.value) {
-          errors.push({
-            category: category.genre,
-            questionText: question.questionText,
-          })
-        }
-      })
-    })
-  })
+/**
+ * 質問の更新ハンドラ。
+ * QuestionCard から @update:question イベントで呼ばれる。
+ */
+const handleQuestionUpdate = (
+  categoryIndex: number,
+  questionIndex: number,
+  updatedQuestion: Question,
+): void => {
+  if (categoryData.value[categoryIndex]) {
+    categoryData.value[categoryIndex].questions[questionIndex] = updatedQuestion;
+  }
+};
 
-  return errors
-}
-
-// 回答が変更されたらバリデーションを実行（送信ボタンを押した後のみ）
-watch(
-  categoryData,
-  () => {
-    if (hasAttemptedSubmit.value) {
-      validationErrors.value = performValidation()
-    }
-  },
-  { deep: true },
-)
-
-// 質問の更新ハンドラ
-const handleQuestionUpdate = (categoryIndex, questionIndex, updatedQuestion) => {
-  categoryData.value[categoryIndex].questions[questionIndex] = updatedQuestion
-}
-
-// 次へ進む処理
-const onSubmit = async () => {
-  hasAttemptedSubmit.value = true
-  validationErrors.value = performValidation()
-
-  if (validationErrors.value.length > 0) {
-    await nextTick()
-    scrollToElement('error-message')
-    return
+/** 次へ進む処理 */
+const onSubmit = async (): Promise<void> => {
+  // エラーがある場合はエラー箇所へスクロールして中断
+  if (!validate()) {
+    await nextTick();
+    const target = document.getElementById('error-message');
+    target?.scrollIntoView({ behavior: 'smooth' });
+    return;
   }
 
   // データ保存
-  const surveyData = {
+  const surveyData: SurveyData = {
     userName,
     categories: categoryData.value.map((cat) => ({
       id: cat.id,
       genre: cat.genre,
-      isChecked: cat.isChecked,
       icon: cat.icon,
+      isChecked: cat.isChecked,
       questions: serializeQuestions(cat.questions),
     })),
-  }
+  };
 
-  setStorageValue(STORAGE_KEYS.SURVEY_DATA, surveyData)
-  router.push(ROUTES.RESULT)
-}
-
-// 次へ進むボタンの有効/無効判定
-const isSubmitDisabled = () => {
-  return hasAttemptedSubmit.value && validationErrors.value.length > 0
-}
+  setStorageValue(STORAGE_KEYS.SURVEY_DATA, surveyData);
+  router.push(ROUTES.RESULT);
+};
 </script>
 
 <template>
@@ -130,25 +111,8 @@ const isSubmitDisabled = () => {
               <img src="../assets/customers.png" alt="" />
             </div>
             <ul class="stars-description">
-              <li>
-                <span>{{ LEVEL_LABELS[0] }}</span>
-                ：習得が不十分な状態
-              </li>
-              <li>
-                <span>{{ LEVEL_LABELS[1] }}</span>
-                ：基礎はあるが不安定
-              </li>
-              <li>
-                <span>{{ LEVEL_LABELS[2] }}</span>
-                ：期待どおりにできる
-              </li>
-              <li>
-                <span>{{ LEVEL_LABELS[3] }}</span>
-                ：期待以上の成果を出す
-              </li>
-              <li>
-                <span>{{ LEVEL_LABELS[4] }}</span>
-                ：卓越したレベルで発揮する
+              <li v-for="level in LEVEL_LABELS" :key="level.stars">
+                {{ level.stars }}： {{ level.text }}
               </li>
             </ul>
           </div>

@@ -1,60 +1,63 @@
-﻿<script setup>
-import ShareButton from '@/components/ShareButton.vue'
-import AnimatedIconButton from '@/components/AnimatedIconButton.vue'
-import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants'
-import { getDataFromUrl } from '@/utils/shareUtils'
-import { getStorageValue } from '@/utils/utils'
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+﻿<script setup lang="ts">
+import ShareButton from '@/components/ShareButton.vue';
+import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
+import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants';
+import { getDataFromUrl } from '@/utils/shareUtils';
+import { getStorageValue } from '@/utils/utils';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import type { SurveyData, Answer, Question } from '@/types/interfaces';
 
-const router = useRouter()
-const surveyData = ref(null)
-const isSharedView = ref(false)
+const router = useRouter();
+const isSharedView = ref<boolean>(false);
+const surveyData = ref<SurveyData | null>(null);
 
-// データ取得
-onMounted(() => {
-  const urlData = getDataFromUrl()
+// ─── データ取得 ──────────────────────────────────────────────────────────────
+
+onMounted((): void => {
+  const urlData = getDataFromUrl();
   if (urlData) {
-    surveyData.value = urlData
-    isSharedView.value = true
-    return
+    surveyData.value = urlData;
+    isSharedView.value = true;
+    return;
   }
 
-  const localData = getStorageValue(STORAGE_KEYS.SURVEY_DATA, '')
+  const localData = getStorageValue<SurveyData>(STORAGE_KEYS.SURVEY_DATA);
   if (localData) {
-    surveyData.value = localData
-    isSharedView.value = false
-    return
+    surveyData.value = localData;
+    isSharedView.value = false;
+    return;
   }
 
-  router.push(ROUTES.SURVEY)
-})
+  router.push(ROUTES.SURVEY);
+});
 
-const getQuestionsByCategory = (categoryId) => {
-  if (!surveyData.value) return []
-  const category = surveyData.value.categories.find((c) => c.id === categoryId)
-  return category.questions || []
-}
+const getQuestionsByCategory = (categoryId: number): Question[] => {
+  if (!surveyData.value) return [];
+  const category = surveyData.value.categories.find((c) => c.id === categoryId);
+  return category?.questions ?? [];
+};
 
-const getCheckedAnswers = (answers) => {
-  return answers.filter((answer) => answer.isChecked)
-}
+/**
+ * チェックされた回答のみ返す。
+ */
+const getCheckedAnswers = (answers: Answer[]): Answer[] => {
+  return answers.filter((answer) => answer.isChecked);
+};
 
-const goToTop = () => {
-  router.push(ROUTES.TOP)
-}
+// ─── イベントハンドラ ────────────────────────────────────────────────────────
 
-const goBack = () => {
-  router.push(ROUTES.SURVEY)
-}
+const goToTop = (): void => {
+  router.push(ROUTES.TOP);
+};
 
-const createMyOwn = () => {
-  router.push(ROUTES.TOP)
-}
+const goBack = (): void => {
+  router.push(ROUTES.SURVEY);
+};
 
-const handlePrint = () => {
-  window.print()
-}
+const handlePrint = (): void => {
+  window.print();
+};
 </script>
 
 <template>
@@ -72,25 +75,8 @@ const handlePrint = () => {
             <img src="../assets/mission.png" alt="" />
           </div>
           <ul class="stars-description">
-            <li>
-              <span>{{ LEVEL_LABELS[0] }}</span>
-              ：習得が不十分な状態
-            </li>
-            <li>
-              <span>{{ LEVEL_LABELS[1] }}</span>
-              ：基礎はあるが不安定
-            </li>
-            <li>
-              <span>{{ LEVEL_LABELS[2] }}</span>
-              ：期待どおりにできる
-            </li>
-            <li>
-              <span>{{ LEVEL_LABELS[3] }}</span>
-              ：期待以上の成果を出す
-            </li>
-            <li>
-              <span>{{ LEVEL_LABELS[4] }}</span>
-              ：卓越したレベルで発揮する
+            <li v-for="level in LEVEL_LABELS" :key="level.stars">
+              {{ level.stars }}： {{ level.text }}
             </li>
           </ul>
         </div>
@@ -126,7 +112,7 @@ const handlePrint = () => {
                 <div class="skill-info">
                   <div class="skill-name">{{ answer.text }}</div>
                   <div class="skill-level">
-                    <span class="level-stars">{{ LEVEL_LABELS[answer.value - 1] }}</span>
+                    <span class="level-stars">{{ LEVEL_LABELS[answer.value - 1]?.stars }}</span>
                   </div>
                 </div>
               </div>
@@ -165,7 +151,7 @@ const handlePrint = () => {
         </template>
 
         <template v-else>
-          <button @click="createMyOwn" class="action-button primary-button">
+          <button @click="goToTop" class="action-button primary-button">
             <span class="button-icon">
               <font-awesome-icon icon="fa-solid fa-pen" />
             </span>

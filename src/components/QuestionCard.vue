@@ -1,31 +1,33 @@
-<script setup>
-import AnswerItem from './AnswerItem.vue'
+<script setup lang="ts">
+import AnswerItem from './AnswerItem.vue';
+import type { Question } from '@/types/interfaces';
 
-const props = defineProps({
-  question: {
-    type: Object,
-    required: true,
-  },
-})
+interface Props {
+  question: Question;
+}
+const props = defineProps<Props>();
 
-const emit = defineEmits(['update:question'])
+const emit = defineEmits<{
+  'update:question': [updatedQuestion: Props['question']];
+}>();
 
 // 回答の更新を親コンポーネントに伝達
-const handleAnswerUpdate = (answerIndex, updatedAnswer) => {
-  const updatedQuestion = {
+type Answer = Props['question']['answers'][number];
+
+const handleAnswerUpdate = (answerIndex: number, updatedAnswer: Answer) => {
+  const updatedQuestion: Props['question'] = {
     ...props.question,
     answers: props.question.answers.map((answer, index) =>
       index === answerIndex ? updatedAnswer : answer,
     ),
-  }
-  emit('update:question', updatedQuestion)
-}
+  };
+  emit('update:question', updatedQuestion);
+};
 </script>
 
 <template>
   <div class="question-card">
     <h4 class="question-text">{{ question.questionText }}</h4>
-
     <div class="answers-grid">
       <AnswerItem
         v-for="(answer, index) in question.answers"

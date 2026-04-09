@@ -1,33 +1,22 @@
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue';
 
-defineProps({
-  icon: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  animationType: {
-    type: String,
-    default: 'beat',
-    validator: (value) => ['beat', 'bounce', 'fade', 'spin', 'none'].includes(value),
-  },
-  buttonClass: {
-    type: String,
-    default: 'action-button',
-  },
-})
-
-const emit = defineEmits(['click'])
-
-const isHovering = ref(false)
-
-const handleClick = () => {
-  emit('click')
+interface Props {
+  icon: string;
+  label: string;
+  animationType?: 'beat' | 'bounce' | 'fade' | 'spin' | 'none';
+  buttonClass?: string;
 }
+defineProps<Props>();
+
+const isHovering = ref(false);
+
+const emit = defineEmits<{
+  click: [];
+}>();
+const handleClick = () => {
+  emit('click');
+};
 </script>
 
 <template>

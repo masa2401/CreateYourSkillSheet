@@ -1,64 +1,40 @@
-﻿<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import ValidationError from '@/components/ValidationError.vue'
-import { STORAGE_KEYS, ROUTES } from '@/utils/constants'
-import { setStorageValue } from '@/utils/utils'
+﻿<script setup lang="ts">
+import ValidationError from '@/components/ValidationError.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useNameValidation } from '@/composables/useNameValidation';
+import { STORAGE_KEYS, ROUTES } from '@/utils/constants';
+import { setStorageValue } from '@/utils/utils';
 
-const router = useRouter()
-const isHovering = ref(false)
+const router = useRouter();
+const isHovering = ref<boolean>(false);
 
-// フォームデータ
-const userName = ref('')
+// ─── フォームデータ ──────────────────────────────────────────────────────────
+
+const userName = ref<string>('Guest');
+
 const selectedCategories = ref({
   engineer: false,
   designer: false,
-})
+});
 
-// バリデーション状態
-const validationErrors = ref([])
-const hasAttemptedSubmit = ref(false)
+// ─── バリデーション ──────────────────────────────────────────────────────────
 
-// バリデーション実行
-const performValidation = () => {
-  const errors = []
+const { validationErrors, validate, onInput } = useNameValidation(userName);
 
-  // 名前が空の場合
-  if (!userName.value.trim()) {
-    errors.push({
-      category: '入力必須項目',
-      questionText: 'お名前を入力してください',
-    })
-  }
+// ─── イベントハンドラ ────────────────────────────────────────────────────────
 
-  return errors
-}
-
-// 入力時にエラーをクリア
-const onNameInput = () => {
-  if (hasAttemptedSubmit.value) {
-    validationErrors.value = performValidation()
-  }
-}
-
-// アンケート開始処理
-const validateAndProceed = () => {
-  hasAttemptedSubmit.value = true
-  validationErrors.value = performValidation()
-
-  // エラーがある場合は処理を中断
-  if (validationErrors.value.length > 0) {
-    return
-  }
-
+/** アンケート開始処理 */
+const validateAndProceed = (): void => {
+  if (!validate()) return;
   // データを保存
-  setStorageValue(STORAGE_KEYS.USER_NAME, userName.value.trim())
-  setStorageValue(STORAGE_KEYS.CATEGORY_ENGINEER, selectedCategories.value.engineer)
-  setStorageValue(STORAGE_KEYS.CATEGORY_DESIGNER, selectedCategories.value.designer)
+  setStorageValue(STORAGE_KEYS.USER_NAME, userName.value.trim());
+  setStorageValue(STORAGE_KEYS.CATEGORY_ENGINEER, selectedCategories.value.engineer);
+  setStorageValue(STORAGE_KEYS.CATEGORY_DESIGNER, selectedCategories.value.designer);
 
   // アンケートページへ遷移
-  router.push(ROUTES.SURVEY)
-}
+  router.push(ROUTES.SURVEY);
+};
 </script>
 
 <template>
@@ -84,7 +60,7 @@ const validateAndProceed = () => {
             :class="{ 'input-error': validationErrors.length > 0 }"
             v-model="userName"
             placeholder="お名前を入力"
-            @input="onNameInput"
+            @input="onInput"
           />
         </div>
 
