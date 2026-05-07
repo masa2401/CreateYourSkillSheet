@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <p class="copyright">&copy; 2025-2026 FAVORS Consortium</p>
+    <p class="copyright"></p>
   </footer>
 </template>
 

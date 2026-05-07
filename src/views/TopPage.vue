@@ -11,7 +11,7 @@ const isHovering = ref<boolean>(false);
 
 // ─── フォームデータ ──────────────────────────────────────────────────────────
 
-const userName = ref<string>('Guest');
+const userName = ref<string>('');
 
 const selectedCategories = ref({
   engineer: false,
@@ -48,7 +48,7 @@ const validateAndProceed = (): void => {
       </div>
       <div class="input-group">
         <div class="input-section">
-          <label class="input-label">
+          <label class="input-label" for="name-input">
             <span class="label-icon">
               <font-awesome-icon icon="fa-solid fa-pen" />
             </span>
@@ -56,6 +56,7 @@ const validateAndProceed = (): void => {
           </label>
           <input
             type="text"
+            id="name-input"
             class="name-input"
             :class="{ 'input-error': validationErrors.length > 0 }"
             v-model="userName"
