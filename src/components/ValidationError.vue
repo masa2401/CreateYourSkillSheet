@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ValidationError } from '@/types/interfaces';
+import type { ValidationError } from '@/types';
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 
@@ -13,9 +13,7 @@ const props = defineProps<Props>();
 // ─── 内部型 ──────────────────────────────────────────────────────────────────
 
 /** カテゴリ × 質問 でグループ化したエラーを表す型 */
-interface GroupedError {
-  category: string;
-  questionText?: string;
+interface GroupedError extends ValidationError {
   count: number;
 }
 
@@ -23,17 +21,17 @@ interface GroupedError {
 
 /**
  * エラーをカテゴリと質問ごとにグループ化する。
- * 同じ (category, questionText) の組み合わせをまとめ、件数を count に持つ。
+ * 同じ (category, text) の組み合わせをまとめ、件数を count に持つ。
  */
 const groupedErrors = computed<GroupedError[]>(() => {
   const groups: Record<string, GroupedError> = {};
 
   props.errors.forEach((error) => {
-    const key = `${error.category}|${error.questionText ?? ''}`;
+    const key = `${error.category}|${error.text ?? ''}`;
     if (!groups[key]) {
       groups[key] = {
         category: error.category,
-        questionText: error.questionText,
+        text: error.text,
         count: 0,
       };
     }
@@ -46,9 +44,9 @@ const groupedErrors = computed<GroupedError[]>(() => {
 /**
  * 質問文の冒頭 30 文字のみ表示する（長い場合は末尾に "..." を付ける）。
  */
-const getQuestionPreview = (questionText?: string) => {
-  if (!questionText) return '';
-  return questionText.length > 30 ? `${questionText.substring(0, 30)}...` : questionText;
+const getTextPreview = (text?: string) => {
+  if (!text) return '';
+  return text.length > 30 ? `${text.substring(0, 30)}...` : text;
 };
 </script>
 
@@ -72,8 +70,8 @@ const getQuestionPreview = (questionText?: string) => {
                   <strong>{{ group.category }}</strong>
                   <span class="error-count">（{{ group.count }}件）</span>
                 </div>
-                <div v-if="group.questionText" class="error-question">
-                  {{ getQuestionPreview(group.questionText) }}
+                <div v-if="group.text" class="error-question">
+                  {{ getTextPreview(group.text) }}
                 </div>
               </div>
             </li>
@@ -98,13 +96,16 @@ const getQuestionPreview = (questionText?: string) => {
 }
 
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   75% {
     transform: translateX(5px);
   }
@@ -132,7 +133,7 @@ const getQuestionPreview = (questionText?: string) => {
   gap: var(--p-4, 0.5rem);
 }
 
-.error-title > h4 {
+.error-title>h4 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
@@ -206,7 +207,7 @@ const getQuestionPreview = (questionText?: string) => {
     font-size: 1.5rem;
   }
 
-  .error-title > h4 {
+  .error-title>h4 {
     font-size: 1.2rem;
   }
 

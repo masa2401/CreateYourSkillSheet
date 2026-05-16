@@ -3,7 +3,7 @@ import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
 import { ref, computed } from 'vue';
 import { createShareUrl, copyToClipboard } from '@/utils/shareUtils';
 import { downloadCSV } from '@/utils/csvUtils';
-import type { SurveyData } from '@/types/interfaces';
+import type { SurveyData } from '@/types';
 
 interface Props {
   surveyData: SurveyData;
@@ -63,13 +63,8 @@ const toggleMenu = () => {
 
 <template>
   <div class="share-button-container">
-    <AnimatedIconButton
-      icon="fa-solid fa-arrow-up-right-from-square"
-      label="結果を共有"
-      animationType="bounce"
-      button-class="share-button"
-      @focus="toggleMenu"
-    />
+    <AnimatedIconButton icon="fa-solid fa-arrow-up-right-from-square" label="結果を共有" animationType="bounce"
+      button-class="share-button" @click="toggleMenu" />
 
     <transition name="slide-fade">
       <div v-if="showMenu" class="share-menu">
@@ -199,6 +194,7 @@ const toggleMenu = () => {
     width: 100%;
     justify-content: center;
   }
+
   .share-menu {
     left: 0;
     right: 0;

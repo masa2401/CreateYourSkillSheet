@@ -5,9 +5,12 @@ import { useRouter } from 'vue-router';
 import { useNameValidation } from '@/composables/useNameValidation';
 import { STORAGE_KEYS, ROUTES } from '@/utils/constants';
 import { setStorageValue } from '@/utils/utils';
+import { CATEGORY_META } from '@/data/questions';
 
 const router = useRouter();
 const isHovering = ref<boolean>(false);
+const { label: engineerLabel, description: engineerDescription } = CATEGORY_META.engineer;
+const { label: designerLabel, description: designerDescription } = CATEGORY_META.designer;
 
 // ─── フォームデータ ──────────────────────────────────────────────────────────
 
@@ -54,15 +57,8 @@ const validateAndProceed = (): void => {
             </span>
             お名前を入力してください
           </label>
-          <input
-            type="text"
-            id="name-input"
-            class="name-input"
-            :class="{ 'input-error': validationErrors.length > 0 }"
-            v-model="userName"
-            placeholder="お名前を入力"
-            @input="onInput"
-          />
+          <input type="text" id="name-input" class="name-input" :class="{ 'input-error': validationErrors.length > 0 }"
+            v-model="userName" placeholder="お名前を入力" @input="onInput" />
         </div>
 
         <div class="category-section">
@@ -74,18 +70,14 @@ const validateAndProceed = (): void => {
           </h3>
           <div class="category-cards">
             <label class="category-card" :class="{ active: selectedCategories.engineer }">
-              <input
-                type="checkbox"
-                class="category-checkbox"
-                v-model="selectedCategories.engineer"
-              />
+              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.engineer" />
               <div class="card-content">
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-computer" />
                 </div>
-                <h4 class="card-category-title">プログラマ / ITエンジニア</h4>
+                <h4 class="card-category-title">{{ engineerLabel }}</h4>
                 <p class="card-category-desc">
-                  開発言語、フレームワーク、<br />インフラ関連のスキル
+                  {{ engineerDescription }}
                 </p>
                 <div class="check-indicator">
                   <span v-if="selectedCategories.engineer" class="check-mark">
@@ -95,17 +87,13 @@ const validateAndProceed = (): void => {
               </div>
             </label>
             <label class="category-card" :class="{ active: selectedCategories.designer }">
-              <input
-                type="checkbox"
-                class="category-checkbox"
-                v-model="selectedCategories.designer"
-              />
+              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.designer" />
               <div class="card-content">
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-palette" />
                 </div>
-                <h4 class="card-category-title">デザイナー / 動画制作</h4>
-                <p class="card-category-desc">デザインツール、動画編集、<br />制作スキル</p>
+                <h4 class="card-category-title">{{ designerLabel }}</h4>
+                <p class="card-category-desc">{{ designerDescription }}</p>
                 <div class="check-indicator">
                   <span v-if="selectedCategories.designer" class="check-mark">
                     <font-awesome-icon icon="fa-solid fa-check" />
@@ -129,12 +117,8 @@ const validateAndProceed = (): void => {
       </ValidationError>
 
       <div class="button-section">
-        <button
-          @click="validateAndProceed"
-          class="start-button"
-          @mouseenter="isHovering = true"
-          @mouseleave="isHovering = false"
-        >
+        <button @click="validateAndProceed" class="start-button" @mouseenter="isHovering = true"
+          @mouseleave="isHovering = false">
           アンケートを開始 &ensp;
           <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHovering" />
         </button>
@@ -219,13 +203,16 @@ const validateAndProceed = (): void => {
 }
 
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   75% {
     transform: translateX(5px);
   }
@@ -333,9 +320,11 @@ const validateAndProceed = (): void => {
   0% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1.2);
   }
+
   100% {
     transform: scale(1);
   }

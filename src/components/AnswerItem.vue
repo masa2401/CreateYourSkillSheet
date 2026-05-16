@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Answer } from '@/types/interfaces';
+import type { Answer } from '@/types';
 
 interface Props {
   answer: Answer;
@@ -32,30 +32,16 @@ const handleLevelChange = (level: number) => {
 <template>
   <div class="answer-item">
     <label class="checkbox-label">
-      <input
-        type="checkbox"
-        :checked="answer.isChecked"
-        @change="handleCheckChange"
-        class="custom-checkbox"
-      />
-      <span class="checkbox-text">{{ answer.text }}</span>
+      <input type="checkbox" :checked="answer.isChecked" @change="handleCheckChange" class="custom-checkbox" />
+      <span class="checkbox-text">{{ answer.label }}</span>
     </label>
 
     <transition name="slide-fade">
       <div v-if="answer.isChecked" class="level-selector">
         <div class="level-buttons">
-          <label
-            v-for="level in 5"
-            :key="level"
-            class="level-button"
-            :class="{ active: answer.value === level }"
-          >
-            <input
-              type="radio"
-              :checked="answer.value === level"
-              @change="handleLevelChange(level)"
-              class="level-radio"
-            />
+          <label v-for="level in 5" :key="level" class="level-button" :class="{ active: answer.value === level }">
+            <input type="radio" :checked="answer.value === level" @change="handleLevelChange(level)"
+              class="level-radio" />
             <span class="level-number">{{ level }}</span>
             <span class="level-stars">{{ '★'.repeat(level) }}</span>
           </label>
@@ -182,10 +168,12 @@ const handleLevelChange = (level: number) => {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.6;
   }

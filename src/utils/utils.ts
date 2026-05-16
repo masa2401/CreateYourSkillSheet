@@ -1,25 +1,14 @@
-import type { Question } from '@/types/interfaces';
-
-// ========================================
-// 型定義
-// ========================================
-
-// createReactiveQuestionsの引数用（生データ）
-interface RawQuestion {
-  id: number;
-  questionText: string;
-  answers: string[];
-}
+import type { Question, QuestionState } from '@/types';
 
 // ========================================
 // LocalStorage操作
 // ========================================
 
 /**
- * LocalStorageから値を取得
+ * LocalStorageから値を取得し、JSONパースして返す。エラーが発生した場合はデフォルト値を返す。
  * @param {string} key - ストレージキー
- * @param {*} defaultValue - デフォルト値
- * @returns {*} 取得した値またはデフォルト値
+ * @param {*} [defaultValue] - デフォルト値（オプション）
+ * @returns {T | undefined} パースされた値、またはデフォルト値/undefined
  */
 
 // defaultValue あり → T が確実に返る
@@ -39,7 +28,7 @@ export function getStorageValue<T>(key: string, defaultValue?: T): T | undefined
 }
 
 /**
- * LocalStorageに値を保存
+ * LocalStorageに値を保存。値はJSON文字列に変換される。エラーが発生した場合はfalseを返す。
  * @param {string} key - ストレージキー
  * @param {*} value - 保存する値
  * @returns {boolean} 成功/失敗
@@ -56,7 +45,7 @@ export const setStorageValue = (key: string, value: unknown): boolean => {
 };
 
 /**
- * LocalStorageから値を削除
+ * LocalStorageから値を削除。エラーが発生した場合はfalseを返す。
  * @param {string} key - ストレージキー
  * @returns {boolean} 成功/失敗
  */
@@ -76,37 +65,30 @@ export const removeStorageValue = (key: string): boolean => {
 // ========================================
 
 /**
- * 質問データをリアクティブな形式に変換
- * @param {RawQuestion[]} data - 質問データ配列
- * @returns {Question[]} リアクティブな質問データ
+ * 質問データをQuestionState形式に変換するユーティリティ関数
+ * @param {Question} question - 変換対象の質問データ
+ * @returns {QuestionState} 変換された質問状態オブジェクト
  */
 
-export const createReactiveQuestions = (data: RawQuestion[]): Question[] => {
-  return data.map((q) => ({
-    id: q.id,
-    questionText: q.questionText,
-    answers: q.answers.map((text) => ({
-      text,
-      isChecked: false,
-      value: 0,
-    })),
-  }));
-};
+const toQuestionState = (question: Question): QuestionState => ({
+  ...question,
+  answers: question.answers.map((label) => ({ label })),
+});
 
-/**
- * 質問データをシリアライズ（保存用）
- * @param {Question[]} questions - 質問データ配列
- * @returns {Question[]} シリアライズされた質問データ
+export const initQuestionStates = (questions: Question[]) => questions.map(toQuestionState); // Question[] → QuestionState[]
+
+/** 質問状態オブジェクトから質問データを抽出するユーティリティ関数
+ * @param {QuestionState[]} questions - 抽出対象の質問状態オブジェクトの配列
+ * @returns {Question[]} 抽出された質問データの配列
  */
 
-export const serializeQuestions = (questions: Question[]): Question[] => {
-  return questions.map((q) => ({
+export const extractQuestionData = (questions: QuestionState[]): QuestionState[] =>
+  questions.map((q) => ({
     id: q.id,
     questionText: q.questionText,
     answers: q.answers.map((a) => ({
-      text: a.text,
+      label: a.label,
       isChecked: a.isChecked,
       value: a.value,
     })),
   }));
-};

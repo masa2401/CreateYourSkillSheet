@@ -6,7 +6,7 @@ import { getDataFromUrl } from '@/utils/shareUtils';
 import { getStorageValue } from '@/utils/utils';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import type { SurveyData, Answer, Question } from '@/types/interfaces';
+import type { SurveyData, Answer, QuestionState } from '@/types';
 
 const router = useRouter();
 const isSharedView = ref<boolean>(false);
@@ -32,7 +32,7 @@ onMounted((): void => {
   router.push(ROUTES.SURVEY);
 });
 
-const getQuestionsByCategory = (categoryId: number): Question[] => {
+const getQuestionsByCategory = (categoryId: number): QuestionState[] => {
   if (!surveyData.value) return [];
   const category = surveyData.value.categories.find((c) => c.id === categoryId);
   return category?.questions ?? [];
@@ -84,35 +84,23 @@ const handlePrint = (): void => {
     </div>
 
     <div class="content-wrapper">
-      <div
-        v-for="category in surveyData.categories"
-        :key="category.id"
-        v-show="category.isChecked"
-        class="category-section"
-      >
+      <div v-for="category in surveyData.categories" :key="category.id" v-show="category.isChecked"
+        class="category-section">
         <div class="category-header">
           <font-awesome-icon :icon="category.icon" class="category-icon" />
           <h3 class="category-title">{{ category.genre }}</h3>
         </div>
 
-        <div
-          v-for="question in getQuestionsByCategory(category.id)"
-          :key="question.id"
-          v-show="getCheckedAnswers(question.answers).length > 0"
-          class="question-block"
-        >
+        <div v-for="question in getQuestionsByCategory(category.id)" :key="question.id"
+          v-show="getCheckedAnswers(question.answers).length > 0" class="question-block">
           <template v-if="getCheckedAnswers(question.answers).length > 0">
             <h4 class="question-title">{{ question.questionText }}</h4>
             <div class="skills-grid">
-              <div
-                v-for="(answer, index) in getCheckedAnswers(question.answers)"
-                :key="index"
-                class="skill-card"
-              >
+              <div v-for="(answer, index) in getCheckedAnswers(question.answers)" :key="index" class="skill-card">
                 <div class="skill-info">
-                  <div class="skill-name">{{ answer.text }}</div>
+                  <div class="skill-name">{{ answer.label }}</div>
                   <div class="skill-level">
-                    <span class="level-stars">{{ LEVEL_LABELS[answer.value - 1]?.stars }}</span>
+                    <span class="level-stars">{{ LEVEL_LABELS[answer.value ?? -1]?.stars }}</span>
                   </div>
                 </div>
               </div>
@@ -123,31 +111,16 @@ const handlePrint = (): void => {
 
       <div class="button-group no-print">
         <template v-if="!isSharedView">
-          <AnimatedIconButton
-            icon="fa-solid fa-arrow-left"
-            label="修正する"
-            animationType="beat"
-            button-class="action-button secondary-button"
-            @click="goBack"
-          />
+          <AnimatedIconButton icon="fa-solid fa-arrow-left" label="修正する" animationType="beat"
+            button-class="action-button secondary-button" @click="goBack" />
 
-          <AnimatedIconButton
-            icon="fa-solid fa-print"
-            label="印刷する"
-            animationType="bounce"
-            button-class="action-button print-button"
-            @click="handlePrint"
-          />
+          <AnimatedIconButton icon="fa-solid fa-print" label="印刷する" animationType="bounce"
+            button-class="action-button print-button" @click="handlePrint" />
 
           <ShareButton :surveyData="surveyData" />
 
-          <AnimatedIconButton
-            icon="fa-regular fa-house"
-            label="トップへ戻る"
-            animationType="beat"
-            button-class="action-button primary-button"
-            @click="goToTop"
-          />
+          <AnimatedIconButton icon="fa-regular fa-house" label="トップへ戻る" animationType="beat"
+            button-class="action-button primary-button" @click="goToTop" />
         </template>
 
         <template v-else>

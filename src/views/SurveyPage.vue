@@ -4,19 +4,15 @@ import ValidationError from '@/components/ValidationError.vue';
 import { ref, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useSurveyValidation } from '@/composables/useSurveyValidation';
-import {
-  commonQuestionData,
-  engineerQuestionData,
-  designerQuestionData,
-} from '@/data/questionData';
+import { QUESTION_DATA } from '@/data/questions';
 import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constants';
 import {
   getStorageValue,
   setStorageValue,
-  createReactiveQuestions,
-  serializeQuestions,
+  initQuestionStates,
+  extractQuestionData,
 } from '@/utils/utils';
-import type { Category, Question, SurveyData } from '@/types/interfaces';
+import type { Category, QuestionState, SurveyData } from '@/types';
 
 const router = useRouter();
 const isHovering = ref<boolean>(false);
@@ -31,23 +27,21 @@ const categoryData = ref<Category[]>([
   {
     ...CATEGORIES.COMMON,
     isChecked: true,
-    questions: createReactiveQuestions(commonQuestionData),
+    questions: initQuestionStates(QUESTION_DATA.common),
   },
   {
     ...CATEGORIES.ENGINEER,
     isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_ENGINEER, false),
-    questions: createReactiveQuestions(engineerQuestionData),
+    questions: initQuestionStates(QUESTION_DATA.engineer),
   },
   {
     ...CATEGORIES.DESIGNER,
     isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_DESIGNER, false),
-    questions: createReactiveQuestions(designerQuestionData),
+    questions: initQuestionStates(QUESTION_DATA.designer),
   },
 ]);
 
 // ─── バリデーション ──────────────────────────────────────────────────────────
-// useSurveyValidation に categoryData の ref を渡すことで、
-// バリデーションロジック（watch を含む）をこのコンポーネントから分離する。
 
 const { validationErrors, validate, isSubmitDisabled } = useSurveyValidation(categoryData);
 
@@ -60,7 +54,7 @@ const { validationErrors, validate, isSubmitDisabled } = useSurveyValidation(cat
 const handleQuestionUpdate = (
   categoryIndex: number,
   questionIndex: number,
-  updatedQuestion: Question,
+  updatedQuestion: QuestionState,
 ): void => {
   if (categoryData.value[categoryIndex]) {
     categoryData.value[categoryIndex].questions[questionIndex] = updatedQuestion;
@@ -85,7 +79,7 @@ const onSubmit = async (): Promise<void> => {
       genre: cat.genre,
       icon: cat.icon,
       isChecked: cat.isChecked,
-      questions: serializeQuestions(cat.questions),
+      questions: extractQuestionData(cat.questions),
     })),
   };
 
@@ -128,12 +122,8 @@ const onSubmit = async (): Promise<void> => {
             <h3 class="category-title">{{ category.genre }}</h3>
           </div>
 
-          <QuestionCard
-            v-for="(question, questionIndex) in category.questions"
-            :key="question.id"
-            :question="question"
-            @update:question="handleQuestionUpdate(categoryIndex, questionIndex, $event)"
-          />
+          <QuestionCard v-for="(question, questionIndex) in category.questions" :key="question.id" :question="question"
+            @update:question="handleQuestionUpdate(categoryIndex, questionIndex, $event)" />
         </div>
       </template>
 
@@ -149,14 +139,8 @@ const onSubmit = async (): Promise<void> => {
           <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake />
           すべてのチェック項目に習熟度を選択してください
         </p>
-        <button
-          @mouseenter="isHovering = true"
-          @mouseleave="isHovering = false"
-          @click="onSubmit"
-          class="submit-button"
-          :class="{ disabled: isSubmitDisabled() }"
-          :disabled="isSubmitDisabled()"
-        >
+        <button @mouseenter="isHovering = true" @mouseleave="isHovering = false" @click="onSubmit" class="submit-button"
+          :class="{ disabled: isSubmitDisabled() }" :disabled="isSubmitDisabled()">
           次へ進む &ensp;
           <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHovering" />
         </button>
@@ -298,10 +282,12 @@ const onSubmit = async (): Promise<void> => {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.6;
   }

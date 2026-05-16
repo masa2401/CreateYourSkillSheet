@@ -14,9 +14,7 @@ const goToTop = () => {
   <div class="notfound-container">
     <div class="notfound-content">
       <div>
-        <span class="error-icon"
-          ><font-awesome-icon icon="fa-solid fa-magnifying-glass" bounce
-        /></span>
+        <span class="error-icon"><font-awesome-icon icon="fa-solid fa-magnifying-glass" bounce /></span>
         <h2 class="error-code">404</h2>
       </div>
       <h3 class="error-title">ページが見つかりません</h3>
@@ -24,13 +22,8 @@ const goToTop = () => {
         お探しのページは存在しないか、<br />
         移動または削除された可能性があります。
       </p>
-      <AnimatedIconButton
-        icon="fa-regular fa-house"
-        label="トップへ戻る"
-        animation="bounce"
-        button-class="action-button primary-button"
-        @click="goToTop"
-      />
+      <AnimatedIconButton icon="fa-regular fa-house" label="トップへ戻る" animation="bounce"
+        button-class="action-button primary-button" @click="goToTop" />
     </div>
   </div>
 </template>

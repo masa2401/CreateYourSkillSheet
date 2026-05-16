@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import AnswerItem from './AnswerItem.vue';
-import type { Question } from '@/types/interfaces';
+import type { QuestionState, Answer } from '@/types';
 
 interface Props {
-  question: Question;
+  question: QuestionState;
 }
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  'update:question': [updatedQuestion: Props['question']];
+  'update:question': [updatedQuestion: QuestionState];
 }>();
 
 // 回答の更新を親コンポーネントに伝達
-type Answer = Props['question']['answers'][number];
 
 const handleAnswerUpdate = (answerIndex: number, updatedAnswer: Answer) => {
   const updatedQuestion: Props['question'] = {
@@ -29,13 +28,8 @@ const handleAnswerUpdate = (answerIndex: number, updatedAnswer: Answer) => {
   <div class="question-card">
     <h4 class="question-text">{{ question.questionText }}</h4>
     <div class="answers-grid">
-      <AnswerItem
-        v-for="(answer, index) in question.answers"
-        :key="index"
-        :answer="answer"
-        :answer-index="index"
-        @update:answer="handleAnswerUpdate(index, $event)"
-      />
+      <AnswerItem v-for="(answer, index) in question.answers" :key="index" :answer="answer" :answer-index="index"
+        @update:answer="handleAnswerUpdate(index, $event)" />
     </div>
   </div>
 </template>

@@ -1,40 +1,45 @@
-import { ref, watch } from 'vue';
+import { watch } from 'vue';
 import type { Ref } from 'vue';
-import type { Category, Answer, ValidationError, Question } from '@/types/interfaces';
+import type { Category, Answer, ValidationError, QuestionState } from '@/types';
+import { useValidation } from '@/composables/useValidation';
 
 // ─── composable ────────────────────────────────────────────────────────────────
 
 export function useSurveyValidation(categoryData: Ref<Category[]>) {
-  /** バリデーションエラーの一覧 */
-  const validationErrors = ref<ValidationError[]>([]);
-
-  /** 一度でも送信ボタンが押されたかどうか */
-  const hasAttemptedSubmit = ref<boolean>(false);
-
   /**
-   * バリデーションルールを評価してエラー一覧を返す。
-   * 副作用はなく、純粋に結果を返すだけ。
+   * 各回答に対するバリデーションルールを評価し、エラーがあれば ValidationError オブジェクトを返す。
+   * ルール：チェックされている回答で、かつ値が空の場合はエラー。
+   * @param category - 現在のカテゴリオブジェクト。
+   * @param question - 現在の質問オブジェクト。
+   * @param answer - 現在の回答オブジェクト。
+   * @returns ValidationError オブジェクトまたは null。
    */
+
   const checkAnswerError = (
     category: Category,
-    questionText: Question,
+    question: QuestionState,
     answer: Answer,
   ): ValidationError | null => {
     if (answer.isChecked && !answer.value) {
       return {
         category: category.genre,
-        questionText: questionText.questionText,
+        text: question.questionText,
       };
     }
     return null;
   };
 
+  /**
+   * 全カテゴリの全質問の全回答に対して checkAnswerError を適用し、エラーがあれば配列で返す。
+   * 送信が試みられた後にのみエラーを評価するため、リアクティブな categoryData を監視して、変更があった場合にバリデーションエラーを再評価する。
+   * @returns ValidationError の配列。
+   */
+
   const buildErrors = (): ValidationError[] => {
     const errors: ValidationError[] = [];
 
     categoryData.value.forEach((category) => {
-      // チェックされていないカテゴリは対象外
-      if (!category.isChecked) return;
+      if (!category.isChecked) return; // チェックされていないカテゴリは対象外
       category.questions.forEach((question) => {
         question.answers.forEach((answer) => {
           const error = checkAnswerError(category, question, answer);
@@ -45,25 +50,23 @@ export function useSurveyValidation(categoryData: Ref<Category[]>) {
     return errors;
   };
 
-  /**
-   * バリデーションを実行し、内部状態を更新する。
-   * @returns エラーがない場合 true、ある場合 false
-   */
-  const validate = (): boolean => {
-    hasAttemptedSubmit.value = true;
-    validationErrors.value = buildErrors();
-    return validationErrors.value.length === 0;
-  };
+  const { validationErrors, hasAttemptedSubmit, validate } = useValidation(buildErrors);
 
   /**
-   * 送信ボタンの無効化条件。
-   * 「送信を試みた かつ エラーがある」場合のみ true。
+   * 送信ボタンの disabled 状態を判定する関数。送信が試みられた後で、かつバリデーションエラーが存在する場合に true を返す。
+   * これにより、ユーザーはエラーを修正するまで送信できなくなる。
+   * @returns boolean - 送信ボタンを無効にするかどうか。
    */
+
   const isSubmitDisabled = (): boolean => {
     return hasAttemptedSubmit.value && validationErrors.value.length > 0;
   };
 
-  // 送信試行後のみ、categoryData の変化に応じてリアルタイム再バリデーション
+  /**
+   * categoryData を監視し、変更があった場合にバリデーションエラーを再評価する。これにより、ユーザーが回答を修正した際にリアルタイムでエラーが更新される。
+   * 送信が試みられた後にのみエラーを更新するため、hasAttemptedSubmit を条件にしている。
+   */
+
   watch(
     categoryData,
     () => {

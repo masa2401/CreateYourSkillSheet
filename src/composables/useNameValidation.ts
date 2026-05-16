@@ -1,43 +1,27 @@
-import { ref } from 'vue';
 import type { Ref } from 'vue';
-import type { ValidationError } from '@/types/interfaces';
+import type { ValidationError } from '@/types';
+import { useValidation } from '@/composables/useValidation';
+
+/**
+ * ユーザー名のバリデーションロジックを提供するカスタムフック。
+ * @param userName - バリデーション対象のユーザー名を保持するRef。
+ * @returns バリデーションエラー、送信試行の有無、バリデーション関数、および入力イベントハンドラ。
+ */
 
 export function useNameValidation(userName: Ref<string>) {
-  /** バリデーションエラーの一覧 */
-  const validationErrors = ref<ValidationError[]>([]);
-
-  /** 一度でも送信ボタンが押されたかどうか */
-  const hasAttemptedSubmit = ref<boolean>(false);
-
-  /**
-   * バリデーションルールを評価してエラー一覧を返す。
-   * 副作用はなく、純粋に結果を返すだけ。
-   */
   const buildErrors = (): ValidationError[] => {
-    const errors: ValidationError[] = [];
-    if (!userName.value || !userName.value.trim()) {
-      errors.push({
-        category: '入力必須項目',
-        questionText: 'お名前を入力してください',
-      });
+    if (!userName.value.trim()) {
+      return [{ category: '入力必須項目', text: 'お名前を入力してください' }];
     }
-    return errors;
+    return [];
   };
 
-  /**
-   * バリデーションを実行し、内部状態を更新する。
-   * @returns エラーがない場合 true、ある場合 false
-   */
-  const validate = (): boolean => {
-    hasAttemptedSubmit.value = true;
-    validationErrors.value = buildErrors();
-    return validationErrors.value.length === 0;
-  };
+  const { validationErrors, hasAttemptedSubmit, validate } = useValidation(buildErrors);
 
   /**
-   * input イベント用ハンドラ。
-   * 送信を一度試みた後のみ、リアルタイムでエラーを更新する。
+   * 入力イベントハンドラ。送信が試みられた後にユーザー名が変更された場合、バリデーションエラーを再評価する。
    */
+
   const onInput = (): void => {
     if (hasAttemptedSubmit.value) {
       validationErrors.value = buildErrors();
