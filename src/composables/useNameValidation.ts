@@ -2,6 +2,12 @@ import type { Ref } from 'vue';
 import type { ValidationError } from '@/types';
 import { useValidation } from '@/composables/useValidation';
 
+/**
+ * ユーザー名のバリデーションロジックを提供するカスタムフック。
+ * @param userName - バリデーション対象のユーザー名を保持するRef。
+ * @returns バリデーションエラー、送信試行の有無、バリデーション関数、および入力イベントハンドラ。
+ */
+
 export function useNameValidation(userName: Ref<string>) {
   const buildErrors = (): ValidationError[] => {
     if (!userName.value.trim()) {
@@ -13,9 +19,9 @@ export function useNameValidation(userName: Ref<string>) {
   const { validationErrors, hasAttemptedSubmit, validate } = useValidation(buildErrors);
 
   /**
-   * input イベント用ハンドラ。
-   * 送信を一度試みた後のみ、リアルタイムでエラーを更新する。
+   * 入力イベントハンドラ。送信が試みられた後にユーザー名が変更された場合、バリデーションエラーを再評価する。
    */
+
   const onInput = (): void => {
     if (hasAttemptedSubmit.value) {
       validationErrors.value = buildErrors();

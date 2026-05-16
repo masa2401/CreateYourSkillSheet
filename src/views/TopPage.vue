@@ -57,15 +57,8 @@ const validateAndProceed = (): void => {
             </span>
             お名前を入力してください
           </label>
-          <input
-            type="text"
-            id="name-input"
-            class="name-input"
-            :class="{ 'input-error': validationErrors.length > 0 }"
-            v-model="userName"
-            placeholder="お名前を入力"
-            @input="onInput"
-          />
+          <input type="text" id="name-input" class="name-input" :class="{ 'input-error': validationErrors.length > 0 }"
+            v-model="userName" placeholder="お名前を入力" @input="onInput" />
         </div>
 
         <div class="category-section">
@@ -77,11 +70,7 @@ const validateAndProceed = (): void => {
           </h3>
           <div class="category-cards">
             <label class="category-card" :class="{ active: selectedCategories.engineer }">
-              <input
-                type="checkbox"
-                class="category-checkbox"
-                v-model="selectedCategories.engineer"
-              />
+              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.engineer" />
               <div class="card-content">
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-computer" />
@@ -98,11 +87,7 @@ const validateAndProceed = (): void => {
               </div>
             </label>
             <label class="category-card" :class="{ active: selectedCategories.designer }">
-              <input
-                type="checkbox"
-                class="category-checkbox"
-                v-model="selectedCategories.designer"
-              />
+              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.designer" />
               <div class="card-content">
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-palette" />
@@ -132,12 +117,8 @@ const validateAndProceed = (): void => {
       </ValidationError>
 
       <div class="button-section">
-        <button
-          @click="validateAndProceed"
-          class="start-button"
-          @mouseenter="isHovering = true"
-          @mouseleave="isHovering = false"
-        >
+        <button @click="validateAndProceed" class="start-button" @mouseenter="isHovering = true"
+          @mouseleave="isHovering = false">
           アンケートを開始 &ensp;
           <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHovering" />
         </button>
@@ -222,13 +203,16 @@ const validateAndProceed = (): void => {
 }
 
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   75% {
     transform: translateX(5px);
   }
@@ -336,9 +320,11 @@ const validateAndProceed = (): void => {
   0% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1.2);
   }
+
   100% {
     transform: scale(1);
   }

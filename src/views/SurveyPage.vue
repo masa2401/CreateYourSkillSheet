@@ -12,7 +12,7 @@ import {
   initQuestionStates,
   extractQuestionData,
 } from '@/utils/utils';
-import type { Category, Question, SurveyData } from '@/types/index';
+import type { Category, QuestionState, SurveyData } from '@/types';
 
 const router = useRouter();
 const isHovering = ref<boolean>(false);
@@ -54,7 +54,7 @@ const { validationErrors, validate, isSubmitDisabled } = useSurveyValidation(cat
 const handleQuestionUpdate = (
   categoryIndex: number,
   questionIndex: number,
-  updatedQuestion: Question,
+  updatedQuestion: QuestionState,
 ): void => {
   if (categoryData.value[categoryIndex]) {
     categoryData.value[categoryIndex].questions[questionIndex] = updatedQuestion;
@@ -122,12 +122,8 @@ const onSubmit = async (): Promise<void> => {
             <h3 class="category-title">{{ category.genre }}</h3>
           </div>
 
-          <QuestionCard
-            v-for="(question, questionIndex) in category.questions"
-            :key="question.id"
-            :question="question"
-            @update:question="handleQuestionUpdate(categoryIndex, questionIndex, $event)"
-          />
+          <QuestionCard v-for="(question, questionIndex) in category.questions" :key="question.id" :question="question"
+            @update:question="handleQuestionUpdate(categoryIndex, questionIndex, $event)" />
         </div>
       </template>
 
@@ -143,14 +139,8 @@ const onSubmit = async (): Promise<void> => {
           <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake />
           すべてのチェック項目に習熟度を選択してください
         </p>
-        <button
-          @mouseenter="isHovering = true"
-          @mouseleave="isHovering = false"
-          @click="onSubmit"
-          class="submit-button"
-          :class="{ disabled: isSubmitDisabled() }"
-          :disabled="isSubmitDisabled()"
-        >
+        <button @mouseenter="isHovering = true" @mouseleave="isHovering = false" @click="onSubmit" class="submit-button"
+          :class="{ disabled: isSubmitDisabled() }" :disabled="isSubmitDisabled()">
           次へ進む &ensp;
           <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHovering" />
         </button>
@@ -292,10 +282,12 @@ const onSubmit = async (): Promise<void> => {
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.6;
   }

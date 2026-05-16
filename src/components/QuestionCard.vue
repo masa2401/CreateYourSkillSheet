@@ -28,13 +28,8 @@ const handleAnswerUpdate = (answerIndex: number, updatedAnswer: Answer) => {
   <div class="question-card">
     <h4 class="question-text">{{ question.questionText }}</h4>
     <div class="answers-grid">
-      <AnswerItem
-        v-for="(answer, index) in question.answers"
-        :key="index"
-        :answer="answer"
-        :answer-index="index"
-        @update:answer="handleAnswerUpdate(index, $event)"
-      />
+      <AnswerItem v-for="(answer, index) in question.answers" :key="index" :answer="answer" :answer-index="index"
+        @update:answer="handleAnswerUpdate(index, $event)" />
     </div>
   </div>
 </template>

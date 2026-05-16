@@ -20,20 +20,11 @@ const handleClick = () => {
 </script>
 
 <template>
-  <button
-    @click="handleClick"
-    :class="buttonClass"
-    @mouseenter="isHovering = true"
-    @mouseleave="isHovering = false"
-  >
+  <button @click="handleClick" :class="buttonClass" @mouseenter="isHovering = true" @mouseleave="isHovering = false">
     <span class="button-icon">
-      <font-awesome-icon
-        :icon="icon"
-        :beat="animationType === 'beat' && isHovering"
-        :bounce="animationType === 'bounce' && isHovering"
-        :fade="animationType === 'fade' && isHovering"
-        :spin="animationType === 'spin' && isHovering"
-      />
+      <font-awesome-icon :icon="icon" :beat="animationType === 'beat' && isHovering"
+        :bounce="animationType === 'bounce' && isHovering" :fade="animationType === 'fade' && isHovering"
+        :spin="animationType === 'spin' && isHovering" />
     </span>
     <span class="button-text">{{ label }}</span>
   </button>

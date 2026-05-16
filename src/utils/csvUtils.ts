@@ -6,10 +6,12 @@ import type { SurveyData } from '@/types';
 // ========================================
 
 /**
- * スキルシートデータをCSV形式に変換
+ * アンケートデータをCSV形式の文字列に変換する関数。
  * @param {SurveyData} surveyData - アンケートデータ
- * @returns {string} CSV文字列
+ * @returns {string} CSV形式の文字列
+ * @throws {Error} 変換に失敗した場合
  */
+
 export const convertToCSV = (surveyData: SurveyData): string => {
   try {
     // ヘッダー行
@@ -22,7 +24,6 @@ export const convertToCSV = (surveyData: SurveyData): string => {
       [],
     ];
 
-    // テーブルヘッダー
     const tableHeader = ['カテゴリ', '質問', 'スキル', '習熟度'];
     const body = surveyData.categories
       .filter((category) => category.isChecked)
@@ -58,8 +59,7 @@ export const convertToCSV = (surveyData: SurveyData): string => {
       )
       .join('\r\n');
 
-    // BOM付きUTF-8（Excelでの文字化け防止）
-    return '\uFEFF' + csvContent;
+    return '\uFEFF' + csvContent; // BOM付きUTF-8（Excelでの文字化け防止）
   } catch (error) {
     console.error('CSV変換エラー:', error);
     throw new Error('CSVへの変換に失敗しました');
@@ -67,10 +67,11 @@ export const convertToCSV = (surveyData: SurveyData): string => {
 };
 
 /**
- * CSVファイルをダウンロード
+ * アンケートデータをCSVファイルとしてダウンロードする関数。
  * @param {SurveyData} surveyData - アンケートデータ
- * @returns {boolean} 成功/失敗
+ * @returns {boolean} ダウンロード成功の有無
  */
+
 export const downloadCSV = (surveyData: SurveyData): boolean => {
   try {
     // データ検証

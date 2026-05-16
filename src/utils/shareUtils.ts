@@ -26,8 +26,11 @@ const isSurveyData = (value: unknown): value is SurveyData =>
 // ========================================
 
 /**
- * オブジェクトを圧縮してBase64エンコード
+ * オブジェクトをJSON文字列に変換し、LZ-stringで圧縮してURL安全なBase64形式でエンコード
+ * @param data - 圧縮・エンコード対象のオブジェクト
+ * @returns 圧縮・エンコードされた文字列、またはエラーが発生した場合はnull
  */
+
 export const encodeData = (data: SurveyData): string | null => {
   try {
     const jsonString = JSON.stringify(data);
@@ -40,8 +43,11 @@ export const encodeData = (data: SurveyData): string | null => {
 };
 
 /**
- * 圧縮されたBase64文字列をデコードしてオブジェクトに変換
+ * LZ-stringで圧縮されたURL安全なBase64形式の文字列をデコードし、JSONオブジェクトに変換
+ * @param compressedString - デコード対象の圧縮・エンコードされた文字列
+ * @returns デコードされたオブジェクト、またはエラーが発生した場合はnull
  */
+
 export const decodeData = (compressedString: string): SurveyData | null => {
   try {
     // LZ-stringで解凍
@@ -61,8 +67,9 @@ export const decodeData = (compressedString: string): SurveyData | null => {
 // ========================================
 
 /**
- * 共有用URLを生成
+ * SurveyDataをエンコードしてURLを生成
  */
+
 export const createShareUrl = (surveyData: SurveyData): string => {
   const encoded = encodeData(surveyData);
   if (!encoded) {
@@ -75,14 +82,14 @@ export const createShareUrl = (surveyData: SurveyData): string => {
 };
 
 /**
- * URLからデータを取得
+ * URLからエンコードされたデータを抽出してデコードし、SurveyDataオブジェクトを返す
  */
+
 export const getDataFromUrl = (): SurveyData | null => {
   try {
     const url = new URL(window.location.href);
     if (!url.hash) return null;
-    // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
-    const [, hashPath] = url.hash.split('?');
+    const [, hashPath] = url.hash.split('?'); // "#/result?data=xxxxx" から "?data=xxxxx" 部分を抽出
     if (!hashPath) return null;
 
     // URLパラメータの解析
@@ -115,15 +122,15 @@ export const getDataFromUrl = (): SurveyData | null => {
 // ========================================
 
 /**
- * URLをクリップボードにコピー
+ * テキストをクリップボードにコピーするユーティリティ関数
+ * @param text - コピーするテキスト
+ * @returns コピーが成功したかどうかを示すPromise<boolean>
  */
+
 export const copyToClipboard = async (text: string): Promise<boolean> => {
   try {
-    // navigator.clipboardがサポートされていない場合はfalseを返す
-    if (!navigator.clipboard) return false;
-
-    // クリップボードにテキストをコピー
-    await navigator.clipboard.writeText(text);
+    if (!navigator.clipboard) return false; // navigator.clipboardがサポートされていない場合はfalseを返す
+    await navigator.clipboard.writeText(text); // クリップボードにテキストをコピー
     return true;
   } catch (error) {
     if (error instanceof Error) {

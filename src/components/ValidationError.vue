@@ -96,13 +96,16 @@ const getTextPreview = (text?: string) => {
 }
 
 @keyframes shake {
+
   0%,
   100% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   75% {
     transform: translateX(5px);
   }
@@ -130,7 +133,7 @@ const getTextPreview = (text?: string) => {
   gap: var(--p-4, 0.5rem);
 }
 
-.error-title > h4 {
+.error-title>h4 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
@@ -204,7 +207,7 @@ const getTextPreview = (text?: string) => {
     font-size: 1.5rem;
   }
 
-  .error-title > h4 {
+  .error-title>h4 {
     font-size: 1.2rem;
   }
 
