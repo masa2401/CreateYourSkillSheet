@@ -1,35 +1,16 @@
-import { ref } from 'vue';
 import type { Ref } from 'vue';
 import type { ValidationError } from '@/types';
+import { useValidation } from '@/composables/useValidation';
 
 export function useNameValidation(userName: Ref<string>) {
-  /** バリデーションエラーの一覧 */
-  const validationErrors = ref<ValidationError[]>([]);
-
-  /** 一度でも送信ボタンが押されたかどうか */
-  const hasAttemptedSubmit = ref<boolean>(false);
-
-  /** バリデーションルールを評価してエラー一覧を返す。 */
   const buildErrors = (): ValidationError[] => {
-    const errors: ValidationError[] = [];
-    if (!userName.value || !userName.value.trim()) {
-      errors.push({
-        category: '入力必須項目',
-        text: 'お名前を入力してください',
-      });
+    if (!userName.value.trim()) {
+      return [{ category: '入力必須項目', text: 'お名前を入力してください' }];
     }
-    return errors;
+    return [];
   };
 
-  /**
-   * バリデーションを実行し、内部状態を更新する。
-   * @returns エラーがない場合 true、ある場合 false
-   */
-  const validate = (): boolean => {
-    hasAttemptedSubmit.value = true;
-    validationErrors.value = buildErrors();
-    return validationErrors.value.length === 0;
-  };
+  const { validationErrors, hasAttemptedSubmit, validate } = useValidation(buildErrors);
 
   /**
    * input イベント用ハンドラ。

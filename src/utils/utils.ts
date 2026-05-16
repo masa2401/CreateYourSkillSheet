@@ -73,9 +73,7 @@ const toQuestionState = (question: Question): QuestionState => ({
   answers: question.answers.map((label) => ({ label })),
 });
 
-export const createReactiveQuestions = (questions: Question[]) => {
-  return questions.map(toQuestionState);
-};
+export const initQuestionStates = (questions: Question[]) => questions.map(toQuestionState); // Question[] → QuestionState[]
 
 /**
  * 質問データをシリアライズ（保存用）
@@ -83,7 +81,7 @@ export const createReactiveQuestions = (questions: Question[]) => {
  * @returns {Question[]} シリアライズされた質問データ
  */
 
-export const serializeQuestions = (questions: QuestionState[]): QuestionState[] =>
+export const extractQuestionData = (questions: QuestionState[]): QuestionState[] =>
   questions.map((q) => ({
     id: q.id,
     questionText: q.questionText,

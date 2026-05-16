@@ -1,16 +1,11 @@
-import { ref, watch } from 'vue';
+import { watch } from 'vue';
 import type { Ref } from 'vue';
 import type { Category, Answer, ValidationError, QuestionState } from '@/types';
+import { useValidation } from '@/composables/useValidation';
 
 // ─── composable ────────────────────────────────────────────────────────────────
 
 export function useSurveyValidation(categoryData: Ref<Category[]>) {
-  /** バリデーションエラーの一覧 */
-  const validationErrors = ref<ValidationError[]>([]);
-
-  /** 一度でも送信ボタンが押されたかどうか */
-  const hasAttemptedSubmit = ref<boolean>(false);
-
   /** バリデーションルールを評価してエラー一覧を返す。 */
   const checkAnswerError = (
     category: Category,
@@ -40,15 +35,7 @@ export function useSurveyValidation(categoryData: Ref<Category[]>) {
     return errors;
   };
 
-  /**
-   * バリデーションを実行し、内部状態を更新する。
-   * @returns エラーがない場合 true、ある場合 false
-   */
-  const validate = (): boolean => {
-    hasAttemptedSubmit.value = true;
-    validationErrors.value = buildErrors();
-    return validationErrors.value.length === 0;
-  };
+  const { validationErrors, hasAttemptedSubmit, validate } = useValidation(buildErrors);
 
   /**
    * 送信ボタンの無効化条件。

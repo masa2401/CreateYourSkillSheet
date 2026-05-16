@@ -9,8 +9,8 @@ import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constant
 import {
   getStorageValue,
   setStorageValue,
-  createReactiveQuestions,
-  serializeQuestions,
+  initQuestionStates,
+  extractQuestionData,
 } from '@/utils/utils';
 import type { Category, Question, SurveyData } from '@/types/index';
 
@@ -27,17 +27,17 @@ const categoryData = ref<Category[]>([
   {
     ...CATEGORIES.COMMON,
     isChecked: true,
-    questions: createReactiveQuestions(QUESTION_DATA.common),
+    questions: initQuestionStates(QUESTION_DATA.common),
   },
   {
     ...CATEGORIES.ENGINEER,
     isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_ENGINEER, false),
-    questions: createReactiveQuestions(QUESTION_DATA.engineer),
+    questions: initQuestionStates(QUESTION_DATA.engineer),
   },
   {
     ...CATEGORIES.DESIGNER,
     isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_DESIGNER, false),
-    questions: createReactiveQuestions(QUESTION_DATA.designer),
+    questions: initQuestionStates(QUESTION_DATA.designer),
   },
 ]);
 
@@ -79,7 +79,7 @@ const onSubmit = async (): Promise<void> => {
       genre: cat.genre,
       icon: cat.icon,
       isChecked: cat.isChecked,
-      questions: serializeQuestions(cat.questions),
+      questions: extractQuestionData(cat.questions),
     })),
   };
 
