@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue';
 import type { Ref } from 'vue';
-import type { Category, Answer, ValidationError, Question } from '@/types/interfaces';
+import type { Category, Answer, ValidationError, Question } from '@/types';
 
 // ─── composable ────────────────────────────────────────────────────────────────
 
@@ -11,30 +11,25 @@ export function useSurveyValidation(categoryData: Ref<Category[]>) {
   /** 一度でも送信ボタンが押されたかどうか */
   const hasAttemptedSubmit = ref<boolean>(false);
 
-  /**
-   * バリデーションルールを評価してエラー一覧を返す。
-   * 副作用はなく、純粋に結果を返すだけ。
-   */
+  /** バリデーションルールを評価してエラー一覧を返す。 */
   const checkAnswerError = (
     category: Category,
-    questionText: Question,
+    question: Question,
     answer: Answer,
   ): ValidationError | null => {
     if (answer.isChecked && !answer.value) {
       return {
         category: category.genre,
-        questionText: questionText.questionText,
+        text: question.questionText,
       };
     }
     return null;
   };
-
   const buildErrors = (): ValidationError[] => {
     const errors: ValidationError[] = [];
 
     categoryData.value.forEach((category) => {
-      // チェックされていないカテゴリは対象外
-      if (!category.isChecked) return;
+      if (!category.isChecked) return; // チェックされていないカテゴリは対象外
       category.questions.forEach((question) => {
         question.answers.forEach((answer) => {
           const error = checkAnswerError(category, question, answer);

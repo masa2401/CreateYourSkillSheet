@@ -1,5 +1,5 @@
 import { LEVEL_LABELS } from '@/utils/constants';
-import type { SurveyData } from '@/types/interfaces';
+import type { SurveyData } from '@/types';
 
 // ========================================
 // CSV変換・ダウンロード
@@ -36,7 +36,7 @@ export const convertToCSV = (surveyData: SurveyData): string => {
             const row = [
               !categoryShown ? category.genre : '',
               !questionShown ? question.questionText : '',
-              answer.text,
+              answer.label,
               level ? level.stars : '',
             ];
             categoryShown = true;

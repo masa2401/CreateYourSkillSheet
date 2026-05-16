@@ -4,11 +4,7 @@ import ValidationError from '@/components/ValidationError.vue';
 import { ref, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useSurveyValidation } from '@/composables/useSurveyValidation';
-import {
-  commonQuestionData,
-  engineerQuestionData,
-  designerQuestionData,
-} from '@/data/questionData';
+import { QUESTION_DATA } from '@/data/questions';
 import { ROUTES, STORAGE_KEYS, CATEGORIES, LEVEL_LABELS } from '@/utils/constants';
 import {
   getStorageValue,
@@ -16,7 +12,7 @@ import {
   createReactiveQuestions,
   serializeQuestions,
 } from '@/utils/utils';
-import type { Category, Question, SurveyData } from '@/types/interfaces';
+import type { Category, Question, SurveyData } from '@/types/index';
 
 const router = useRouter();
 const isHovering = ref<boolean>(false);
@@ -31,23 +27,21 @@ const categoryData = ref<Category[]>([
   {
     ...CATEGORIES.COMMON,
     isChecked: true,
-    questions: createReactiveQuestions(commonQuestionData),
+    questions: createReactiveQuestions(QUESTION_DATA.common),
   },
   {
     ...CATEGORIES.ENGINEER,
     isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_ENGINEER, false),
-    questions: createReactiveQuestions(engineerQuestionData),
+    questions: createReactiveQuestions(QUESTION_DATA.engineer),
   },
   {
     ...CATEGORIES.DESIGNER,
     isChecked: getStorageValue<boolean>(STORAGE_KEYS.CATEGORY_DESIGNER, false),
-    questions: createReactiveQuestions(designerQuestionData),
+    questions: createReactiveQuestions(QUESTION_DATA.designer),
   },
 ]);
 
 // ─── バリデーション ──────────────────────────────────────────────────────────
-// useSurveyValidation に categoryData の ref を渡すことで、
-// バリデーションロジック（watch を含む）をこのコンポーネントから分離する。
 
 const { validationErrors, validate, isSubmitDisabled } = useSurveyValidation(categoryData);
 

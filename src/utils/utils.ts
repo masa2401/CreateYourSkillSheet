@@ -1,15 +1,4 @@
-import type { Question } from '@/types/interfaces';
-
-// ========================================
-// 型定義
-// ========================================
-
-// createReactiveQuestionsの引数用（生データ）
-interface RawQuestion {
-  id: number;
-  questionText: string;
-  answers: string[];
-}
+import type { Question, QuestionState } from '@/types';
 
 // ========================================
 // LocalStorage操作
@@ -77,20 +66,15 @@ export const removeStorageValue = (key: string): boolean => {
 
 /**
  * 質問データをリアクティブな形式に変換
- * @param {RawQuestion[]} data - 質問データ配列
- * @returns {Question[]} リアクティブな質問データ
  */
 
-export const createReactiveQuestions = (data: RawQuestion[]): Question[] => {
-  return data.map((q) => ({
-    id: q.id,
-    questionText: q.questionText,
-    answers: q.answers.map((text) => ({
-      text,
-      isChecked: false,
-      value: 0,
-    })),
-  }));
+const toQuestionState = (questions: Question): QuestionState => ({
+  ...questions,
+  answers: questions.answers.map((label) => ({ label })),
+});
+
+export const createReactiveQuestions = (questions: Question[]) => {
+  return questions.map(toQuestionState);
 };
 
 /**
@@ -99,14 +83,13 @@ export const createReactiveQuestions = (data: RawQuestion[]): Question[] => {
  * @returns {Question[]} シリアライズされた質問データ
  */
 
-export const serializeQuestions = (questions: Question[]): Question[] => {
-  return questions.map((q) => ({
+export const serializeQuestions = (questions: QuestionState): QuestionState =>
+  questions.map((q) => ({
     id: q.id,
     questionText: q.questionText,
     answers: q.answers.map((a) => ({
-      text: a.text,
+      label: a.label,
       isChecked: a.isChecked,
       value: a.value,
     })),
   }));
-};

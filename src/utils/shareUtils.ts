@@ -1,5 +1,5 @@
 import LZString from 'lz-string';
-import type { Category, SurveyData } from '../types/interfaces';
+import type { Category, SurveyData } from '@/types';
 
 // ========================================
 // 型ガード

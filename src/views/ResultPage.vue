@@ -6,7 +6,7 @@ import { getDataFromUrl } from '@/utils/shareUtils';
 import { getStorageValue } from '@/utils/utils';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import type { SurveyData, Answer, Question } from '@/types/interfaces';
+import type { SurveyData, Answer, Question } from '@/types';
 
 const router = useRouter();
 const isSharedView = ref<boolean>(false);

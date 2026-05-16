@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Answer } from '@/types/interfaces';
+import type { Answer } from '@/types';
 
 interface Props {
   answer: Answer;

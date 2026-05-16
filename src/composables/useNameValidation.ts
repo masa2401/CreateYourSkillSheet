@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-import type { ValidationError } from '@/types/interfaces';
+import type { ValidationError } from '@/types';
 
 export function useNameValidation(userName: Ref<string>) {
   /** バリデーションエラーの一覧 */
@@ -9,16 +9,13 @@ export function useNameValidation(userName: Ref<string>) {
   /** 一度でも送信ボタンが押されたかどうか */
   const hasAttemptedSubmit = ref<boolean>(false);
 
-  /**
-   * バリデーションルールを評価してエラー一覧を返す。
-   * 副作用はなく、純粋に結果を返すだけ。
-   */
+  /** バリデーションルールを評価してエラー一覧を返す。 */
   const buildErrors = (): ValidationError[] => {
     const errors: ValidationError[] = [];
     if (!userName.value || !userName.value.trim()) {
       errors.push({
         category: '入力必須項目',
-        questionText: 'お名前を入力してください',
+        text: 'お名前を入力してください',
       });
     }
     return errors;

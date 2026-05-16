@@ -3,7 +3,7 @@ import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
 import { ref, computed } from 'vue';
 import { createShareUrl, copyToClipboard } from '@/utils/shareUtils';
 import { downloadCSV } from '@/utils/csvUtils';
-import type { SurveyData } from '@/types/interfaces';
+import type { SurveyData } from '@/types';
 
 interface Props {
   surveyData: SurveyData;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AnswerItem from './AnswerItem.vue';
-import type { Question } from '@/types/interfaces';
+import type { Question } from '@/types';
 
 interface Props {
   question: Question;

@@ -5,9 +5,12 @@ import { useRouter } from 'vue-router';
 import { useNameValidation } from '@/composables/useNameValidation';
 import { STORAGE_KEYS, ROUTES } from '@/utils/constants';
 import { setStorageValue } from '@/utils/utils';
+import { CATEGORY_META } from '@/data/questions';
 
 const router = useRouter();
 const isHovering = ref<boolean>(false);
+const { label: engineerLabel, description: engineerDescription } = CATEGORY_META.engineer;
+const { label: designerLabel, description: designerDescription } = CATEGORY_META.designer;
 
 // ─── フォームデータ ──────────────────────────────────────────────────────────
 
@@ -83,9 +86,9 @@ const validateAndProceed = (): void => {
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-computer" />
                 </div>
-                <h4 class="card-category-title">プログラマ / ITエンジニア</h4>
+                <h4 class="card-category-title">{{ engineerLabel }}</h4>
                 <p class="card-category-desc">
-                  開発言語、フレームワーク、<br />インフラ関連のスキル
+                  {{ engineerDescription }}
                 </p>
                 <div class="check-indicator">
                   <span v-if="selectedCategories.engineer" class="check-mark">
@@ -104,8 +107,8 @@ const validateAndProceed = (): void => {
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-palette" />
                 </div>
-                <h4 class="card-category-title">デザイナー / 動画制作</h4>
-                <p class="card-category-desc">デザインツール、動画編集、<br />制作スキル</p>
+                <h4 class="card-category-title">{{ designerLabel }}</h4>
+                <p class="card-category-desc">{{ designerDescription }}</p>
                 <div class="check-indicator">
                   <span v-if="selectedCategories.designer" class="check-mark">
                     <font-awesome-icon icon="fa-solid fa-check" />
