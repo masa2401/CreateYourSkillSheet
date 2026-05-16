@@ -1,6 +1,6 @@
 import { ref, watch } from 'vue';
 import type { Ref } from 'vue';
-import type { Category, Answer, ValidationError, Question } from '@/types';
+import type { Category, Answer, ValidationError, QuestionState } from '@/types';
 
 // ─── composable ────────────────────────────────────────────────────────────────
 
@@ -14,7 +14,7 @@ export function useSurveyValidation(categoryData: Ref<Category[]>) {
   /** バリデーションルールを評価してエラー一覧を返す。 */
   const checkAnswerError = (
     category: Category,
-    question: Question,
+    question: QuestionState,
     answer: Answer,
   ): ValidationError | null => {
     if (answer.isChecked && !answer.value) {

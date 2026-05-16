@@ -68,7 +68,7 @@ const toggleMenu = () => {
       label="結果を共有"
       animationType="bounce"
       button-class="share-button"
-      @focus="toggleMenu"
+      @click="toggleMenu"
     />
 
     <transition name="slide-fade">

@@ -110,7 +110,7 @@ const handlePrint = (): void => {
                 class="skill-card"
               >
                 <div class="skill-info">
-                  <div class="skill-name">{{ answer.text }}</div>
+                  <div class="skill-name">{{ answer.label }}</div>
                   <div class="skill-level">
                     <span class="level-stars">{{ LEVEL_LABELS[answer.value - 1]?.stars }}</span>
                   </div>

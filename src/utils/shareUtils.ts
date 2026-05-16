@@ -42,14 +42,14 @@ export const encodeData = (data: SurveyData): string | null => {
 /**
  * 圧縮されたBase64文字列をデコードしてオブジェクトに変換
  */
-export const decodeData = (compressedString: string): string | null => {
+export const decodeData = (compressedString: string): SurveyData | null => {
   try {
     // LZ-stringで解凍
     const jsonString = LZString.decompressFromEncodedURIComponent(compressedString);
     if (!jsonString) {
       throw new Error('解凍に失敗しました');
     }
-    return JSON.parse(jsonString) as string;
+    return JSON.parse(jsonString) as SurveyData;
   } catch (error) {
     console.error('デコードエラー:', error);
     return null;

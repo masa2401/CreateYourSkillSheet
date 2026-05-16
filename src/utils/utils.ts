@@ -68,9 +68,9 @@ export const removeStorageValue = (key: string): boolean => {
  * 質問データをリアクティブな形式に変換
  */
 
-const toQuestionState = (questions: Question): QuestionState => ({
-  ...questions,
-  answers: questions.answers.map((label) => ({ label })),
+const toQuestionState = (question: Question): QuestionState => ({
+  ...question,
+  answers: question.answers.map((label) => ({ label })),
 });
 
 export const createReactiveQuestions = (questions: Question[]) => {
@@ -83,7 +83,7 @@ export const createReactiveQuestions = (questions: Question[]) => {
  * @returns {Question[]} シリアライズされた質問データ
  */
 
-export const serializeQuestions = (questions: QuestionState): QuestionState =>
+export const serializeQuestions = (questions: QuestionState[]): QuestionState[] =>
   questions.map((q) => ({
     id: q.id,
     questionText: q.questionText,

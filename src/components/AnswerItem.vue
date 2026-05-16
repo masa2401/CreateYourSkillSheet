@@ -38,7 +38,7 @@ const handleLevelChange = (level: number) => {
         @change="handleCheckChange"
         class="custom-checkbox"
       />
-      <span class="checkbox-text">{{ answer.text }}</span>
+      <span class="checkbox-text">{{ answer.label }}</span>
     </label>
 
     <transition name="slide-fade">
