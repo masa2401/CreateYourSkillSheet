@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Answer } from '@/types';
+import type { Answer, StarLevel } from '@/types';
 
 interface Props {
   answer: Answer;
@@ -21,7 +21,7 @@ const handleCheckChange = (e: Event) => {
 };
 
 // 習熟度の変更
-const handleLevelChange = (level: number) => {
+const handleLevelChange = (level: StarLevel) => {
   emit('update:answer', {
     ...props.answer,
     value: level,
@@ -40,7 +40,7 @@ const handleLevelChange = (level: number) => {
       <div v-if="answer.isChecked" class="level-selector">
         <div class="level-buttons">
           <label v-for="level in 5" :key="level" class="level-button" :class="{ active: answer.value === level }">
-            <input type="radio" :checked="answer.value === level" @change="handleLevelChange(level)"
+            <input type="radio" :checked="answer.value === level" @change="handleLevelChange(level as StarLevel)"
               class="level-radio" />
             <span class="level-number">{{ level }}</span>
             <span class="level-stars">{{ '★'.repeat(level) }}</span>

@@ -100,7 +100,7 @@ const handlePrint = (): void => {
                 <div class="skill-info">
                   <div class="skill-name">{{ answer.label }}</div>
                   <div class="skill-level">
-                    <span class="level-stars">{{ LEVEL_LABELS[answer.value ?? -1]?.stars }}</span>
+                    <span class="level-stars">{{ LEVEL_LABELS[(answer.value ?? 0) - 1]?.stars }}</span>
                   </div>
                 </div>
               </div>

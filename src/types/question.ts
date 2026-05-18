@@ -10,10 +10,12 @@ export type QuestionState = {
   answers: Answer[];
 };
 
+export type StarLevel = 1 | 2 | 3 | 4 | 5;
+
 export type Answer = {
   readonly label: string;
   isChecked?: boolean;
-  value?: number;
+  value?: StarLevel;
 };
 
 export type QuestionCategory = 'common' | 'engineer' | 'designer';
