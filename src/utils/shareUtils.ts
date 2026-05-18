@@ -67,7 +67,9 @@ export const decodeData = (compressedString: string): SurveyData | null => {
 // ========================================
 
 /**
- * SurveyDataをエンコードしてURLを生成
+ * SurveyDataオブジェクトをエンコードしてURLのクエリパラメータに埋め込み、結果ページへの完全なURLを生成
+ * @param surveyData
+ * @returns
  */
 
 export const createShareUrl = (surveyData: SurveyData): string => {

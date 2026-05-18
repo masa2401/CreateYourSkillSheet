@@ -135,12 +135,12 @@ const onSubmit = async (): Promise<void> => {
       </ValidationError>
 
       <div class="submit-section">
-        <p v-if="isSubmitDisabled()" class="submit-hint">
+        <p v-if="isSubmitDisabled" class="submit-hint">
           <font-awesome-icon icon="fa-solid fa-triangle-exclamation" shake />
           すべてのチェック項目に習熟度を選択してください
         </p>
         <button @mouseenter="isHovering = true" @mouseleave="isHovering = false" @click="onSubmit" class="submit-button"
-          :class="{ disabled: isSubmitDisabled() }" :disabled="isSubmitDisabled()">
+          :class="{ disabled: isSubmitDisabled }" :disabled="isSubmitDisabled">
           次へ進む &ensp;
           <font-awesome-icon icon="fa-solid fa-arrow-right" :bounce="isHovering" />
         </button>

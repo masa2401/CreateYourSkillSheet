@@ -1,4 +1,4 @@
-import { watch } from 'vue';
+import { watch, computed } from 'vue';
 import type { Ref } from 'vue';
 import type { Category, Answer, ValidationError, QuestionState } from '@/types';
 import { useValidation } from '@/composables/useValidation';
@@ -53,14 +53,16 @@ export function useSurveyValidation(categoryData: Ref<Category[]>) {
   const { validationErrors, hasAttemptedSubmit, validate } = useValidation(buildErrors);
 
   /**
-   * 送信ボタンの disabled 状態を判定する関数。送信が試みられた後で、かつバリデーションエラーが存在する場合に true を返す。
-   * これにより、ユーザーはエラーを修正するまで送信できなくなる。
-   * @returns boolean - 送信ボタンを無効にするかどうか。
+   * 送信ボタンの有効/無効を制御するための computed プロパティ。送信が試みられ、かつバリデーションエラーが存在する場合は true を返す。
+   * これにより、ユーザーがすべての必須項目を正しく入力するまで送信ボタンが無効化される。
+    送信が試みられていない場合は常に false を返すため、ユーザーは最初の送信前にはエラーを気にせず入力できる。
+    送信が試みられた後は、エラーの有無に応じてボタンの状態がリアルタイムで更新される。
+    @returns boolean - 送信ボタンが無効な場合は true、有効な場合は false。
    */
 
-  const isSubmitDisabled = (): boolean => {
-    return hasAttemptedSubmit.value && validationErrors.value.length > 0;
-  };
+  const isSubmitDisabled = computed(
+    () => hasAttemptedSubmit.value && validationErrors.value.length > 0,
+  );
 
   /**
    * categoryData を監視し、変更があった場合にバリデーションエラーを再評価する。これにより、ユーザーが回答を修正した際にリアルタイムでエラーが更新される。

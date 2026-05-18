@@ -4,9 +4,9 @@ import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
 import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants';
 import { getDataFromUrl } from '@/utils/shareUtils';
 import { getStorageValue } from '@/utils/utils';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import type { SurveyData, Answer, QuestionState } from '@/types';
+import type { SurveyData, Answer } from '@/types';
 
 const router = useRouter();
 const isSharedView = ref<boolean>(false);
@@ -32,18 +32,25 @@ onMounted((): void => {
   router.push(ROUTES.SURVEY);
 });
 
-const getQuestionsByCategory = (categoryId: number): QuestionState[] => {
-  if (!surveyData.value) return [];
-  const category = surveyData.value.categories.find((c) => c.id === categoryId);
-  return category?.questions ?? [];
-};
-
 /**
  * チェックされた回答のみ返す。
  */
 const getCheckedAnswers = (answers: Answer[]): Answer[] => {
   return answers.filter((answer) => answer.isChecked);
 };
+
+// ─── 分岐処理 ──────────────────────────────────────────────────────────────
+
+const displayCategories = computed(() =>
+  (surveyData.value?.categories ?? [])
+    .filter((cat) => cat.isChecked)
+    .map((cat) => ({
+      ...cat,
+      questions: cat.questions.map((q) => ({
+        ...q,
+        answers: getCheckedAnswers(q.answers),
+      })).filter((q) => q.answers.length > 0),
+    })));
 
 // ─── イベントハンドラ ────────────────────────────────────────────────────────
 
@@ -84,28 +91,24 @@ const handlePrint = (): void => {
     </div>
 
     <div class="content-wrapper">
-      <div v-for="category in surveyData.categories" :key="category.id" v-show="category.isChecked"
+      <div v-for="category in displayCategories" :key="category.id" v-show="category.isChecked"
         class="category-section">
         <div class="category-header">
           <font-awesome-icon :icon="category.icon" class="category-icon" />
           <h3 class="category-title">{{ category.genre }}</h3>
         </div>
-
-        <div v-for="question in getQuestionsByCategory(category.id)" :key="question.id"
-          v-show="getCheckedAnswers(question.answers).length > 0" class="question-block">
-          <template v-if="getCheckedAnswers(question.answers).length > 0">
-            <h4 class="question-title">{{ question.questionText }}</h4>
-            <div class="skills-grid">
-              <div v-for="(answer, index) in getCheckedAnswers(question.answers)" :key="index" class="skill-card">
-                <div class="skill-info">
-                  <div class="skill-name">{{ answer.label }}</div>
-                  <div class="skill-level">
-                    <span class="level-stars">{{ LEVEL_LABELS[(answer.value ?? 0) - 1]?.stars }}</span>
-                  </div>
+        <div v-for="question in category.questions" :key="question.id" class="question-block">
+          <h4 class="question-title">{{ question.questionText }}</h4>
+          <div class="skills-grid">
+            <div v-for="answer in question.answers" :key="answer.label" class="skill-card">
+              <div class="skill-info">
+                <div class="skill-name">{{ answer.label }}</div>
+                <div class="skill-level">
+                  <span class="level-stars">{{ LEVEL_LABELS[(answer.value ?? 0) - 1]?.stars }}</span>
                 </div>
               </div>
             </div>
-          </template>
+          </div>
         </div>
       </div>
 
