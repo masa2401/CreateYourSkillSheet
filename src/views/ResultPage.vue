@@ -138,8 +138,8 @@ const handlePrint = (): void => {
     </div>
   </div>
 
-  <div v-else class="loading-container">
-    <div class="loading-spinner"></div>
+  <div v-else class="loading-container" role="status" aria-label="データを読み込んでいます" aria-live="polite">
+    <div class="loading-spinner" aria-hidden="true"></div>
     <p class="loading-text">データを読み込んでいます...</p>
   </div>
 </template>

@@ -39,9 +39,10 @@ const handleLevelChange = (level: StarLevel) => {
     <transition name="slide-fade">
       <div v-if="answer.isChecked" class="level-selector">
         <div class="level-buttons">
-          <label v-for="level in 5" :key="level" class="level-button" :class="{ active: answer.value === level }">
+          <label v-for="level in 5" :key="level" class="level-button" :class="{ active: answer.value === level }"
+            aria-label="`習熟度 ${level}: ${LEVEL_LABELS[level - 1].text}`">
             <input type="radio" :checked="answer.value === level" @change="handleLevelChange(level as StarLevel)"
-              class="level-radio" />
+              class="level-radio" :aria-label="`${level}段階`" />
             <span class="level-number">{{ level }}</span>
             <span class="level-stars">{{ '★'.repeat(level) }}</span>
           </label>

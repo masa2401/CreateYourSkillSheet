@@ -21,7 +21,7 @@ const handleClick = () => {
 
 <template>
   <button @click="handleClick" :class="buttonClass" @mouseenter="isHovering = true" @mouseleave="isHovering = false">
-    <span class="button-icon">
+    <span class="button-icon" aria-hidden="true">
       <font-awesome-icon :icon="icon" :beat="animationType === 'beat' && isHovering"
         :bounce="animationType === 'bounce' && isHovering" :fade="animationType === 'fade' && isHovering"
         :spin="animationType === 'spin' && isHovering" />

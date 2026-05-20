@@ -70,13 +70,14 @@ const validateAndProceed = (): void => {
           </h3>
           <div class="category-cards">
             <label class="category-card" :class="{ active: selectedCategories.engineer }">
-              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.engineer" />
+              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.engineer"
+                aria-describedby="engineer-desc" />
               <div class="card-content">
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-computer" />
                 </div>
                 <h4 class="card-category-title">{{ engineerLabel }}</h4>
-                <p class="card-category-desc">
+                <p id="engineer-desc" class="card-category-desc">
                   {{ engineerDescription }}
                 </p>
                 <div class="check-indicator">
@@ -87,13 +88,14 @@ const validateAndProceed = (): void => {
               </div>
             </label>
             <label class="category-card" :class="{ active: selectedCategories.designer }">
-              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.designer" />
+              <input type="checkbox" class="category-checkbox" v-model="selectedCategories.designer"
+                aria-describedby="designer-desc" />
               <div class="card-content">
                 <div class="card-icon-large">
                   <font-awesome-icon icon="fa-solid fa-palette" />
                 </div>
                 <h4 class="card-category-title">{{ designerLabel }}</h4>
-                <p class="card-category-desc">{{ designerDescription }}</p>
+                <p id="designer-desc" class="card-category-desc">{{ designerDescription }}</p>
                 <div class="check-indicator">
                   <span v-if="selectedCategories.designer" class="check-mark">
                     <font-awesome-icon icon="fa-solid fa-check" />
