@@ -34,6 +34,7 @@ root/
 │   ├── composable/     # Validation機能
 │   ├── data/           # 質問データ
 │   ├── router/         # Vue router
+│   ├── test/           # テスト用データ
 │   ├── types/          # 型データ
 │   ├── utils/          # 共通関数
 │   └── views/          # 見た目データ

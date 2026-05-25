@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ref } from 'vue';
-import type { Category } from '@/types';
 import { useSurveyValidation } from './useSurveyValidation';
+import type { Category } from '@/types';
 
 const makeCategory = (overrides?: Partial<Category>) => ({
   id: 1,

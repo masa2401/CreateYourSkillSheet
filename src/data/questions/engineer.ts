@@ -23,7 +23,7 @@ export const engineerQuestions: Question[] = [
       'Laravel(PHP)',
       'Ruby on Rails(Ruby)',
       'Django(Python)',
-      'Spring(Java)',
+      'SpringBoot(Java)',
     ],
   },
   {

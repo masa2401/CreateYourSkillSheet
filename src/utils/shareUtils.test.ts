@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { encodeData, decodeData } from './shareUtils';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { encodeData, decodeData, createShareUrl, copyToClipboard } from './shareUtils';
 import type { SurveyData } from '@/types';
 
 const mockSurveyData: SurveyData = {
@@ -43,5 +43,52 @@ describe('decodeData', () => {
   it('不正な文字列はnullを返す', () => {
     const result = decodeData('invalid-string');
     expect(result).toBeNull();
+  });
+});
+
+describe('createShareUrl', () => {
+  const url = createShareUrl(mockSurveyData);
+
+  it('data パラメータを含む URL が生成される', () => {
+    expect(url).toContain('data=');
+  });
+
+  it('result ページへのハッシュが含まれる', () => {
+    expect(url).toContain('#/result');
+  });
+});
+
+describe('copyToClipboard', () => {
+  const mockWriteText = vi.fn();
+
+  beforeEach(() => {
+    mockWriteText.mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', {
+      clipboard: { writeText: mockWriteText },
+    });
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('コピー成功時に true を返す', async () => {
+    const result = await copyToClipboard('https://example.com');
+    expect(result).toBe(true);
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://example.com');
+  });
+
+  it('コピー失敗時に false を返す', async () => {
+    vi.stubGlobal('navigator', {
+      clipboard: { writeText: mockWriteText.mockRejectedValue(new Error('denied')) },
+    });
+    const result = await copyToClipboard('https://example.com');
+    expect(result).toBe(false);
+  });
+
+  it('clipboard が未サポートの場合は false を返す', async () => {
+    vi.stubGlobal('navigator', { clipboard: undefined });
+    const result = await copyToClipboard('https://example.com');
+    expect(result).toBe(false);
   });
 });

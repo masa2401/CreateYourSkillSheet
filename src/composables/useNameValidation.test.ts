@@ -16,12 +16,10 @@ describe('useNameValidation', () => {
     const { validate, validationErrors, onInput } = useNameValidation(userName);
 
     validate();
-
     expect(validationErrors.value).toHaveLength(1);
     userName.value = '山田太郎';
 
     onInput();
-
     expect(validationErrors.value).toHaveLength(0);
   });
 
@@ -38,7 +36,6 @@ describe('useNameValidation', () => {
     const { validate, validationErrors } = useNameValidation(userName);
 
     validate();
-
     expect(validationErrors.value).toHaveLength(1);
   });
 });
