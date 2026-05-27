@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Answer, StarLevel } from '@/types';
+import { LEVEL_LABELS } from '@/utils/constants';
 
 interface Props {
   answer: Answer;
@@ -40,7 +41,7 @@ const handleLevelChange = (level: StarLevel) => {
       <div v-if="answer.isChecked" class="level-selector">
         <div class="level-buttons">
           <label v-for="level in 5" :key="level" class="level-button" :class="{ active: answer.value === level }"
-            aria-label="`習熟度 ${level}: ${LEVEL_LABELS[level - 1].text}`">
+            :aria-label="`習熟度 ${level}: ${LEVEL_LABELS[level - 1]!.text}`">
             <input type="radio" :checked="answer.value === level" @change="handleLevelChange(level as StarLevel)"
               class="level-radio" :aria-label="`${level}段階`" />
             <span class="level-number">{{ level }}</span>

@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import TopPage from '@/views/TopPage.vue'
+import { createRouter, createWebHashHistory } from 'vue-router';
+import TopPage from '@/views/TopPage.vue';
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -7,11 +7,6 @@ const router = createRouter({
     {
       path: '/',
       name: 'top',
-      component: TopPage,
-    },
-    {
-      path: '/top',
-      name: 'topPage',
       component: TopPage,
     },
     {
@@ -32,11 +27,11 @@ const router = createRouter({
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     } else {
-      return { top: 0 }
+      return { top: 0 };
     }
   },
-})
+});
 
-export default router
+export default router;

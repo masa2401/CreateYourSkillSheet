@@ -1,14 +1,15 @@
 ﻿<script setup lang="ts">
 import ShareButton from '@/components/ShareButton.vue';
 import AnimatedIconButton from '@/components/AnimatedIconButton.vue';
-import { STORAGE_KEYS, ROUTES, LEVEL_LABELS } from '@/utils/constants';
+import { ROUTES, LEVEL_LABELS } from '@/utils/constants';
 import { getDataFromUrl } from '@/utils/shareUtils';
-import { getStorageValue } from '@/utils/utils';
+import { useSurveyStore } from '@/stores/useSurveyStore';
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import type { SurveyData, Answer } from '@/types';
 
 const router = useRouter();
+const store = useSurveyStore();
 const isSharedView = ref<boolean>(false);
 const surveyData = ref<SurveyData | null>(null);
 
@@ -22,14 +23,11 @@ onMounted((): void => {
     return;
   }
 
-  const localData = getStorageValue<SurveyData>(STORAGE_KEYS.SURVEY_DATA);
-  if (localData) {
-    surveyData.value = localData;
-    isSharedView.value = false;
-    return;
-  }
-
-  router.push(ROUTES.SURVEY);
+  // ストアにユーザー名がなければアンケートページへ
+  // （直接アクセスや未回答状態の場合）
+  if (!store.userName) router.push(ROUTES.SURVEY);
+  surveyData.value = store.surveyData;
+  isSharedView.value = false;
 });
 
 /**

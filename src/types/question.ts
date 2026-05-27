@@ -1,19 +1,17 @@
 export type Question = {
-  readonly id: number;
-  readonly questionText: string;
+  id: number;
+  questionText: string;
   answers: string[];
 };
 
-export type QuestionState = {
-  readonly id: number;
-  readonly questionText: string;
+export type QuestionState = Omit<Question, 'answers'> & {
   answers: Answer[];
 };
 
 export type StarLevel = 1 | 2 | 3 | 4 | 5;
 
 export type Answer = {
-  readonly label: string;
+  label: string;
   isChecked?: boolean;
   value?: StarLevel;
 };
@@ -21,6 +19,6 @@ export type Answer = {
 export type QuestionCategory = 'common' | 'engineer' | 'designer';
 
 export interface CategoryMeta {
-  readonly label: string;
-  readonly description: string;
+  label: string;
+  description: string;
 }

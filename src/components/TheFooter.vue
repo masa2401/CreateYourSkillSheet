@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <p class="copyright"></p>
+    <p class="copyright">&copy; Copy Right</p>
   </footer>
 </template>
 

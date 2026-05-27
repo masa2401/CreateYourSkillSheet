@@ -8,8 +8,8 @@ export interface SurveyData {
 }
 
 export interface Category {
-  readonly id: number;
-  readonly genre: string;
+  id: number;
+  genre: string;
   icon?: string;
   isChecked: boolean;
   questions: QuestionState[];
